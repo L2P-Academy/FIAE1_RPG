@@ -1,14 +1,14 @@
 package launcher;
 
 import view.CharacterView;
+import view.MainMenuView;
 
 public class Main {
 
 	public static void main(String[] args) {
-		System.out.println("Das wird ein RPG der Extraklasse! :D");
 		
-		// Anzeige des Fensters als Beispiel
-		CharacterView view = new CharacterView();
+		// Program initialize, show Start Menu
+		MainMenuView mainMenuView = new MainMenuView();
 
 	}
 
