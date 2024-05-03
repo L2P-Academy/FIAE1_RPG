@@ -35,7 +35,7 @@ public class PlayerCharacterModel extends CharacterModel {
 		return level;
 	}
 
-	public void set_level(int lvl) {
+	public void set_level(int level) { // changed (int lvl) to (int level)
 		this.level = level;
 	}
 
