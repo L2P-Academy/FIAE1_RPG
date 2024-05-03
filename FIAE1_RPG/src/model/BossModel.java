@@ -1,3 +1,7 @@
+package model;
+
+import java.util.List;
+
 public class BossModel {
     private List<MobModel> minions;
     private int phase;
