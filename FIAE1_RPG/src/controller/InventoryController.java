@@ -3,14 +3,14 @@ package controller;
 import model.ItemModel;
 import view.InventoryView;
 import java.util.ArrayList;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 public class InventoryController {
     private InventoryView view;
-    private ArrayList<ItemModel> inventory; 
+    private ArrayList<ItemModel> inventory;
+    int goldBalance;
+    String SelectedItem;
 
-    // create new inventory and keylistener i and escape 
+    // create new inventory
     public InventoryController() {
         this.view = new InventoryView();
         this.inventory = new ArrayList<ItemModel>(); 
@@ -34,4 +34,15 @@ public class InventoryController {
     public void removeItem(ItemModel item) {
         this.inventory.remove(item);
     }
+    
+    // function to add gold to value
+    public void addGold(int GoldValue) {
+        this.goldBalance += GoldValue;
+    }
+    
+    // function to remove Gold from Balance
+    public void reduceGold(int reduceValue) {
+    	this.goldBalance -= reduceValue;
+    }
+    
 }
