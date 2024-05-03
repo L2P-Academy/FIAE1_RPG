@@ -1,63 +1,49 @@
 package controller;
 
+import model.CharacterModel;	
+import model.PlayerCharacterModel;
+
 public class CharacterController {
 	
-	private int addHealthPoints(int healthPoints) {
+	/* defines max Points, so HP/MP can't fall below 0
+	private int maxHealthPoints; needed?
+	private int maxManaPoints; needed? */
+	
+	// create a new player character, sets Level to 1 
+	// Singleton-pattern required?
+	
+	public void createCharacter() {
 		
-		/*
-		Im CharacterModel ist keine maximale HP-Zahl genannt, d.h. 
-		fehlt ein Check (=if-Abfrage), damit die maximale HP-Zahl nicht
-		überschritten wird. 
-		*/
+		PlayerCharacterModel playerCharacterModel = new PlayerCharacterModel(null, null, 0, 0, 0, 0, 0, 0);
+		playerCharacterModel.set_level(1);
+		playerCharacterModel.setHealthPoints(100); // not final
+		playerCharacterModel.setBaseArmour(5); // not final
+		playerCharacterModel.set_manaPoints(100); // not final
+		playerCharacterModel.setBaseDmg(10); // not final
+		playerCharacterModel.setAbilityList(null); // not final
+		playerCharacterModel.setInventoryList(null); // weapons, armour? not final
+	
+	} 
+	
+	// Change HP; TO DO: >= 0 = Game Over
+	
+	public void updateHealthpoints(int updateHP) {	
 		
-		this.healthPoints += healthPoints;
-		return healthPoints;
+		int hp = playerCharacterModel.get_healthPoints();
+		playerCharacterModel.set_healthPoints(hp + updateHP);
+		// How to solve this with getter/setter?
+			
+	}
+	
+	// Change Mana; TO DO: >= 0 = 0
+	
+	public void updateMana(int updateMana) {	
+		
+		int mp = playerCharacterModel.get_healthPoints();
+		playerCharacterModel.set_healthPoints(mp + updateMana);
+		// How to solve this with getter/setter?
 		
 	}
 	
-	private int reduceHealthPoints(int healthPoints) {
-		
-		this.healthPoints -= healthPoints;
-		if (healthPoints <= 0) {
-			// GAME OVER => Wie einbinden?
-		} else {
-			return healthPoints;
-		}
-		
-	}
-	
-	private int addManaPoints(int manaPoints) {
-		
-		/*
-		Im CharacterModel ist keine maximale MP-Zahl genannt, d.h. 
-		fehlt ein Check (=if-Abfrage), damit die maximale MP-Zahl nicht
-		überschritten wird. 
-		*/
-		
-		this.manaPoints += manaPoints;
-		return manaPoints;
-		
-	}
-	
-	private int reduceManaPoints(int manaPoints) {
-		
-		this.manaPoints -= manaPoints;
-		if (manaPoints <= 0) {
-			manaPoints = 0; 
-			return manaPoints;
-		} else {
-			return manaPoints;
-		}
-		
-	}
-	
-	private int addXP(int expPoints) {
-		this.expPoints += expPoints;
-		return expPoints;
-	}
-	
-	private int levelUp() {
-		// Konditionen werden in einem XpModel o.ä. definiert?
-	}
 
 }
