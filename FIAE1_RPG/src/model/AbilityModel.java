@@ -7,6 +7,8 @@ public class AbilityModel {
 	private boolean isRanged, isAOE;
 	private ArrayList<String> elementsList; // neutral, fire, water, wind, earth?
 	
+	// Constructors
+	
 	public AbilityModel(boolean isRanged, boolean isAOE) { // model for ranged and AOE
 		this.isRanged = isRanged;
 		this.isAOE = isAOE;
