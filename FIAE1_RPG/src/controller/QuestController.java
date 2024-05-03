@@ -13,15 +13,18 @@ public class QuestController {
     public QuestController() {
         this.questList = new ArrayList<>();
     }
-
+    
+    // Method to add a quest to the quest list
     public void addQuest(QuestModel quest) {
         questList.add(quest);
     }
-
+    
+    // Method to remove a quest from the quest list
     public void removeQuest(QuestModel quest) {
         questList.remove(quest);
     }
-
+    
+    // Method to get a list of all available quests
     public List<QuestModel> getAllQuests() {
         return questList;
     }
@@ -47,49 +50,50 @@ public class QuestController {
 //            System.out.println("Quest '" + quest.getName() + "' is not active for '" + player.getName() + "'.");
 //        }
 //    }
-
+    
+    // Method to cancel the quest for the player
     public void cancelQuest(PlayerCharacterModel player, QuestModel quest) {
-        // Method to cancel the quest for the player
+    	
     }
 
+    // Method to retrieve active quests for the player
     public List<QuestModel> getActiveQuests(PlayerCharacterModel player) {
         List<QuestModel> activeQuests = new ArrayList<>();
-        // Method to retrieve active quests for the player
         return activeQuests;
     }
 
+    // Method to retrieve completed quests for the player
     public List<QuestModel> getCompleteQuests(PlayerCharacterModel player) {
         List<QuestModel> completeQuests = new ArrayList<>();
-        // Method to retrieve completed quests for the player
         return completeQuests;
     }
 
+    // Method to retrieve available quests
     public List<QuestModel> getAvailableQuests() {
         List<QuestModel> availableQuests = new ArrayList<>();
-        // Method to retrieve available quests
         return availableQuests;
     }
 
+    // Method to retrieve a quest by its ID
     public QuestModel getQuestId(int questId) {
-        // Method to retrieve a quest by its ID
         return null;
     }
 
+    // Method to check if a quest is completed
     public boolean isQuestCompleted(QuestModel quest) {
-        // Method to check if a quest is completed
         return false;
     }
 
+    // Method to check if a quest is active
     public boolean isQuestActive(QuestModel quest) {
-        // Method to check if a quest is active
         return false;
     }
 
+    // Method to update the progress of a quest for the player
     public void updateQuest(PlayerCharacterModel player, QuestModel quest, int progress) {
-        // Method to update the progress of a quest for the player
     }
 
+    // Method to retrieve the reward associated with completing a quest
     public void getQuestReward(QuestModel quest) {
-        // Method to retrieve the reward associated with completing a quest
     }
 }

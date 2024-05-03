@@ -23,7 +23,7 @@ public class QuestModel {
         this.questItemRequired = questItemRequired;
         this.levelRequired = levelRequired;
         this.questNPC = questNPC;
-        this.isCompleted = false; // The quest is by default not complete
+        this.isCompleted = false; // The quest is by default not complete.SS
     }
 
     // Getters and Setters
