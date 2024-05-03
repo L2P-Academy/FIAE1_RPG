@@ -13,8 +13,7 @@ public class NpcCharacterModel extends CharacterModel{
 		this.isFriendly = isFriendly;
 		this.isTrader = isTrader;
 		this.isQuestGiver = isQuestGiver;
-		
-	}
+		}
 	
 	//Getter and Setter
 	public boolean isFriendly() {
