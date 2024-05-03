@@ -18,8 +18,13 @@ public class ItemModel {
 	boolean isQuestItem;
 	int damage;
 	JList <String> category;*/
+    
+    //TO DO
+	//
+	//JList <String> category  wird noch benötigt, auch als get/set
+	//boolean isQuestItem wird noch benötigt
 
-	// Constructor
+		// Constructor
 	
 	   public ItemModel(String itemName, String itemDurability, int itemQuantity, int itemPrice, int itemDamage) {
 	        this.itemName = itemName;
