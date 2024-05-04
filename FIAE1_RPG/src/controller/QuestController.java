@@ -29,27 +29,27 @@ public class QuestController {
         return questList;
     }
     
-//    // Method to start quests for the player if level requirement is met
-//    public void startQuest(PlayerCharacterModel player, QuestModel quest) {
-//    	if(player.getLevel() >= quest.getLevelRequired()) {
-//    		player.getActiveQuest().add(quest);
-//    		System.out.println("Quest '" + quest.getName() + "' started for '" + player.getName() + "'.");
-//    	} else {
-//    		System.out.println(player.getName() + " does not meet the level requirement to start the quest.");
-//    	}
-//    }
-//
-//    // Method to retrieve completed quests for the player
-//    public void completeQuest(PlayerCharacterModel player, QuestModel quest) {
-//        
-//        if (player.getActiveQuests().contains(quest)) { // Check if the quest is in the player's active quest list
-//            player.getActiveQuests().remove(quest); // Remove the completed quest from the player's active quest list
-//            player.setExpPoints(player.getExpPoints() + quest.getRewardExpPoints()); // Add any rewards for completing the quest (e.g., experience points, gold, etc...)
-//            System.out.println("Quest '" + quest.getName() + "' completed for '" + player.getName() + "'.");
-//        } else {
-//            System.out.println("Quest '" + quest.getName() + "' is not active for '" + player.getName() + "'.");
-//        }
-//    }
+    // Method to start quests for the player if level requirement is met
+    public void startQuest(PlayerCharacterModel player, QuestModel quest) {
+    	if(player.getLevel() >= quest.getLevelRequired()) {
+    		player.getActiveQuest().add(quest);
+    		System.out.println("Quest '" + quest.getName() + "' started for '" + player.getName() + "'.");
+    	} else {
+    		System.out.println(player.getName() + " does not meet the level requirement to start the quest.");
+    	}
+    }
+
+    // Method to retrieve completed quests for the player
+    public void completeQuest(PlayerCharacterModel player, QuestModel quest) {
+        
+        if (player.getActiveQuests().contains(quest)) { // Check if the quest is in the player's active quest list
+            player.getActiveQuests().remove(quest); // Remove the completed quest from the player's active quest list
+            player.setExpPoints(player.getExpPoints() + quest.getRewardExpPoints()); // Add any rewards for completing the quest (e.g., experience points, gold, etc...)
+            System.out.println("Quest '" + quest.getName() + "' completed for '" + player.getName() + "'.");
+        } else {
+            System.out.println("Quest '" + quest.getName() + "' is not active for '" + player.getName() + "'.");
+        }
+    }
     
     // Method to cancel the quest for the player
     public void cancelQuest(PlayerCharacterModel player, QuestModel quest) {

@@ -2,6 +2,7 @@ package model;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.List;
 
 public class PlayerCharacterModel extends CharacterModel {
 
@@ -65,5 +66,30 @@ public class PlayerCharacterModel extends CharacterModel {
 
 	public Dictionary<String, Integer> get_equipList() {
 		return equipList;
+	}
+
+	public int getLevel() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public List<QuestModel> getActiveQuest() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public int getExpPoints() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public void setExpPoints(int i) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public List<QuestModel> getActiveQuests() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
