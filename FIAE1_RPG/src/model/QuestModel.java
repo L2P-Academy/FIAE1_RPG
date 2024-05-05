@@ -106,4 +106,9 @@ public class QuestModel {
 	public void setQuestNPC(NpcCharacterModel questNPC) {
 		this.questNPC = questNPC;
 	}
+
+	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
