@@ -68,13 +68,13 @@ public class InventoryController {
     
     
     // Sort method for price with compare method 
-    public void sortByPrice() {
-        Collections.sort(inventory, new Comparator<ItemModel>() {
-            public int compare(ItemModel item1, ItemModel item2) {
-                return Integer.compare(item1.getitemPrice(), item2.getitemPrice());
-            }
-        });
-    }
+//    public void sortByPrice() {
+//        Collections.sort(inventory, new Comparator<ItemModel>() {
+//            public int compare(ItemModel item1, ItemModel item2) {
+//                return Integer.compare(item1.getItemPrice(), item2.getItemPrice());
+//            }
+//        });
+//    }
 }
 
 
