@@ -3,93 +3,89 @@ package model;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.ArrayList;
+
 
 public class PlayerCharacterModel extends CharacterModel {
-
 	private int level;
 	private int manaPoints;
 	private int staminaPoints;
-	private int expPoints;
+	private double expPoints;
 	private Dictionary<String, Integer> equipList = new Hashtable<>();
+	private List<QuestModel> activeQuests;
+	private List<QuestModel> completedQuests;
 	
 	// Constructor
 	public PlayerCharacterModel(String name, String race, int level, int healthPoints, int manaPoints, int staminaPoints, int baseDmg, int baseArmour) {
 		super(name, race, healthPoints, baseDmg, baseArmour);
-        set_level(level);
-        set_expPoints(0);
-        set_manaPoints(manaPoints);
-        set_staminaPoints(staminaPoints);
+        setLevel(level); // changed to match the rest of the code!
+        setExpPoints(0); // from: set_expPoints --> setExpPoints
+        setManaPoints(manaPoints); // the rest of the code doesn't use _ (underscores) here
+        setStaminaPoints(staminaPoints); // so i changed this model to match the rest. Made the most sense :)
+        activeQuests = new ArrayList<>();
+        completedQuests = new ArrayList<>();
     }
 
 	// method to add item to equip
-	public void add_item_equipList(String item, int quantity) {
+	public void addItemEquipList(String item, int quantity) {
 		equipList.put(item, quantity);
 	}
 	
 	// method to remove item from equip
-	public void remove_item_equipList(String item) {
+	public void removeItemEquipList(String item) {
 		equipList.remove(item);
 	}
 	
 	// getters/setters
-	public int get_level() {
+	public int getLevel() {
 		return level;
 	}
 
-	public void set_level(int level) { // changed (int lvl) to (int level)
+	public void setLevel(int level) { // changed (int lvl) to (int level)
 		this.level = level;
 	}
 
-	public int get_manaPoints() {
+	public int getManaPoints() {
 		return manaPoints;
 	}
 
-	public void set_manaPoints(int manaPoints) {
+	public void setManaPoints(int manaPoints) {
 		this.manaPoints = manaPoints;
 	}
 
-	public int get_staminaPoints() {
+	public int getStaminaPoints() {
 		return staminaPoints;
 	}
 
-	public void set_staminaPoints(int staminaPoints) {
+	public void setStaminaPoints(int staminaPoints) {
 		this.staminaPoints = staminaPoints;
 	}
 
-	public int get_expPoints() {
+	public double getExpPoints() {
 		return expPoints;
 	}
 
-	public void set_expPoints(int expPoints) {
+	public void setExpPoints(double expPoints) {
 		this.expPoints = expPoints;
 	}
 
-	public Dictionary<String, Integer> get_equipList() {
+	public Dictionary<String, Integer> getEquipList() {
 		return equipList;
 	}
-
-	public int getLevel() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public List<QuestModel> getActiveQuest() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public int getExpPoints() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public void setExpPoints(int i) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	
 	public List<QuestModel> getActiveQuests() {
-		// TODO Auto-generated method stub
-		return null;
+        return activeQuests;
+    }
+
+    public void setActiveQuests(List<QuestModel> activeQuests) {
+        this.activeQuests = activeQuests;
+    }
+
+    public void addActiveQuest(QuestModel quest) {
+        activeQuests.add(quest);
+    }
+
+	public List<QuestModel> getCompletedQuests() {
+		return completedQuests;
 	}
 }
