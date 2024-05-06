@@ -17,10 +17,10 @@ public class CharacterController {
 	public void createCharacter() {
 		
 		playerCharacterModel = new PlayerCharacterModel(null, null, 0, 0, 0, 0, 0, 0);
-		playerCharacterModel.set_level(1); 
+		playerCharacterModel.setLevel(1); 
 		playerCharacterModel.setHealthPoints(100); // not final
 		playerCharacterModel.setBaseArmour(5); // not final
-		playerCharacterModel.set_manaPoints(100); // not final
+		playerCharacterModel.setManaPoints(100); // not final
 		playerCharacterModel.setBaseDmg(10); // not final
 		playerCharacterModel.setAbilityList(null); // not final
 		playerCharacterModel.setInventoryList(null); // weapons, armour? not final
