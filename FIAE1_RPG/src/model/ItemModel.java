@@ -8,6 +8,8 @@ public class ItemModel {
     private int itemQuantity;
     private int itemPrice;
     private int itemDamage;
+    private String category;
+    private boolean isQuestItem;
     
 	// Fragen? -> SAMAEL SCHRÖDER
 	
@@ -20,10 +22,14 @@ public class ItemModel {
 	boolean isQuestItem;
 	int damage;
 	JList <String> category;*/
+    
+    /*TODO
+    
+    Array statt List*/
 
 		// Constructor
 	
-	   public ItemModel(String itemName, String itemDurability, int itemQuantity, int itemPrice, int itemDamage) {
+	   public ItemModel(String itemName, String itemDurability, int itemQuantity, int itemPrice, int itemDamage, boolean isQuestitem, String category) {
 	        this.itemName = itemName;
 	        this.itemDurability = itemDurability;
 	        this.itemQuantity = itemQuantity;
@@ -36,12 +42,15 @@ public class ItemModel {
 	   
 	   public void displayIteminfo() {
 	        System.out.println("Name: " + itemName);
+	        System.out.println("Kategorie: "+category);
 	        System.out.println("Zustand: " + itemDurability);
 	        System.out.println("Schaden: " + itemDamage);
 	        System.out.println(" ");
 	        System.out.println("Anzahl: " + itemQuantity);
 	        System.out.println(" ");
 	        System.out.println("Kosten: " + itemPrice);
+			// System.out.println("Für Quest benötigt?" + printIsQuestItem);
+			// printIsQuestItem soll Ja oder Nein ausgeben, siehe Code unten
 	        
 	   }
 	   
@@ -55,45 +64,64 @@ public class ItemModel {
 	    	this.itemName = itemName;
 	    }
 	    
-	    public String itemDurability() {
+	    public String getitemDurability() {
 	        return itemDurability;
 	    }
 
-	    public void itemDurability(String itemDurability) {
+	    public void setitemDurability(String itemDurability) {
 	    	this.itemDurability = itemDurability;
 	    }
 	    
-	    public int itemQuantity() {
+	    public int getitemQuantity() {
 	        return itemQuantity;
 	    }
 
-	    public void itemQuantity(int itemQuantity) {
+	    public void setitemQuantity(int itemQuantity) {
 	    	this.itemQuantity = itemQuantity;
 	    }
 	    
-	    public int itemPrice() {
-	        return itemQuantity;
+	    public int getitemPrice() {
+	        return itemPrice;
 	    }
 
-	    public void itemPrice(int itemPrice) {
+	    public void setitemPrice(int itemPrice) {
 	    	this.itemPrice = itemPrice;
 	    }
 	    
-	    public int itemDamage() {
+	    public int getitemDamage() {
 	        return itemDamage;
 	    }
 
-	    public void itemDamage(int itemDamage) {
+	    public void setitemDamage(int itemDamage) {
 	    	this.itemDamage = itemDamage;
 	    }
 	    
-	    public void isQuestItem(boolean isQuestItem) {
+	    public void printIsQuestItem() {
+    	    if (this.isQuestItem) {
+    	        System.out.println("Ja");
+    	    } else {
+    	        System.out.println("Nein");
+    	    }
+    	}
+	    
+	   
+	    // Ich krieg die getter und setter für QuestItem nicht hin
+	    
+	    /*public void setisQuestItem(boolean isQuestItem) {
 	    	this.isQuestItem(isQuestItem);
-	    	
-	    }
-	    public void category(String category) {
-	    	this.category(category);
+	    }*/
+	    
+	    
+		// public void category(Object[] categories) {
+		//   for (Object category : categories) {
+		//     this.category(category.toString());
+		//	}
+		// } 
+		// "the method category Object[] in the type ItemModel is not applicable for the arguments (String)"
+	    
+	    // Sonderregel für isQuestItem
+	    
+	    
 	    }
 	    
-	}
 	    
