@@ -2,6 +2,7 @@ package launcher;
 
 import view.CharacterView;
 import view.MainMenuView;
+import view.QuestView;
 
 public class Main {
 
