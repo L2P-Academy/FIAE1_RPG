@@ -1,1 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?><InventoryList>
+    <Stein>
+        <Durability>50</Durability>
+        <Quantity>10</Quantity>
+        <Price>5.0</Price>
+        <Damage>60</Damage>
+        <QuestItem>false</QuestItem>
+        <Category>null</Category>
+    </Stein>
+</InventoryList>
