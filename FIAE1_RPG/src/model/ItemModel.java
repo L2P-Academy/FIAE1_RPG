@@ -1,5 +1,7 @@
 package model;
 
+import javax.swing.JList;
+
 public class ItemModel {
     private String itemName;
     private String itemDurability;
@@ -18,11 +20,6 @@ public class ItemModel {
 	boolean isQuestItem;
 	int damage;
 	JList <String> category;*/
-    
-    //TO DO
-	//
-	//JList <String> category  wird noch benötigt, auch als get/set
-	//boolean isQuestItem wird noch benötigt
 
 		// Constructor
 	
@@ -88,6 +85,14 @@ public class ItemModel {
 
 	    public void itemDamage(int itemDamage) {
 	    	this.itemDamage = itemDamage;
+	    }
+	    
+	    public void isQuestItem(boolean isQuestItem) {
+	    	this.isQuestItem(isQuestItem);
+	    	
+	    }
+	    public void category(String category) {
+	    	this.category(category);
 	    }
 	    
 	}
