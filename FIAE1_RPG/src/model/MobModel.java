@@ -1,47 +1,48 @@
 package model;
 
 public class MobModel extends CharacterModel {
-    private boolean isFriendly;
-    private int level;
-    private boolean isFlying;
+	private boolean isFriendly;
+	private int level;
+	private boolean isFlying;
 
-    // Constructor
-    public MobModel(String name, String race, int healthPoints, int baseDmg, int baseArmour, boolean isFriendly, int level, boolean isFlying) {
-        super(name, race, healthPoints, baseDmg, baseArmour);
-        this.isFriendly = isFriendly;
-        this.level = level;
-        this.isFlying = isFlying;
-    }
-    
-    // Method to display extra mob information
-    public void displayMobInfo() {
-    	System.out.println("Freundlich: " + isFriendly);
-    	System.out.println("Level: " + level);
-    	System.out.println("Kann fliegen: " + isFlying);
-    }
+	// Constructor
+	public MobModel(String name, String race, int healthPoints, int baseDmg, int baseArmour, boolean isFriendly,
+			int level, boolean isFlying) {
+		super(name, race, healthPoints, baseDmg, baseArmour);
+		this.isFriendly = isFriendly;
+		this.level = level;
+		this.isFlying = isFlying;
+	}
 
-    // Getters and Setters
-    public boolean isFriendly() {
-        return isFriendly;
-    }
+	// Method to display extra mob information
+	public void displayMobInfo() {
+		System.out.println("Freundlich: " + isFriendly);
+		System.out.println("Level: " + level);
+		System.out.println("Kann fliegen: " + isFlying);
+	}
 
-    public void setFriendly(boolean friendly) {
-        isFriendly = friendly;
-    }
+	// Getters and Setters
+	public boolean isFriendly() {
+		return isFriendly;
+	}
 
-    public int getLevel() {
-        return level;
-    }
+	public void setFriendly(boolean friendly) {
+		isFriendly = friendly;
+	}
 
-    public void setLevel(int level) {
-        this.level = level;
-    }
+	public int getLevel() {
+		return level;
+	}
 
-    public boolean isFlying() {
-        return isFlying;
-    }
+	public void setLevel(int level) {
+		this.level = level;
+	}
 
-    public void setFlying(boolean flying) {
-        isFlying = flying;
-    }
+	public boolean isFlying() {
+		return isFlying;
+	}
+
+	public void setFlying(boolean flying) {
+		isFlying = flying;
+	}
 }
