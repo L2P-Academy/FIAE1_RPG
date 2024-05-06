@@ -3,34 +3,36 @@ package model;
 public class QuestModel {
 	private String title;
 	private String description;
-    private int questID;
-    private boolean isMainQuest;
-    private boolean isCompleted;
-    private double rewardGold;
-    private int rewardExpPoints;
-    private ItemModel questItemRequired;
-    private int levelRequired;
-    private NpcCharacterModel questNPC;
-    private int questProgress;
-    private int questTarget;
+	private int questID;
+	private boolean isMainQuest;
+	private boolean isCompleted;
+	private double rewardGold;
+	private int rewardExpPoints;
+	private ItemModel questItemRequired;
+	private int levelRequired;
+	private NpcCharacterModel questNPC;
+	private int questProgress;
+	private int questTarget;
 
-    // Constructor
-    public QuestModel( String title, String description, int questID, boolean isMainQuest, double rewardGold, int rewardExpPoints, ItemModel questItemRequired, int levelRequired, NpcCharacterModel questNPC, int questProgress, int questTarget) {
-        this.title = title;
-        this.description = description;
-        this.questID = questID;
-        this.isMainQuest = isMainQuest;
-        this.rewardGold = rewardGold;
-        this.rewardExpPoints = rewardExpPoints;
-        this.questItemRequired = questItemRequired;
-        this.levelRequired = levelRequired;
-        this.questNPC = questNPC;
-        this.isCompleted = false; // The quest is by default not complete.
-        this.questProgress = questProgress;
-        this.questTarget = questTarget;
-    }
+	// Constructor
+	public QuestModel(String title, String description, int questID, boolean isMainQuest, double rewardGold,
+			int rewardExpPoints, ItemModel questItemRequired, int levelRequired, NpcCharacterModel questNPC,
+			int questProgress, int questTarget) {
+		this.title = title;
+		this.description = description;
+		this.questID = questID;
+		this.isMainQuest = isMainQuest;
+		this.rewardGold = rewardGold;
+		this.rewardExpPoints = rewardExpPoints;
+		this.questItemRequired = questItemRequired;
+		this.levelRequired = levelRequired;
+		this.questNPC = questNPC;
+		this.isCompleted = false; // The quest is by default not complete.
+		this.questProgress = questProgress;
+		this.questTarget = questTarget;
+	}
 
-    // Getters and Setters
+	// Getters and Setters
 	public String getTitle() {
 		return title;
 	}
@@ -114,7 +116,7 @@ public class QuestModel {
 	public int getQuestProgress() {
 		return questProgress;
 	}
-	
+
 	public void setQuestProgress(int questProgress) {
 		this.questProgress = questProgress;
 	}
@@ -122,7 +124,7 @@ public class QuestModel {
 	public int getQuestTarget() {
 		return questTarget;
 	}
-	
+
 	public void setQuestTarget(int questTarget) {
 		this.questTarget = questTarget;
 	}
