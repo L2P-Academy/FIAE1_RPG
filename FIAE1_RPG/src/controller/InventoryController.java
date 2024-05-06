@@ -1,4 +1,6 @@
 package controller;
+import java.util.Collections;
+import java.util.Comparator;
 
 import model.ItemModel;
 import view.InventoryView;
@@ -8,7 +10,7 @@ public class InventoryController {
     private InventoryView view;
     private ArrayList<ItemModel> inventory;
     int goldBalance;
-    String SelectedItem;
+    String selectedItem;
 
     // create new inventory
     public InventoryController() {
@@ -45,4 +47,35 @@ public class InventoryController {
     	this.goldBalance -= reduceValue;
     }
     
+    // function to equip a item
+    public void equipItem(String item) {
+    	this.selectedItem = item;
+    }
+    
+    // function to unequip a item
+    public void unequipItem(String item) {
+    	this.selectedItem = null;
+    }
+    
+    // Sort method for name with compare the items
+    public void sortByName() {
+        Collections.sort(inventory, new Comparator<ItemModel>() {
+            public int compare(ItemModel item1, ItemModel item2) {
+                return item1.getItemName().compareTo(item2.getItemName());
+            }
+        });
+    }
+    
+    
+    // Sort method for price with compare method 
+    public void sortByPrice() {
+        Collections.sort(inventory, new Comparator<ItemModel>() {
+            public int compare(ItemModel item1, ItemModel item2) {
+                return Integer.compare(item1.getitemPrice(), item2.getitemPrice());
+            }
+        });
+    }
 }
+
+
+

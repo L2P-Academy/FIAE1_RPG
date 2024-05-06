@@ -15,7 +15,6 @@ public class ItemModel {
 	// Fragen? -> SAMAEL SCHRÖDER
 
 	// aus dem Modell übernommene Eigenschaften
-
 	/*
 	 * String name; 
 	 * int durability; 
