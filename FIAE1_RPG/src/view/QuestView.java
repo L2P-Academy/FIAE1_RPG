@@ -51,7 +51,7 @@ public class QuestView extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				MainMenuView mainMenuView = new MainMenuView();//No Map class to switch to
+				MapView mapView = new MapView();
 				dispose();
 				
 				
@@ -62,7 +62,7 @@ public class QuestView extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				MainMenuView mainMenuView = new MainMenuView();//No Map class to switch to
+				MapView mapView = new MapView();
 				dispose();
 				
 			}
