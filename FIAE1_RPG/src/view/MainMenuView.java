@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 
 import javax.sound.sampled.AudioInputStream;
@@ -43,15 +45,16 @@ public class MainMenuView extends JFrame{
 		
 		// button panel for better Alignment
 		buttonPanel = new JPanel(new FlowLayout());
-		newGameBtn = new JButton("Neues Spiel");
 		
-		newGameBtn.setFont(gameFont);
-		loadGameBtn = new JButton("Spiel laden");
-		
-		loadGameBtn.setFont(gameFont);
+		// create buttons and assign Fonts
+		newGameBtn = new JButton("Neues Spiel");		
+		newGameBtn.setFont(gameFont);		
+		loadGameBtn = new JButton("Spiel laden");		
+		loadGameBtn.setFont(gameFont);		
 		closeGameBtn = new JButton("Beenden");
 		closeGameBtn.setFont(gameFont);
-		
+
+		// fill buttonPanel with Buttons
 		buttonPanel.add(newGameBtn);
 		buttonPanel.add(loadGameBtn);
 		buttonPanel.add(closeGameBtn);
@@ -59,6 +62,35 @@ public class MainMenuView extends JFrame{
 		// fill the background with contents
 		backgroundPanel.add(gameTitleLbl, BorderLayout.NORTH);
 		backgroundPanel.add(buttonPanel, BorderLayout.SOUTH);
+		
+		newGameBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				CharacterCreationView characterCreationView = new CharacterCreationView();
+				stopBackgroundMusic();
+				dispose();								
+			}
+		});
+		
+		loadGameBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
+		closeGameBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				stopBackgroundMusic();
+				dispose();
+				
+			}
+		});
 		
 		getContentPane().add(backgroundPanel);
 		pack();

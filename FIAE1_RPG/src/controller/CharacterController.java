@@ -5,6 +5,8 @@ import model.PlayerCharacterModel;
 
 public class CharacterController {
 	
+	PlayerCharacterModel playerCharacterModel;
+	
 	/* defines max Points, so HP/MP can't fall below 0
 	private int maxHealthPoints; needed?
 	private int maxManaPoints; needed? */
@@ -14,8 +16,8 @@ public class CharacterController {
 	
 	public void createCharacter() {
 		
-		PlayerCharacterModel playerCharacterModel = new PlayerCharacterModel(null, null, 0, 0, 0, 0, 0, 0);
-		playerCharacterModel.set_level(1);
+		playerCharacterModel = new PlayerCharacterModel(null, null, 0, 0, 0, 0, 0, 0);
+		playerCharacterModel.set_level(1); 
 		playerCharacterModel.setHealthPoints(100); // not final
 		playerCharacterModel.setBaseArmour(5); // not final
 		playerCharacterModel.set_manaPoints(100); // not final
@@ -29,8 +31,11 @@ public class CharacterController {
 	
 	public void updateHealthpoints(int updateHP) {	
 		
-		int hp = playerCharacterModel.get_healthPoints();
-		playerCharacterModel.set_healthPoints(hp + updateHP);
+		// TODO: Methoden in Model müssen noch für HP erstellt werden
+		// später Comments entfernen!
+		
+		// int hp = playerCharacterModel.get_healthPoints();
+		// playerCharacterModel.set_healthPoints(hp + updateHP);
 		// How to solve this with getter/setter?
 			
 	}
@@ -39,8 +44,8 @@ public class CharacterController {
 	
 	public void updateMana(int updateMana) {	
 		
-		int mp = playerCharacterModel.get_healthPoints();
-		playerCharacterModel.set_healthPoints(mp + updateMana);
+		// int mp = playerCharacterModel.get_healthPoints();
+		// playerCharacterModel.set_healthPoints(mp + updateMana);
 		// How to solve this with getter/setter?
 		
 	}
