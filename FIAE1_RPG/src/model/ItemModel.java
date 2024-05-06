@@ -1,6 +1,6 @@
-package model;
+package model; // zuletz von Cedric Antunes geändert
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class ItemModel {
 
@@ -9,7 +9,7 @@ public class ItemModel {
 	private int itemQuantity;
 	private double itemPrice;
 	private int itemDamage;
-	private List<String> category;
+	private ArrayList<String> category;
 	private boolean isQuestItem;
 
 	// Fragen? -> SAMAEL SCHRÖDER
@@ -27,13 +27,15 @@ public class ItemModel {
 
 	// Constructor
 
-	public ItemModel(String itemName, int itemDurability, int itemQuantity, int itemPrice, int itemDamage,
-			boolean isQuestitem, String category) {
+	public ItemModel(String itemName, int itemDurability, int itemQuantity, double itemPrice, int itemDamage,
+			boolean isQuestItem) {
 		this.itemName = itemName;
 		this.itemDurability = itemDurability;
 		this.itemQuantity = itemQuantity;
 		this.itemPrice = itemPrice;
 		this.itemDamage = itemDamage;
+		this.isQuestItem = isQuestItem;
+		this.category = new ArrayList<>();
 
 	}
 
@@ -67,7 +69,7 @@ public class ItemModel {
 			return itemPrice;
 		}
 
-		public void setItemPrice(int itemPrice) {
+		public void setItemPrice(double itemPrice) {
 			this.itemPrice = itemPrice;
 		}
 
@@ -79,19 +81,19 @@ public class ItemModel {
 			this.itemDamage = itemDamage;
 		}
 
-		public List<String> getCategory() {
+		public ArrayList<String> getCategory() {
 			return category;
 		}
 
-		public void setCategory(List<String> category) {
+		public void setCategory(ArrayList<String> category) {
 			this.category = category;
 		}
 
-		public boolean isQuestItem() {
+		public boolean getIsQuestItem() {
 			return isQuestItem;
 		}
 
-		public void setQuestItem(boolean isQuestItem) {
+		public void setIsQuestItem(boolean isQuestItem) {
 			this.isQuestItem = isQuestItem;
 		}
 		
