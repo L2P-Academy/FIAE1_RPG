@@ -5,7 +5,7 @@ import java.util.List;
 public class ItemModel {
 
 	private String itemName;
-	private String itemDurability;
+	private int itemDurability;
 	private int itemQuantity;
 	private double itemPrice;
 	private int itemDamage;
@@ -22,12 +22,12 @@ public class ItemModel {
 	 * double price; 
 	 * boolean isQuestItem;
 	 * int damage; 
-	 * JList <String> category;
+	 * JList <String> category; -> ist jetzt nur List
 	 */
 
 	// Constructor
 
-	public ItemModel(String itemName, String itemDurability, int itemQuantity, int itemPrice, int itemDamage,
+	public ItemModel(String itemName, int itemDurability, int itemQuantity, int itemPrice, int itemDamage,
 			boolean isQuestitem, String category) {
 		this.itemName = itemName;
 		this.itemDurability = itemDurability;
@@ -47,11 +47,11 @@ public class ItemModel {
 			this.itemName = itemName;
 		}
 
-		public String getItemDurability() {
+		public int getItemDurability() {
 			return itemDurability;
 		}
 
-		public void setItemDurability(String itemDurability) {
+		public void setItemDurability(int itemDurability) {
 			this.itemDurability = itemDurability;
 		}
 
@@ -94,6 +94,7 @@ public class ItemModel {
 		public void setQuestItem(boolean isQuestItem) {
 			this.isQuestItem = isQuestItem;
 		}
+		
 	}
 
 //// Display Item info
