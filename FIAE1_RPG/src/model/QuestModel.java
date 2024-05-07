@@ -128,9 +128,4 @@ public class QuestModel {
 	public void setQuestTarget(int questTarget) {
 		this.questTarget = questTarget;
 	}
-
-	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }
