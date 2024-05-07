@@ -67,14 +67,12 @@ public class XMLController {
 				DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 				DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 				Document document = documentBuilder.newDocument();
-				
-				
+							
 				//Adding root Element
 				Element rootElement = document.createElement("InventoryList");
 				document.appendChild(rootElement);
 				
-				//Loop for every Item in the itemList
-				
+				//Loop for every Item in the itemList				
 				for(int i = 0 ; i < itemList.size(); i++) {
 					//Varriable die mit der Forschleife hochzählt, damit jedes Item der Liste erfasst wird.
 					ItemModel currentItem = itemList.get(i);
@@ -108,10 +106,10 @@ public class XMLController {
 					isQuestItemChild.appendChild(document.createTextNode(String.valueOf(currentItem.getIsQuestItem())));
 					nameChild.appendChild(isQuestItemChild);
 				
-	//				//Adding category Child
-	//				Element categoryChild = document.createElement("Category");
-	//				categoryChild.appendChild(document.createTextNode(String.valueOf(currentItem.getCategory())));
-	//				nameChild.appendChild(categoryChild);
+//					//Adding category Child
+//					Element categoryChild = document.createElement("Category");
+//					categoryChild.appendChild(document.createTextNode(String.valueOf(currentItem.getCategory())));
+//					nameChild.appendChild(categoryChild);
 				
 					}
 					// Write Content into the File
@@ -123,12 +121,12 @@ public class XMLController {
 					
 					
 					// Console output
-					StreamResult consoleResult = new StreamResult(System.out);
-			        transformer.transform(source, consoleResult);
+//					StreamResult consoleResult = new StreamResult(System.out);
+//			        transformer.transform(source, consoleResult);
 			
 			}
 			catch (Exception e) {
-				// TODO: handle exception
+				e.printStackTrace();
 			}
 		
 		}
