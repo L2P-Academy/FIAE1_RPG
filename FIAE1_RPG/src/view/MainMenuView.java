@@ -18,6 +18,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import controller.SoundController;
+
 public class MainMenuView extends JFrame{
 	
 	JLabel gameTitleLbl;
@@ -26,12 +28,13 @@ public class MainMenuView extends JFrame{
 	String introImgPath = "res/img/Intro_Picture.jpg";
 	ImageIcon introImgIcon;
 	Font gameFont;
-	Clip introMusicClip;
+	SoundController soundController;
 	
 	public MainMenuView() {
 		
 		setTitle("Dragons & Dungeons");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		soundController = new SoundController();
 		
 		// create background Panel
 		backgroundPanel = new BackGroundPanel(new ImageIcon(introImgPath).getImage());
@@ -68,7 +71,7 @@ public class MainMenuView extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				CharacterCreationView characterCreationView = new CharacterCreationView();
-				stopBackgroundMusic();
+				soundController.stopMainMenuMusic();
 				dispose();								
 			}
 		});
@@ -86,7 +89,7 @@ public class MainMenuView extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				stopBackgroundMusic();
+				soundController.stopMainMenuMusic();
 				dispose();
 				
 			}
@@ -97,28 +100,9 @@ public class MainMenuView extends JFrame{
 		setLocationRelativeTo(null);
 		setVisible(true);
 		
-		//play Music in background after rendering
-		playBackgroundMusic();
+		//play Music in background after rendering		
+		soundController.playMainMenuMusic();
 		
-	}
-	
-	private void playBackgroundMusic() {
-		try {
-			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("res/music/intro_music.wav"));
-			introMusicClip = AudioSystem.getClip();
-			introMusicClip.open(audioInputStream);
-			introMusicClip.loop(Clip.LOOP_CONTINUOUSLY);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	private void stopBackgroundMusic() {
-		if (introMusicClip != null && introMusicClip.isOpen()) {
-			introMusicClip.stop();
-			introMusicClip.close();
-		}
 	}
 
 }
