@@ -1,11 +1,13 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -13,9 +15,10 @@ import javax.swing.JPanel;
 
 public class QuestView extends JFrame{
 	
-	JLabel questTitleLbl, questDescription, questImgLbl;
+	JLabel questTitleLbl, questDescriptionLbl, questImgLbl;
 	JButton acceptQuestBtn, exitQuestBtn;
-	JPanel buttonPanel;
+	JPanel buttonPnl, questPnl, questItemPnl, questTitlePnl, mainPnl;
+	String questBackgroundPath = "res/img/QuestDescBack.png";
 	Font gameFont;
 	
 	public QuestView() {
@@ -27,11 +30,29 @@ public class QuestView extends JFrame{
 		//Create Font
 		gameFont = new Font("Old English Text MT", Font.BOLD, 64);
 		
-		//Create ButtonPanel
-		buttonPanel = new JPanel();
+		//Create Label
+		questTitleLbl = new JLabel("Hier kommt der Quest Titel hin");
+		questDescriptionLbl = new JLabel("Hier kommt die Quest Beschreibung hin");
+		questImgLbl = new JLabel("Hier kommt das Quest Bild hin");
 		
-		//Panel Layout
-		buttonPanel.setLayout(new FlowLayout());
+		//Create Panel
+		buttonPnl = new JPanel(new FlowLayout());
+		questPnl = new BackGroundPanel(new ImageIcon(questBackgroundPath).getImage());
+		questPnl.setLayout(new BorderLayout());
+		questItemPnl = new JPanel(new BorderLayout());
+		questTitlePnl = new JPanel(new BorderLayout());
+		mainPnl = new JPanel(new BorderLayout());	
+		
+		//Panel Layout (  nicht sicher ob notwendig)
+		//buttonPanel.setLayout(new FlowLayout());
+		//questPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		//questItemPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		
+		//set Panel Background for better Sichtbarkeit
+		questPnl.setBackground(Color.CYAN);
+		buttonPnl.setBackground(Color.GREEN);
+		questItemPnl.setBackground(Color.YELLOW);
+		questTitlePnl.setBackground(Color.ORANGE);
 		
 		//Create Button
 		acceptQuestBtn = new JButton("Wenns sein muss");//Worktitle
@@ -40,11 +61,21 @@ public class QuestView extends JFrame{
 		exitQuestBtn.setFont(gameFont);
 		
 		//Fill Button
-		buttonPanel.add(acceptQuestBtn);
-		buttonPanel.add(exitQuestBtn);
+		buttonPnl.add(acceptQuestBtn);
+		buttonPnl.add(exitQuestBtn);
 		
-		//Set Position for Button
-		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		//Fill Panel with Labels
+		questPnl.add(questDescriptionLbl);
+		questItemPnl.add(questImgLbl);
+		questTitlePnl.add(questTitleLbl);
+		
+		//Set Position for Panels
+		mainPnl.add(questTitlePnl, BorderLayout.NORTH);
+		mainPnl.add(questPnl, BorderLayout.CENTER);
+		mainPnl.add(buttonPnl, BorderLayout.SOUTH);
+		mainPnl.add(questItemPnl, BorderLayout.WEST);
+		
+		getContentPane().add(mainPnl);
 		
 		//give function to Buttons
 		acceptQuestBtn.addActionListener(new ActionListener() {
@@ -68,6 +99,7 @@ public class QuestView extends JFrame{
 			}
 		});
 		
+		setLocationRelativeTo(null);
 		setVisible(true);
 		
 	}
