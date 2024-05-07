@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -17,7 +19,7 @@ import javax.swing.SwingConstants;
 
 public class InventoryView extends JFrame{
 
-    JPanel backgroundPanel, buttonPanel, goldPanel, tablePanel, spacingPanel;
+    JPanel backgroundPanel, buttonPanel, goldPanel, tablePanel, spacingPanelWest, spacingPanelEast;
     JTable inventoryTable;
     JScrollPane inventoryScrollPane;
     JLabel goldBalanceLabel;
@@ -32,18 +34,23 @@ public class InventoryView extends JFrame{
         setSize(1200, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         goldBalance = "999";
+        
+		gameFont = new Font("Old English Text MT", Font.BOLD, 24);
 
     	// create background Panel
     	backgroundPanel = new BackGroundPanel(new ImageIcon(introImgPath).getImage());
     	backgroundPanel.setLayout(new BorderLayout());
-    	
+
     	// create background Panel
-    	spacingPanel = new JPanel();
-    	spacingPanel.setOpaque(false);
-    	spacingPanel.setPreferredSize(new Dimension(160,50));
+    	spacingPanelWest = new JPanel();
+    	spacingPanelWest.setOpaque(false);
+    	spacingPanelWest.setPreferredSize(new Dimension(160,50));
+    	// create background Panel
+    	spacingPanelEast = new JPanel();
+    	spacingPanelEast.setOpaque(false);
+    	spacingPanelEast.setPreferredSize(new Dimension(160,50));
 
     	// create gold Panel and Label
-		gameFont = new Font("Old English Text MT", Font.BOLD, 24);
 		goldBalanceLabel = new JLabel(goldBalance, SwingConstants.CENTER);
 		goldBalanceLabel.setFont(gameFont);
 		goldBalanceLabel.setForeground(new Color(245, 245, 220));
@@ -68,7 +75,7 @@ public class InventoryView extends JFrame{
     	buttonPanel.setOpaque(false);
     	buttonPanel.setPreferredSize(new Dimension(1200, 220));
 
-		// create buttons and assign Fonts
+		// create close buttons
 		closeInvBtn = new JButton("Schließen");
 		closeInvBtn.setFont(gameFont);
 		closeInvBtn.setForeground(new Color(245, 245, 220));
@@ -83,11 +90,25 @@ public class InventoryView extends JFrame{
     	
 		// fill the panels with contents
 		backgroundPanel.add(goldPanel, BorderLayout.NORTH);
+		backgroundPanel.add(spacingPanelWest, BorderLayout.WEST);
 		backgroundPanel.add(tablePanel, BorderLayout.CENTER);
+		backgroundPanel.add(spacingPanelEast, BorderLayout.EAST);
 		backgroundPanel.add(buttonPanel, BorderLayout.SOUTH);
 		
 		getContentPane().add(backgroundPanel);
 		setLocationRelativeTo(null);
 		setVisible(true);
+
+		//close buttons function
+		closeInvBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				MapView mapView = new MapView();
+				dispose();
+				
+			}
+		});
+		
 	}
 }
