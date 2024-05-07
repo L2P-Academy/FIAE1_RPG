@@ -1,10 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?><InventoryList>
     <Stein>
-        <Durability>50</Durability>
-        <Quantity>10</Quantity>
-        <Price>5.0</Price>
-        <Damage>60</Damage>
+        <Durability>100</Durability>
+        <Quantity>20</Quantity>
+        <Price>10.0</Price>
+        <Damage>1</Damage>
         <QuestItem>false</QuestItem>
-        <Category>null</Category>
     </Stein>
+    <Schwert>
+        <Durability>10</Durability>
+        <Quantity>2</Quantity>
+        <Price>1.0</Price>
+        <Damage>100</Damage>
+        <QuestItem>true</QuestItem>
+    </Schwert>
+    <Axt>
+        <Durability>50</Durability>
+        <Quantity>5</Quantity>
+        <Price>100.0</Price>
+        <Damage>50</Damage>
+        <QuestItem>false</QuestItem>
+    </Axt>
 </InventoryList>
