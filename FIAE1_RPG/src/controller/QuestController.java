@@ -43,6 +43,7 @@ public class QuestController {
 		if (player.getActiveQuests().contains(quest)) { // Check if the quest is in the player's active quest list
 			player.getActiveQuests().remove(quest); // Remove the completed quest from the player's active quest list
 			player.setExpPoints(player.getExpPoints() + quest.getRewardExpPoints() + quest.getRewardGold()); // Add any rewards for completing the quest (in this case experience points and gold)
+
 			System.out.println("Quest '" + quest.getTitle() + "' wurde von '" + player.getName() + "' abgeschlossen.");
 		} else {
 			System.out.println("Quest '" + quest.getTitle() + "' ist für '" + player.getName() + "' nicht aktiv.");
@@ -109,6 +110,7 @@ public class QuestController {
 		List<QuestModel> completedQuests = player.getCompletedQuests(); // Get the player's completed quests
 		for (QuestModel completedQuest : completedQuests) {
 			if (completedQuest.getQuestID() == quest.getQuestID()) { // Check if the quest is in the list of completed quests
+
 				return true; // Return true if the quest is completed
 			}
 		}
@@ -119,6 +121,7 @@ public class QuestController {
 	public boolean isQuestActive(PlayerCharacterModel player, QuestModel quest) {
 		List<QuestModel> activeQuests = player.getActiveQuests(); // Get the player's active quests
 		return activeQuests.contains(quest) && !quest.isCompleted(); // Check if the quest is in the list of active quests and not completed
+
 	}
 
 	// Method to update the progress of a quest for the player
@@ -126,11 +129,13 @@ public class QuestController {
 		if (player.getActiveQuests().contains(quest)) { // Check if the quest is in the player's active quest list
 			int currentProgress = quest.getQuestProgress();
 			int updatedProgress = currentProgress + questProgress; // Update the progress of the quest based on the specified progress
+
 			int questTarget = quest.getQuestTarget();
 			if (updatedProgress >= questTarget) { // Make sure progress does not exceed quest requirements
 				quest.setCompleted(true); // Mark the quest as completed
 				updatedProgress = questTarget;
-				System.out.println("Quest '" + quest.getTitle() + "' wurde von '" + player.getName() + "' abgeschlossen.");
+				System.out.println(
+						"Quest '" + quest.getTitle() + "' wurde von '" + player.getName() + "' abgeschlossen.");
 			} else {
 				quest.setQuestProgress(updatedProgress); // Update the quest progress
 			}
@@ -140,15 +145,15 @@ public class QuestController {
 	}
 
 	// Method to retrieve the reward associated with completing a quest
-    public void getQuestReward(PlayerCharacterModel player, QuestModel quest) {
-        if (!quest.isCompleted()) { // Check if the quest is completed
-            System.out.println("Quest '" + quest.getTitle() + "' ist noch nicht abgeschlossen.");
-            return;
-        }
+	public void getQuestReward(PlayerCharacterModel player, QuestModel quest) {
+		if (!quest.isCompleted()) { // Check if the quest is completed
+			System.out.println("Quest '" + quest.getTitle() + "' ist noch nicht abgeschlossen.");
+			return;
+		}
 
-	// Apply quest rewards to the player
-	player.setExpPoints(player.getExpPoints() + quest.getRewardExpPoints());
+		// Apply quest rewards to the player
+		player.setExpPoints(player.getExpPoints() + quest.getRewardExpPoints());
 //	player.setGold(player.getGold() + quest.getRewardGold());
-	System.out.println("Quest '" + quest.getTitle() + "' rewards applied to '" + player.getName() + "'.");
+		System.out.println("Die Belohnungen für das Quest '" + quest.getTitle() + "' wurden an '" + player.getName() + "' erteilt.");
 	}
 }
