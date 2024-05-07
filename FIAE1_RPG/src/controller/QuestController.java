@@ -1,7 +1,8 @@
 package controller;
 
 import java.util.ArrayList;
-import java.util.List;
+
+import model.ItemModel;
 import model.PlayerCharacterModel;
 import model.QuestModel;
 
@@ -130,13 +131,13 @@ public class QuestController {
 	}
 
 //	// Method to retrieve the reward associated with completing a quest
-//	public void getQuestReward(PlayerCharacterModel player, QuestModel quest) {
-//		if (!quest.isCompleted()) {
-//			return;
-//		}
-//
-//		// Apply quest rewards to the player
-//		player.setExpPoints(player.getExpPoints() + quest.getRewardExpPoints());
-//		player.setGold(player.getGold() + quest.getRewardGold());
+//	public void getQuestReward(PlayerCharacterModel player, QuestModel quest, ItemModel item) {
+//	    if (!quest.isCompleted()) {
+//	        return;
+//	    }
+//	    player.setExpPoints(player.getExpPoints() + quest.getRewardExpPoints());
+//	    if (item != null) {
+//	        item.setGold(item.getGold() + quest.getRewardGold());
+//	    }
 //	}
 }

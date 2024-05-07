@@ -18,7 +18,7 @@ public class MobModel extends CharacterModel {
 	public void displayMobInfo() {
 	}
 
-	// Getters and Setters
+	// Getter & Setter
 	public boolean isFriendly() {
 		return isFriendly;
 	}
