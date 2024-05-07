@@ -1,4 +1,4 @@
-package model; // zuletz von Cedric Antunes geändert
+package model; 
 
 import java.util.ArrayList;
 
@@ -13,17 +13,12 @@ public class ItemModel {
 	private boolean isQuestItem;
 
 	// Fragen? -> SAMAEL SCHRÖDER
-
-	// aus dem Modell übernommene Eigenschaften
-	/*
-	 * String name; 
-	 * int durability; 
-	 * int quantity; 
-	 * double price; 
-	 * boolean isQuestItem;
-	 * int damage; 
-	 * JList <String> category; -> ist jetzt nur List
-	 */
+	
+	//TO-DO
+	
+	// Array-List als Zugriff anlegen
+	// Item-Liste als Tabelle anlegen
+	// einzelne Item Einträge
 
 	// Constructor
 
@@ -37,7 +32,7 @@ public class ItemModel {
 		this.isQuestItem = isQuestItem;
 		this.category = new ArrayList<>();
 
-	}
+		}
 
 	   // Getter & Setter
 
@@ -96,21 +91,36 @@ public class ItemModel {
 		public void setIsQuestItem(boolean isQuestItem) {
 			this.isQuestItem = isQuestItem;
 		}
-		
 	}
 
-//// Display Item info
+// Item-Liste
+
+
+
+
+////Display Item info
 //
 ///* public void displayIteminfo() {
-//     System.out.println("Name: " + itemName);
-//     System.out.println("Kategorie: "+category);
-//     System.out.println("Zustand: " + itemDurability);
-//     System.out.println("Schaden: " + itemDamage);
-//     System.out.println(" ");
-//     System.out.println("Anzahl: " + itemQuantity);
-//     System.out.println(" ");
-//     System.out.println("Kosten: " + itemPrice);
-//		System.out.println("Für Quest benötigt?" + printIsQuestItem);
-//		*/
-//// Irrelevant für Model
+//System.out.println("Name: " + itemName);
+//System.out.println("Kategorie: "+category);
+//System.out.println("Zustand: " + itemDurability);
+//System.out.println("Schaden: " + itemDamage);
+//System.out.println(" ");
+//System.out.println("Anzahl: " + itemQuantity);
+//System.out.println(" ");
+//System.out.println("Kosten: " + itemPrice);
+//	System.out.println("Für Quest benötigt?" + printIsQuestItem);
+//	*/
+////Irrelevant für Model
+
+// aus dem Modell übernommene Eigenschaften
+/*
+ * String name; 
+ * int durability; 
+ * int quantity; 
+ * double price; 
+ * boolean isQuestItem;
+ * int damage; 
+ * JList <String> category; -> ist jetzt nur List
+ */
 	    
