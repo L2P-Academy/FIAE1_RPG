@@ -14,11 +14,12 @@ public class ItemModel {
 
 	// Fragen? -> SAMAEL SCHRÖDER
 	
+	//Item-Liste: https://more2learn-my.sharepoint.com/:x:/g/personal/ssch467_more2learn_de/EcYh5wDUl6xOkwiXIFZANVQB8GkH7YTvfICZ9erPfrlPkA?e=BddI87
+	
 	//TO-DO
 	
 	// Array-List als Zugriff anlegen
-	// Item-Liste als Tabelle anlegen
-	// einzelne Item Einträge
+	// Constructor anpassen mit Cedric
 
 	// Constructor
 
@@ -30,7 +31,7 @@ public class ItemModel {
 		this.itemPrice = itemPrice;
 		this.itemDamage = itemDamage;
 		this.isQuestItem = isQuestItem;
-		this.category = new ArrayList<>();
+		this.category = new ArrayList<>(); 
 
 		}
 
@@ -91,12 +92,24 @@ public class ItemModel {
 		public void setIsQuestItem(boolean isQuestItem) {
 			this.isQuestItem = isQuestItem;
 		}
-	}
+		
 
 // Item-Liste
 
+		// itemName,itemDurability,itemQuantity,itemPrice,itemDamage,isQuestItem
 
+		ItemModel item1 = new ItemModel("Langschwert", 100, 1, 50, 28, false);
 
+		ItemModel item2 = new ItemModel("Stein", 1000, 1, 0.1, 5, false);
+
+		ItemModel item3 = new ItemModel("Heiltrank", 0, 1, 20, 0, false);
+
+		ItemModel item4 = new ItemModel("Schild", 250, 1, 30, 0, false);
+
+		ItemModel item5 = new ItemModel("Seil", 100, 1, 5, 0, false);
+
+		ItemModel item6 = new ItemModel("Banditenkopf", 0, 0, 0, 0, true);
+	}
 
 ////Display Item info
 //
