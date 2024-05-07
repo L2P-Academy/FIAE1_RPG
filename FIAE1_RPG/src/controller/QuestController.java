@@ -6,7 +6,7 @@ import model.PlayerCharacterModel;
 import model.QuestModel;
 
 public class QuestController {
-	private List<QuestModel> questList;
+	private ArrayList<QuestModel> questList;
 
 	// Constructor
 	public QuestController() {
@@ -24,7 +24,7 @@ public class QuestController {
 	}
 
 	// Method to get a list of all available quests
-	public List<QuestModel> getAllQuests() {
+	public ArrayList<QuestModel> getAllQuests() {
 		return questList;
 	}
 
@@ -32,128 +32,111 @@ public class QuestController {
 	public void startQuest(PlayerCharacterModel player, QuestModel quest) {
 		if (player.getLevel() >= quest.getLevelRequired()) {
 			player.getActiveQuests().add(quest);
-			System.out.println("Quest '" + quest.getTitle() + "' wurde von '" + player.getName() + "' angenommen.");
-		} else {
-			System.out.println(player.getName() + " erfüllt nicht das erforderliche Level für dieses Quest.");
 		}
 	}
 
 	// Method to retrieve completed quest for the player
 	public void completeQuest(PlayerCharacterModel player, QuestModel quest) {
-		if (player.getActiveQuests().contains(quest)) { // Check if the quest is in the player's active quest list
-			player.getActiveQuests().remove(quest); // Remove the completed quest from the player's active quest list
-			player.setExpPoints(player.getExpPoints() + quest.getRewardExpPoints() + quest.getRewardGold()); // Add any rewards for completing the quest (in this case experience points and gold)
-
-			System.out.println("Quest '" + quest.getTitle() + "' wurde von '" + player.getName() + "' abgeschlossen.");
-		} else {
-			System.out.println("Quest '" + quest.getTitle() + "' ist für '" + player.getName() + "' nicht aktiv.");
+		if (player.getActiveQuests().contains(quest)) {
+			player.getActiveQuests().remove(quest);
+			player.setExpPoints(player.getExpPoints() + quest.getRewardExpPoints() + quest.getRewardGold());
 		}
 	}
 
 	// Method to cancel the quest for the player
 	public void cancelQuest(PlayerCharacterModel player, QuestModel quest) {
-		if (player.getActiveQuests().contains(quest)) { // Check if the quest is in the player's active quest list
-			player.getActiveQuests().remove(quest); // Remove the quest from the player's active quest list
-			System.out.println("Quest '" + quest.getTitle() + "' wurde von '" + player.getName() + "' abgebrochen.");
-		} else {
-			System.out.println("Quest '" + quest.getTitle() + "' ist für '" + player.getName() + "' nicht aktiv.");
+		if (player.getActiveQuests().contains(quest)) {
+			player.getActiveQuests().remove(quest);
 		}
 	}
 
 	// Method to retrieve active quests for the player
-	public List<QuestModel> getActiveQuests(PlayerCharacterModel player) {
-		List<QuestModel> activeQuests = new ArrayList<>();
+	public ArrayList<QuestModel> getActiveQuests(PlayerCharacterModel player) {
+		ArrayList<QuestModel> activeQuests = new ArrayList<>();
 		for (QuestModel quest : player.getActiveQuests()) {
 			if (!quest.isCompleted()) {
-				activeQuests.add(quest); // Add quest to the active quests list
+				activeQuests.add(quest);
 			}
 		}
-		return activeQuests; // Return all active quests of the player
+		return activeQuests;
 	}
 
 	// Method to retrieve completed quests for the player
-	public List<QuestModel> getCompletedQuests(PlayerCharacterModel player) {
-		List<QuestModel> completedQuests = new ArrayList<>();
+	public ArrayList<QuestModel> getCompletedQuests(PlayerCharacterModel player) {
+		ArrayList<QuestModel> completedQuests = new ArrayList<>();
 		for (QuestModel quest : player.getActiveQuests()) {
 			if (quest.isCompleted()) {
-				completedQuests.add(quest); // Add quest to the completed quests list
+				completedQuests.add(quest);
 			}
 		}
-		return completedQuests; // Return all completed quests by the player
+		return completedQuests;
 	}
 
 	// Method to retrieve available quests
-	public List<QuestModel> getAvailableQuests(PlayerCharacterModel player) {
-		List<QuestModel> availableQuests = new ArrayList<>();
-		List<QuestModel> allQuests = getAllQuests();
+	public ArrayList<QuestModel> getAvailableQuests(PlayerCharacterModel player) {
+		ArrayList<QuestModel> availableQuests = new ArrayList<>();
+		ArrayList<QuestModel> allQuests = getAllQuests();
 		for (QuestModel quest : allQuests) {
 			if (quest.getLevelRequired() <= player.getLevel() && !quest.isMainQuest()) {
-				availableQuests.add(quest); // Add quest to the available quests list
+				availableQuests.add(quest);
 			}
 		}
-		return availableQuests; // Return all available quests
+		return availableQuests;
 	}
 
 	// Method to retrieve a quest by its ID
 	public QuestModel getQuestById(int questId) {
-		List<QuestModel> allQuests = getAllQuests();
+		ArrayList<QuestModel> allQuests = getAllQuests();
 		for (QuestModel quest : allQuests) {
 			if (quest.getQuestID() == questId) {
-				return quest; // Return the quest if found
+				return quest;
 			}
 		}
-		return null; // Return null if the quest with the specified ID is not found
+		return null;
 	}
 
 	// Method to check if a quest is completed
 	public boolean isQuestCompleted(PlayerCharacterModel player, QuestModel quest) {
-		List<QuestModel> completedQuests = player.getCompletedQuests(); // Get the player's completed quests
+		ArrayList<QuestModel> completedQuests = player.getCompletedQuests();
 		for (QuestModel completedQuest : completedQuests) {
-			if (completedQuest.getQuestID() == quest.getQuestID()) { // Check if the quest is in the list of completed quests
+			if (completedQuest.getQuestID() == quest.getQuestID()) {
 
-				return true; // Return true if the quest is completed
+				return true;
 			}
 		}
-		return false; // Return false if the quest is not completed
+		return false;
 	}
 
 	// Method to check if a quest is active
 	public boolean isQuestActive(PlayerCharacterModel player, QuestModel quest) {
-		List<QuestModel> activeQuests = player.getActiveQuests(); // Get the player's active quests
-		return activeQuests.contains(quest) && !quest.isCompleted(); // Check if the quest is in the list of active quests and not completed
-
+		ArrayList<QuestModel> activeQuests = player.getActiveQuests();
+		return activeQuests.contains(quest) && !quest.isCompleted();
 	}
 
 	// Method to update the progress of a quest for the player
 	public void updateQuest(PlayerCharacterModel player, QuestModel quest, int questProgress) {
-		if (player.getActiveQuests().contains(quest)) { // Check if the quest is in the player's active quest list
+		if (player.getActiveQuests().contains(quest)) {
 			int currentProgress = quest.getQuestProgress();
-			int updatedProgress = currentProgress + questProgress; // Update the progress of the quest based on the specified progress
+			int updatedProgress = currentProgress + questProgress;
 
 			int questTarget = quest.getQuestTarget();
-			if (updatedProgress >= questTarget) { // Make sure progress does not exceed quest requirements
-				quest.setCompleted(true); // Mark the quest as completed
+			if (updatedProgress >= questTarget) {
+				quest.setCompleted(true);
 				updatedProgress = questTarget;
-				System.out.println(
-						"Quest '" + quest.getTitle() + "' wurde von '" + player.getName() + "' abgeschlossen.");
 			} else {
-				quest.setQuestProgress(updatedProgress); // Update the quest progress
+				quest.setQuestProgress(updatedProgress);
 			}
-		} else {
-			System.out.println("Quest '" + quest.getTitle() + "' ist für '" + player.getName() + "' nicht aktiv.");
 		}
 	}
 
-	// Method to retrieve the reward associated with completing a quest
-	public void getQuestReward(PlayerCharacterModel player, QuestModel quest) {
-		if (!quest.isCompleted()) { // Check if the quest is completed
-			System.out.println("Quest '" + quest.getTitle() + "' ist noch nicht abgeschlossen.");
-			return;
-		}
-
-		// Apply quest rewards to the player
-		player.setExpPoints(player.getExpPoints() + quest.getRewardExpPoints());
-//	player.setGold(player.getGold() + quest.getRewardGold());
-		System.out.println("Die Belohnungen für das Quest '" + quest.getTitle() + "' wurden an '" + player.getName() + "' erteilt.");
-	}
+//	// Method to retrieve the reward associated with completing a quest
+//	public void getQuestReward(PlayerCharacterModel player, QuestModel quest) {
+//		if (!quest.isCompleted()) {
+//			return;
+//		}
+//
+//		// Apply quest rewards to the player
+//		player.setExpPoints(player.getExpPoints() + quest.getRewardExpPoints());
+//		player.setGold(player.getGold() + quest.getRewardGold());
+//	}
 }

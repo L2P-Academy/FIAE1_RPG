@@ -16,9 +16,6 @@ public class MobModel extends CharacterModel {
 
 	// Method to display extra mob information
 	public void displayMobInfo() {
-		System.out.println("Freundlich: " + isFriendly);
-		System.out.println("Level: " + level);
-		System.out.println("Kann fliegen: " + isFlying);
 	}
 
 	// Getters and Setters
