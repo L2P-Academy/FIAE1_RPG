@@ -2,7 +2,6 @@ package model;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
-import java.util.List;
 import java.util.ArrayList;
 
 
@@ -12,8 +11,8 @@ public class PlayerCharacterModel extends CharacterModel {
 	private int staminaPoints;
 	private double expPoints;
 	private Dictionary<String, Integer> equipList = new Hashtable<>();
-	private List<QuestModel> activeQuests;
-	private List<QuestModel> completedQuests;
+	private ArrayList<QuestModel> activeQuests;
+	private ArrayList<QuestModel> completedQuests;
 	
 	// Constructor
 	public PlayerCharacterModel(String name, String race, int level, int healthPoints, int manaPoints, int staminaPoints, int baseDmg, int baseArmour) {
@@ -36,12 +35,12 @@ public class PlayerCharacterModel extends CharacterModel {
 		equipList.remove(item);
 	}
 	
-	// getters/setters
+	// Getters and Setters
 	public int getLevel() {
 		return level;
 	}
 
-	public void setLevel(int level) { // changed (int lvl) to (int level)
+	public void setLevel(int level) {
 		this.level = level;
 	}
 
@@ -73,11 +72,15 @@ public class PlayerCharacterModel extends CharacterModel {
 		return equipList;
 	}
 	
-	public List<QuestModel> getActiveQuests() {
+	public void setEquipList(Dictionary<String, Integer> equipList) {
+		this.equipList = equipList;
+	}
+
+	public ArrayList<QuestModel> getActiveQuests() {
         return activeQuests;
     }
 
-    public void setActiveQuests(List<QuestModel> activeQuests) {
+    public void setActiveQuests(ArrayList<QuestModel> activeQuests) {
         this.activeQuests = activeQuests;
     }
 
@@ -85,7 +88,11 @@ public class PlayerCharacterModel extends CharacterModel {
         activeQuests.add(quest);
     }
 
-	public List<QuestModel> getCompletedQuests() {
+	public ArrayList<QuestModel> getCompletedQuests() {
 		return completedQuests;
+	}
+
+	public void setCompletedQuests(ArrayList<QuestModel> completedQuests) {
+		this.completedQuests = completedQuests;
 	}
 }

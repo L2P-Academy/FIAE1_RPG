@@ -8,8 +8,8 @@ public class CharacterModel {
     private int healthPoints;
     private int baseDmg;
     private int baseArmour;
-    private ArrayList<String> inventoryList;
-    private ArrayList<String> abilityList;
+    private ArrayList<ItemModel> inventoryList;
+    private ArrayList<AbilityModel> abilityList;
 
     // Constructor
     public CharacterModel(String name, String race, int healthPoints, int baseDmg, int baseArmour) {
@@ -23,24 +23,13 @@ public class CharacterModel {
     }
     
 	// Method to add an item to the inventory
-    public void addToInventory(String item) {
+    public void addToInventory(ItemModel item) {
         inventoryList.add(item);
     }
     
     // Method to add an ability to the ability list
-    public void addToAbility(String ability) {
+    public void addToAbility(AbilityModel ability) {
     	abilityList.add(ability);
-    }
-    
-    // Method to display character information
-    public void displayInfo() {
-        System.out.println("Name: " + name);
-        System.out.println("Race: " + race);
-        System.out.println("Lebenspunkte: " + healthPoints);
-        System.out.println("Schaden: " + baseDmg);
-        System.out.println("Rüstung: " + baseArmour);
-        System.out.println("Inventar: " + inventoryList);
-        System.out.println("Fähigkeiten: " + abilityList);
     }
 
     // Getters and Setters
@@ -84,19 +73,19 @@ public class CharacterModel {
         this.baseArmour = baseArmour;
     }
 
-    public ArrayList<String> getInventoryList() {
+    public ArrayList<ItemModel> getInventoryList() {
         return inventoryList;
     }
 
-    public void setInventoryList(ArrayList<String> inventoryList) {
+    public void setInventoryList(ArrayList<ItemModel> inventoryList) {
         this.inventoryList = inventoryList;
     }
 
-    public ArrayList<String> getAbilityList() {
+    public ArrayList<AbilityModel> getAbilityList() {
         return abilityList;
     }
 
-    public void setAbilityList(ArrayList<String> abilityList) {
+    public void setAbilityList(ArrayList<AbilityModel> abilityList) {
         this.abilityList = abilityList;
     }
 }
