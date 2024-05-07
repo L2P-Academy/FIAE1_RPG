@@ -17,10 +17,10 @@ public class PlayerCharacterModel extends CharacterModel {
 	// Constructor
 	public PlayerCharacterModel(String name, String race, int level, int healthPoints, int manaPoints, int staminaPoints, int baseDmg, int baseArmour) {
 		super(name, race, healthPoints, baseDmg, baseArmour);
-        setLevel(level); // changed to match the rest of the code!
-        setExpPoints(0); // from: set_expPoints --> setExpPoints
-        setManaPoints(manaPoints); // the rest of the code doesn't use _ (underscores) here
-        setStaminaPoints(staminaPoints); // so i changed this model to match the rest. Made the most sense :)
+        setLevel(level);
+        setExpPoints(0);
+        setManaPoints(manaPoints);
+        setStaminaPoints(staminaPoints);
         activeQuests = new ArrayList<>();
         completedQuests = new ArrayList<>();
     }
@@ -35,7 +35,7 @@ public class PlayerCharacterModel extends CharacterModel {
 		equipList.remove(item);
 	}
 	
-	// Getters and Setters
+	// Getter & Setter
 	public int getLevel() {
 		return level;
 	}

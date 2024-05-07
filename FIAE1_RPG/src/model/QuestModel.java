@@ -32,7 +32,7 @@ public class QuestModel {
 		this.questTarget = questTarget;
 	}
 
-	// Getters and Setters
+	// Getter & Setter
 	public String getTitle() {
 		return title;
 	}

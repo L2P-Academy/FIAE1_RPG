@@ -32,7 +32,7 @@ public class CharacterModel {
     	abilityList.add(ability);
     }
 
-    // Getters and Setters
+    // Getter & Setter
     public String getName() {
         return name;
     }
