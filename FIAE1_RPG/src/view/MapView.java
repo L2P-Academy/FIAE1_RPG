@@ -25,10 +25,10 @@ public class MapView extends JFrame {
 
 	JPanel buttonPanel, mapPanel, mainPanel;
 	JLabel mapTitleLbl;
-	JButton mapBtn, inventoryBtn, characterBtn, questsBtn, settingsBtn; ///////
+	JButton mapBtn, inventoryBtn, characterBtn, questsBtn, settingsBtn; 
 	String mapImagePath = "res/img/MapViewImages/map_start.jpg";
-	String gearImagePath = "C:\\Users\\User\\git\\FIAE1_DnD\\FIAE1_RPG\\res\\img\\MapViewImages\\icon_settings3.png"; //////
-	String buttonPanelBackgroundPath = "res/img/MapViewImages/dnd_background.jpg"; ///////
+	String gearImagePath = "C:\\Users\\User\\git\\FIAE1_DnD\\FIAE1_RPG\\res\\img\\MapViewImages\\icon_settings3.png"; 
+	String buttonPanelBackgroundPath = "res/img/MapViewImages/dnd_background.jpg"; 
 	
 	Clip soundFileMap;
 	
@@ -43,7 +43,7 @@ public class MapView extends JFrame {
 		//Create Panels
 		//create mainPanel
 		mainPanel = new JPanel(new BorderLayout());
-		
+		  
 		//create buttonPanel
 		//buttonPanel = new JPanel(new FlowLayout());
 		buttonPanel = new BackGroundPanel(new ImageIcon(buttonPanelBackgroundPath).getImage());
@@ -64,9 +64,9 @@ public class MapView extends JFrame {
 		characterBtn.setFont(gameFont);
 		questsBtn = new JButton("Quests");
 		questsBtn.setFont(gameFont);
-		////Create Gear-Icon for Settings-Button
+		//Create Gear-Icon for Settings-Button
 		ImageIcon gearIcon = new ImageIcon(new ImageIcon("C:\\Users\\User\\git\\FIAE1_DnD\\FIAE1_RPG\\res\\img\\MapViewImages\\icon_settings3.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH));;
-		////Create the SettingsBtn with GearIcon
+		//Create the SettingsBtn with GearIcon
 		settingsBtn = new JButton(gearIcon);
 		
 		
@@ -76,7 +76,7 @@ public class MapView extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 		MapView mapView = new MapView();
-		SoundFileMap soundFileMap = new SoundFileMap();
+		
 		dispose();					
 		}
 		});
