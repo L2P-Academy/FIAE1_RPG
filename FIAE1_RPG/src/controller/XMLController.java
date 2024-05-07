@@ -81,7 +81,7 @@ public class XMLController {
 			
 			//Adding isQuestItem Child
 			Element isQuestItemChild = document.createElement("QuestItem");
-			isQuestItemChild.appendChild(document.createTextNode(String.valueOf(itemModel.isQuestItem())));
+			isQuestItemChild.appendChild(document.createTextNode(String.valueOf(itemModel.getIsQuestItem())));
 			nameChild.appendChild(isQuestItemChild);
 			
 			//Adding category Child
