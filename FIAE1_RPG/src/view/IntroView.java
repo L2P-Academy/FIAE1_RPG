@@ -18,13 +18,8 @@ public class IntroView extends JFrame {
     		+ "ruht das Schicksal auf den Schultern eines mutigen Helden. "
     		+ "In einem malerischen Dorf namens Eichenhain, umgeben von majestätischen Wäldern "
     		+ "und schroffen Bergen, lebt ein junger Mann namens Rida. Sein Herz brennt vor "
-    		+ "Abenteuerlust, und sein Geist sehnt sich nach der Unbekannten, die jenseits der "
-    		+ "Grenzen seines kleinen Dorfes liegt. Eines Tages, als die Sonne golden über den "
-    		+ "Horizont klettert und die Welt in ein warmes Licht taucht, trifft eine Nachricht "
-    		+ "aus der fernen Hauptstadt des Königreichs ein. Ein uraltes Böses erhebt sich aus "
-    		+ "den Schatten, bedroht die Welt und versetzt das Land in Angst und Schrecken. "
-    		+ "Der König ruft nach Helden, die sich ihm entgegenstellen und das Land vor dem "
-    		+ "drohenden Unheil retten können. Inspiriert von dem Ruf des Abenteuers und dem "
+    		+ "Abenteuerlust, und sein Geist sehnt sich nach dem Unbekannten, die jenseits der "
+    		+ "Grenzen seines kleinen Dorfes liegt. Inspiriert von dem Ruf des Abenteuers und dem "
     		+ "Drang, seinem Volk zu dienen, beschließt Rida, sich der Mission anzuschließen. "
     		+ "Mit einem Schwert an seiner Seite, einem Hauch von Magie in der Luft und der "
     		+ "Unterstützung seiner treuen Freunde macht er sich auf den Weg zu einer Reise, "
@@ -35,6 +30,7 @@ public class IntroView extends JFrame {
     		+ "auch das Schicksal des gesamten Königreichs bestimmen. Begleite Rida auf seinem "
     		+ "epischen Abenteuer, während er sich auf den Weg macht, um das Böse zu bekämpfen, "
     		+ "das in den Schatten lauert, und die Welt von Dragons & Dungeons zu retten. "
+    		+ "\n"
     		+ "Die Reise beginnt jetzt...";
 
     public IntroView() {
@@ -52,6 +48,7 @@ public class IntroView extends JFrame {
         scrollingTextArea.setEditable(false); // Text nicht editierbar machen
         scrollingTextArea.setPreferredSize(new Dimension(400, 200));
         scrollingTextArea.setBackground(new Color(245, 245, 220));
+        scrollingTextArea.setText(introText);
         
         nextBtn = new JButton("Weiter");
         nextBtn.setFont(new Font("Old English Text MT", Font.PLAIN, 28));
@@ -68,7 +65,7 @@ public class IntroView extends JFrame {
 			}
 		});
         
-        getContentPane().add(scrollingTextArea);
+        getContentPane().add(scrollingTextArea, BorderLayout.CENTER);
         getContentPane().add(nextBtn, BorderLayout.SOUTH);
 
         setLocationRelativeTo(null);
@@ -86,7 +83,7 @@ public class IntroView extends JFrame {
                     SwingUtilities.invokeLater(() -> {
                         scrollingTextArea.setText(currentText);
                     });
-                    TimeUnit.MILLISECONDS.sleep(40); // Anpassen der Geschwindigkeit
+                    TimeUnit.MILLISECONDS.sleep(5); // Anpassen der Geschwindigkeit
                 }
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
