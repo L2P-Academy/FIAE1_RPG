@@ -83,7 +83,7 @@ public class IntroView extends JFrame {
                     SwingUtilities.invokeLater(() -> {
                         scrollingTextArea.setText(currentText);
                     });
-                    TimeUnit.MILLISECONDS.sleep(5); // Anpassen der Geschwindigkeit
+                    TimeUnit.MILLISECONDS.sleep(50); // Anpassen der Geschwindigkeit
                 }
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
