@@ -17,7 +17,7 @@ public class PlayerCharacterModel extends CharacterModel {
         set_level(level);
         set_expPoints(0);
         set_manaPoints(manaPoints);
-        set_staminaPoints(staminaPoints);
+        
     }
 
 	// method to add item to equip

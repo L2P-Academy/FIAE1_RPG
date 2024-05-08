@@ -10,6 +10,7 @@ public class CharacterModel {
     private int baseArmour;
     private ArrayList<String> inventoryList;
     private ArrayList<String> abilityList;
+    private int currentHealthPoints;
 
     // Constructor
     public CharacterModel(String name, String race, int healthPoints, int baseDmg, int baseArmour) {
@@ -20,6 +21,7 @@ public class CharacterModel {
         this.baseArmour = baseArmour;
         this.inventoryList = new ArrayList<>();
         this.abilityList = new ArrayList<>();
+        this.currentHealthPoints = healthPoints;
     }
     
 	// Method to add an item to the inventory
