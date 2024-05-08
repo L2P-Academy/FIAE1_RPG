@@ -82,10 +82,10 @@ public class XMLController {
 					rootElement.appendChild(nameChild);
 					
 					//Adding durability Child
-					Element durabilityChild = document.createElement("Durability");
-					durabilityChild.appendChild(document.createTextNode(String.valueOf(currentItem.getItemDurability())));
-					nameChild.appendChild(durabilityChild);
-					
+//					Element durabilityChild = document.createElement("Durability");
+//					durabilityChild.appendChild(document.createTextNode(String.valueOf(currentItem.getItemDurability())));
+//					nameChild.appendChild(durabilityChild);
+//					
 					//Adding quantity Child
 					Element quantityChild = document.createElement("Quantity");
 					quantityChild.appendChild(document.createTextNode(String.valueOf(currentItem.getItemQuantity())));

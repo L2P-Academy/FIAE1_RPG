@@ -70,8 +70,8 @@ public class MainMenuView extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				CharacterCreationView characterCreationView = new CharacterCreationView();
-				soundController.stopMainMenuMusic();
+				soundController.playButtonClickSound();
+				CharacterCreationView characterCreationView = new CharacterCreationView();				
 				dispose();								
 			}
 		});
@@ -80,7 +80,8 @@ public class MainMenuView extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				soundController.playButtonClickSound();
+				SavegameView savegameView = new SavegameView();
 				
 			}
 		});
@@ -89,7 +90,9 @@ public class MainMenuView extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				soundController.stopMainMenuMusic();
+				soundController.playButtonClickSound();
+				soundController.stopMusicLoop();
+
 				dispose();
 				
 			}
@@ -101,7 +104,7 @@ public class MainMenuView extends JFrame{
 		setVisible(true);
 		
 		//play Music in background after rendering		
-		soundController.playMainMenuMusic();
+		soundController.playMusicLoop("res/soundFX/music/mainMenu_music.wav");
 		
 	}
 
