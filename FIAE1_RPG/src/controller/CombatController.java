@@ -1,6 +1,7 @@
 package controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import model.CharacterModel;
 
@@ -21,16 +22,28 @@ public class CombatController {
 
 	// Method to start the combat encounter
 	public void startEncounter() {
-		// TODO: under construction...
+		Collections.shuffle(combatants);
+		currentTurnIndex = 0;
+		for (int i = 0; i < combatants.size(); i++) {
+		}
+		takeTurn();
 	}
 
 	// Method to end the combat encounter
 	public void endEncounter() {
-		// TODO: somethings missing...
+		combatants.clear();
+		currentTurnIndex = 0;
 	}
 
 	// Method to handle a combatant's turn
 	private void takeTurn() {
-		// TODO: will be back soon...
+		if (combatants.isEmpty()) {
+			return;
+		}
+		currentTurnIndex++;
+		if (currentTurnIndex >= combatants.size()) {
+			currentTurnIndex = 0;
+		}
+		takeTurn();
 	}
 }
