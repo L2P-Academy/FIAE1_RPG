@@ -10,7 +10,7 @@ public class InventoryController {
     private InventoryView view;
     private ArrayList<ItemModel> inventory;
     int goldBalance;
-    String selectedItem;
+    ItemModel selectedItem;
 
     // create new inventory
     public InventoryController() {
@@ -48,14 +48,22 @@ public class InventoryController {
     }
     
     // function to equip a item
-    public void equipItem(String item) {
-    	this.selectedItem = item;
+    public void equipItem(String itemName) {
+        for (ItemModel item : inventory) {
+            if (item.getItemName().equals(itemName)) {
+                this.selectedItem = item; 
+                break;
+            }
+        }
     }
-    
+
     // function to unequip a item
-    public void unequipItem(String item) {
-    	this.selectedItem = null;
+    public void unequipItem(String itemName) {
+        if (this.selectedItem != null && this.selectedItem.getItemName().equals(itemName)) {
+            this.selectedItem = null; 
+        }
     }
+
     
     // Sort method for name with compare the items
     public void sortByName() {
@@ -67,14 +75,19 @@ public class InventoryController {
     }
     
     
-    // Sort method for price with compare method 
-//    public void sortByPrice() {
-//        Collections.sort(inventory, new Comparator<ItemModel>() {
-//            public int compare(ItemModel item1, ItemModel item2) {
-//                return Integer.compare(item1.getItemPrice(), item2.getItemPrice());
-//            }
-//        });
-//    }
+    public void sortByPrice() {
+        int n = inventory.size();
+        for (int i = 0; i < n-1; i++) {
+            for (int j = 0; j < n-i-1; j++) {
+                if (inventory.get(j).getItemPrice() > inventory.get(j+1).getItemPrice()) {
+                    ItemModel temp = inventory.get(j);
+                    inventory.set(j, inventory.get(j+1));
+                    inventory.set(j+1, temp);
+                }
+            }
+        }
+    }
+
 }
 
 
