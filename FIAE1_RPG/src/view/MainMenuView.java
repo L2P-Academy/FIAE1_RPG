@@ -71,6 +71,7 @@ public class MainMenuView extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				soundController.playButtonClickSound();
+				soundController.stopMusicLoop();
 				CharacterCreationView characterCreationView = new CharacterCreationView();				
 				dispose();								
 			}

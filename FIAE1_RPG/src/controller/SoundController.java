@@ -8,7 +8,7 @@ import javax.sound.sampled.Clip;
 
 public class SoundController {
 	
-	Clip clip;
+	Clip buttonClip, ambientClip, musicClip, fxClip;
 	File filepath;
 	
 	public SoundController() {
@@ -21,9 +21,9 @@ public class SoundController {
 	public void playButtonClickSound() {
 		try {
 			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("res/soundFX/fxEffects/button_click_Sound.wav"));
-			clip = AudioSystem.getClip();
-			clip.open(audioInputStream);
-			clip.loop(0);
+			buttonClip = AudioSystem.getClip();
+			buttonClip.open(audioInputStream);
+			buttonClip.loop(0);
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -34,9 +34,9 @@ public class SoundController {
 	public void playAmbientSound(String filepath) {
 		try {
 			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(filepath));
-			clip = AudioSystem.getClip();
-			clip.open(audioInputStream);
-			clip.loop(Clip.LOOP_CONTINUOUSLY);
+			ambientClip = AudioSystem.getClip();
+			ambientClip.open(audioInputStream);
+			ambientClip.loop(Clip.LOOP_CONTINUOUSLY);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -46,9 +46,9 @@ public class SoundController {
 	public void playFxSound(String filepath) {
 		try {
 			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(filepath));
-			clip = AudioSystem.getClip();
-			clip.open(audioInputStream);
-			clip.loop(0);
+			fxClip = AudioSystem.getClip();
+			fxClip.open(audioInputStream);
+			fxClip.loop(0);
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -60,9 +60,9 @@ public class SoundController {
 	public void playMusicLoop(String filepath) {
 		try {
 			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(filepath));
-			clip = AudioSystem.getClip();
-			clip.open(audioInputStream);
-			clip.loop(Clip.LOOP_CONTINUOUSLY);
+			musicClip = AudioSystem.getClip();
+			musicClip.open(audioInputStream);
+			musicClip.loop(Clip.LOOP_CONTINUOUSLY);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -70,15 +70,15 @@ public class SoundController {
 	}
 	
 	public void stopAmbientSound() {
-		if (clip != null && clip.isOpen()) {
-			clip.stop();
-			clip.close();
+		if (ambientClip != null && ambientClip.isOpen()) {
+			ambientClip.stop();
+			ambientClip.close();
 		}
 	}
 	
 	public void stopMusicLoop() {
-			clip.stop();
-			clip.close();
+		musicClip.stop();
+		musicClip.close();
 		}
 	}
 
