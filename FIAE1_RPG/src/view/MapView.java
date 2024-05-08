@@ -19,18 +19,21 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+
+import controller.SoundController;
 
 
 public class MapView extends JFrame {
 
 	JPanel buttonPanel, mapPanel, mainPanel;
 	JLabel mapTitleLbl;
-	JButton mapBtn, inventoryBtn, characterBtn, questsBtn, settingsBtn; 
+	JButton inventoryBtn, characterBtn, questsBtn, settingsBtn; 
 	String mapImagePath = "res/img/MapViewImages/map_start.jpg";
-	String gearImagePath = "C:\\Users\\User\\git\\FIAE1_DnD\\FIAE1_RPG\\res\\img\\MapViewImages\\icon_settings3.png"; 
+	String gearImagePath = "res/img/MapViewImages/icon_settings3.png"; 
 	String buttonPanelBackgroundPath = "res/img/MapViewImages/dnd_background.jpg"; 
+	SoundController soundController;
 	
-	Clip soundFileMap;
 	
 	Font gameFont;
 	
@@ -39,6 +42,7 @@ public class MapView extends JFrame {
 		setTitle("Weltkarte");
 		setSize(1200, 800);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		soundController = new SoundController();
 	
 		//Create Panels
 		//create mainPanel
@@ -56,8 +60,7 @@ public class MapView extends JFrame {
 				
 		//Create Buttons
 		gameFont = new Font("Old English Text MT", Font.BOLD, 32);
-		mapBtn = new JButton("Weltkarte"); 
-		mapBtn.setFont(gameFont);
+		
 		inventoryBtn = new JButton("Inventar");
 		inventoryBtn.setFont(gameFont);
 		characterBtn = new JButton("Charakter");
@@ -65,43 +68,36 @@ public class MapView extends JFrame {
 		questsBtn = new JButton("Quests");
 		questsBtn.setFont(gameFont);
 		//Create Gear-Icon for Settings-Button
-		ImageIcon gearIcon = new ImageIcon(new ImageIcon("C:\\Users\\User\\git\\FIAE1_DnD\\FIAE1_RPG\\res\\img\\MapViewImages\\icon_settings3.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH));;
+		ImageIcon gearIcon = new ImageIcon(new ImageIcon("res/img/MapViewImages/icon_settings3.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH));;
 		//Create the SettingsBtn with GearIcon
 		settingsBtn = new JButton(gearIcon);
 		
 		
 		
-		// Add action listeners to buttons
-		mapBtn.addActionListener(new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-		MapView mapView = new MapView();
-		
-		dispose();					
-		}
-		});
-		
+				
 		inventoryBtn.addActionListener(new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+		soundController.playFxSound("res/soundFX/fxEffects/cloth-inventory.wav");
 		InventoryView inventoryView = new InventoryView();
-		dispose();
+		
 		}
 		});
 					
 		characterBtn.addActionListener(new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+		soundController.playButtonClickSound();
 		CharacterView characterView = new CharacterView();
-		dispose();
+		
 		}
 		});
 					 
 		questsBtn.addActionListener(new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+		soundController.playFxSound("res/soundFX/fxEffects/turn_page.wav");
 		QuestView questView = new QuestView();
-		dispose();
 		}
 		});
 					 
@@ -113,7 +109,7 @@ public class MapView extends JFrame {
 		});
 					 
 		// add buttons to buttonPanel		
-		buttonPanel.add(mapBtn);
+		
 		buttonPanel.add(inventoryBtn);
 		buttonPanel.add(characterBtn);
 		buttonPanel.add(questsBtn);
