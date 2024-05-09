@@ -130,8 +130,7 @@ public class XMLController {
 					DOMSource source = new DOMSource(document);
 					StreamResult result = new StreamResult(new File(inventoryListFilepath));
 					transformer.transform(source, result);
-					
-					
+										
 					// Console output
 //					StreamResult consoleResult = new StreamResult(System.out);
 //			        transformer.transform(source, consoleResult);
