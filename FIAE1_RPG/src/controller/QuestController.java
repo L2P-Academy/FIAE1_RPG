@@ -130,14 +130,12 @@ public class QuestController {
 		}
 	}
 
-//	// Method to retrieve the reward associated with completing a quest
-//	public void getQuestReward(PlayerCharacterModel player, QuestModel quest, ItemModel item) {
-//	    if (!quest.isCompleted()) {
-//	        return;
-//	    }
-//	    player.setExpPoints(player.getExpPoints() + quest.getRewardExpPoints());
-//	    if (item != null) {
-//	        item.setGold(item.getGold() + quest.getRewardGold());
-//	    }
-//	}
+	// Method to retrieve the reward associated with completing a quest
+	public void getQuestReward(PlayerCharacterModel player, QuestModel quest, ItemModel gold) {
+	    if (!quest.isCompleted()) {
+	        return;
+	    }
+	    player.setExpPoints(player.getExpPoints() + quest.getRewardExpPoints());
+	        gold.setItemQuantity((int) (gold.getItemQuantity() + quest.getRewardGold()));
+	}
 }
