@@ -41,11 +41,13 @@ public class ItemModel {
 	}
 
 	// Constructor für Equipment
-	public ItemModel(String itemName, int itemQuantity, double itemPrice, int itemDamage) {
+	public ItemModel(String itemName, int itemQuantity, double itemPrice, int itemDamage, String itemDescription ) {
 		this.itemName = itemName;
 		this.itemQuantity = itemQuantity;
+		this.itemPrice = itemPrice;
 		this.isQuestItem = false;
 		this.itemDamage = itemDamage;
+		this.itemDescription = itemDescription;
 	}
 
 	// Getter & Setter

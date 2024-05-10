@@ -111,8 +111,8 @@ public class XMLController {
 					itemRoot.appendChild(isQuestItemChild);
 					
 					//Adding itemDescription Child
-					Element itemDescriptionChild = document.createElement("Descriptiopn");
-					isQuestItemChild.appendChild(document.createTextNode(String.valueOf(currentItem.getItemDescription())));
+					Element itemDescriptionChild = document.createElement("Description");
+					itemDescriptionChild.appendChild(document.createTextNode(currentItem.getItemDescription()));
 					itemRoot.appendChild(itemDescriptionChild);
 				
 					//Adding durability Child
@@ -165,18 +165,13 @@ public class XMLController {
 					// Element casting is necessary for using Element methods
 					Element itemElement = (Element) itemNode;
 
-					String itemName = itemElement.getElementsByTagName("Name").item(0).getTextContent();
-					System.out.println(itemName);
+					String itemName = itemElement.getElementsByTagName("Name").item(0).getTextContent();					
 					boolean isQuestItem = Boolean.parseBoolean(itemElement.getElementsByTagName("QuestItem").item(0).getTextContent());
-					System.out.println(isQuestItem);
 					int quantity = Integer.parseInt(itemElement.getElementsByTagName("Quantity").item(0).getTextContent());
-					System.out.println(quantity);
-					
+					String itemDescription = String.valueOf(itemElement.getElementsByTagName("Description").item(0).getTextContent());
 					NodeList priceNodes = itemElement.getElementsByTagName("Price");
 					NodeList damageNodes = itemElement.getElementsByTagName("Damage");
-					System.out.println(damageNodes.getLength());
-					System.out.println(priceNodes.getLength());
-			
+					
 //					else if (damageNodes.getLength() > 0) {
 //						int damage = Integer.parseInt(itemElement.getElementsByTagName("Damage").item(0).getTextContent());
 //						ItemModel itemModel = new ItemModel(itemName, quantity, price, damage);
@@ -190,7 +185,6 @@ public class XMLController {
 					else if(priceNodes.getLength() != 0 && damageNodes.getLength() != 0) {
 						double price = Double.parseDouble(itemElement.getElementsByTagName("Price").item(0).getTextContent());
 						int damage = Integer.parseInt(itemElement.getElementsByTagName("Damage").item(0).getTextContent());
-						String itemDescription = String.valueOf(itemElement.getElementsByTagName("Description").item(0).getTextContent());
 						ItemModel itemModel = new ItemModel(itemName, quantity, price, damage, isQuestItem, itemDescription);
 				    	itemList.add(itemModel);
 				    	
