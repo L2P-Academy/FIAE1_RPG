@@ -2,7 +2,7 @@ Titel: FIAE1_RPG
 
 Lernprojekt Comcave Kurs 425518 unter Leitung von L2P Academy
 
-Von D&D inspiriertes klassisches RPG, programmiert in Java via Eclipse
+Textbasiertes RPG, programmiert in Java via Eclipse
 
 Lizenz: GNU GPL v.3
 
