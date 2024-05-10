@@ -7,8 +7,8 @@ public class EquipModel extends ItemModel {
 
 	
 	// Constructor with all input (Name, Quantity, Price, Damage, isQuestItem, Defense, req.Lvl)
-	public EquipModel(String itemName, int itemQuantity, double itemPrice, int itemDamage, boolean isQuestItem, int itemDefense, int requiredLevel) {
-		super(itemName, itemQuantity, itemPrice, itemDamage, isQuestItem);
+	public EquipModel(String itemName, int itemQuantity, double itemPrice, int itemDamage, boolean isQuestItem, int itemDefense, int requiredLevel, String itemDescription) {
+		super(itemName, itemQuantity, itemPrice, itemDamage, isQuestItem, itemDescription);
 		this.itemDefense = itemDefense;
 		this.requiredLevel = requiredLevel;
 	}
