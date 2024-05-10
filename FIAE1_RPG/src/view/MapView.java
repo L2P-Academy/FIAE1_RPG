@@ -30,8 +30,9 @@ public class MapView extends JFrame {
 	JLabel mapTitleLbl;
 	JButton inventoryBtn, characterBtn, questsBtn, settingsBtn; 
 	String mapImagePath = "res/img/MapViewImages/map_start.jpg";
-	String gearImagePath = "res/img/MapViewImages/icon_settings3.png"; 
-	String buttonPanelBackgroundPath = "res/img/MapViewImages/dnd_background.jpg"; 
+	String buttonPanelBackgroundPath = "res/img/MapViewImages/ButtonPanelBackground5.jpg"; 
+	
+	
 	SoundController soundController;
 	
 	
@@ -45,78 +46,86 @@ public class MapView extends JFrame {
 		soundController = new SoundController();
 	
 		//Create Panels
-		//create mainPanel
 		mainPanel = new JPanel(new BorderLayout());
-		  
-		//create buttonPanel
-		//buttonPanel = new JPanel(new FlowLayout());
-		buttonPanel = new BackGroundPanel(new ImageIcon(buttonPanelBackgroundPath).getImage());
-		buttonPanel.setLayout(new FlowLayout());
 		
-		//create mapPanel
+		//Create BackgroundMusic
+		soundController.playAmbientSound("res/soundFX/music/Map_Music.wav");
+		////soundController.stopAmbientSound();
+		
+		//Create buttonPanel with BackgroundImage
+		buttonPanel = new BackGroundPanel(new ImageIcon(buttonPanelBackgroundPath).getImage());
+		buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 200, 0)); //px Abstand horizontal und vertikal
+		
+		//create mapPanel with BackgroundImage
 		mapPanel = new BackGroundPanel(new ImageIcon(mapImagePath).getImage());
 		mapPanel.setLayout(new BorderLayout());
 		mainPanel = new JPanel(new BorderLayout());
 				
 		//Create Buttons
-		gameFont = new Font("Old English Text MT", Font.BOLD, 32);
+		//gameFont = new Font("Old English Text MT", Font.BOLD, 32);
 		
-		inventoryBtn = new JButton("Inventar");
-		inventoryBtn.setFont(gameFont);
-		characterBtn = new JButton("Charakter");
-		characterBtn.setFont(gameFont);
-		questsBtn = new JButton("Quests");
-		questsBtn.setFont(gameFont);
+		//Create inventoryBtn with bagIcon
+		ImageIcon bagIcon = new ImageIcon(new ImageIcon("res/img/MapViewImages/icon_bag2.png").getImage().getScaledInstance(44, 44, Image.SCALE_SMOOTH));;
+		inventoryBtn = new JButton(bagIcon);
+		inventoryBtn.setContentAreaFilled(false); // Make button transparent
+		inventoryBtn.setBorderPainted(false);	// Remove border	
+		inventoryBtn.setToolTipText("Inventar"); // hoverText
+		
+		//Create CharacterBtn with characterIcon
+		ImageIcon characterIcon = new ImageIcon(new ImageIcon("res/img/MapViewImages/icon_character2.png").getImage().getScaledInstance(44, 44, Image.SCALE_SMOOTH));;
+		characterBtn = new JButton(characterIcon);
+		characterBtn.setContentAreaFilled(false); // Make button transparent
+		characterBtn.setBorderPainted(false);	// Remove border
+		characterBtn.setToolTipText("Charakter");
+		
+		
+		//Create questsBtn with questsIcon
+		ImageIcon questsIcon = new ImageIcon(new ImageIcon("res/img/MapViewImages/icon_quests2.png").getImage().getScaledInstance(44, 44, Image.SCALE_SMOOTH));;
+		questsBtn = new JButton(questsIcon);
+		questsBtn.setContentAreaFilled(false); // Make button transparent
+		questsBtn.setBorderPainted(false);		// Remove border
+		questsBtn.setToolTipText("Quests");
+		
 		//Create Gear-Icon for Settings-Button
-		ImageIcon gearIcon = new ImageIcon(new ImageIcon("res/img/MapViewImages/icon_settings3.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH));;
-		//Create the SettingsBtn with GearIcon
+		ImageIcon gearIcon = new ImageIcon(new ImageIcon("res/img/MapViewImages/icon_settings3.png").getImage().getScaledInstance(44, 44, Image.SCALE_SMOOTH));;
 		settingsBtn = new JButton(gearIcon);
+		settingsBtn.setContentAreaFilled(false); // Make button transparent
+		settingsBtn.setBorderPainted(false);	// Remove border
+		settingsBtn.setToolTipText("Einstellungen");
 		
-		
-		
-				
+		//Add ActionListener to buttons
 		inventoryBtn.addActionListener(new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 		soundController.playFxSound("res/soundFX/fxEffects/cloth-inventory.wav");
 		InventoryView inventoryView = new InventoryView();
-		
-		}
-		});
+		}});
 					
 		characterBtn.addActionListener(new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 		soundController.playButtonClickSound();
 		CharacterView characterView = new CharacterView();
-		
-		}
-		});
+		}});
 					 
 		questsBtn.addActionListener(new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 		soundController.playFxSound("res/soundFX/fxEffects/turn_page.wav");
 		QuestView questView = new QuestView();
-		}
-		});
+		}});
 					 
 		settingsBtn.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
-							//// LOLOL /////
-							////////////////
-		}
-		});
-					 
-		// add buttons to buttonPanel		
-		
+		}});
+		//Add buttons to buttonPanel		
 		buttonPanel.add(inventoryBtn);
 		buttonPanel.add(characterBtn);
 		buttonPanel.add(questsBtn);
 		////add settingsBtn to buttonPanel
 		buttonPanel.add(settingsBtn);
 		
-		// add panels to Window
+		//Add panels to Window
 		mainPanel.add(buttonPanel, BorderLayout.NORTH);
 		mainPanel.add(mapPanel, BorderLayout.CENTER);
 		getContentPane().add(mainPanel);
