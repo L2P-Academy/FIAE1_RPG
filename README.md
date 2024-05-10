@@ -4,7 +4,7 @@ Lernprojekt Comcave Kurs 425518 unter Leitung von L2P Academy
 
 Von D&D inspiriertes klassisches RPG, programmiert in Java via Eclipse
 
-Lizenz: Open Source / CC BY-SA 4.0
+Lizenz: GNU GPL v.3
 
 Contributors:
 
