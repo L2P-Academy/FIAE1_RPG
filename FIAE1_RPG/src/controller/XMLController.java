@@ -2,7 +2,7 @@ package controller;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.stream.XMLOutputFactory;
+//import javax.xml.stream.XMLOutputFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -10,12 +10,15 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
+//import java.io.IOException;
+//import java.io.OutputStream;
+//import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import model.ItemModel;
 
@@ -26,16 +29,16 @@ import model.ItemModel;
 public class XMLController {
 	
 	// Adding Filepaths 
-	private String characterInfoFilepath = "res/xml/characterInfo.xml";
+	//private String characterInfoFilepath = "res/xml/characterInfo.xml";
 	private String inventoryListFilepath = "res/xml/inventoryList.xml";
-	private String progressFilepath= "res/xml/progress.xml";
+	//private String progressFilepath= "res/xml/progress.xml";
 	
 	// Adding Existens Varriable for Verafication in Write Methods
-	private File fileExistsCharacterInfo = new File(characterInfoFilepath);
+	//private File fileExistsCharacterInfo = new File(characterInfoFilepath);
 	private File fileExistsInventoryList = new File(inventoryListFilepath);
-	private File fileExistsProgress = new File(progressFilepath);
+	//private File fileExistsProgress = new File(progressFilepath);
 	
-		
+	
 	
 	public void xmlWriteCharacterInfo(){	
 		
@@ -73,38 +76,48 @@ public class XMLController {
 				document.appendChild(rootElement);
 				
 				//Loop for every Item in the itemList				
-				for(int i = 0 ; i < itemList.size(); i++) {
-					//Varriable die mit der Forschleife hochzählt, damit jedes Item der Liste erfasst wird.
-					ItemModel currentItem = itemList.get(i);
-				
-					//Adding name Child and "root" for every attribute
-					Element nameChild = document.createElement(currentItem.getItemName());
-					rootElement.appendChild(nameChild);
+				for(ItemModel currentItem : itemList) {
 					
-					//Adding durability Child
-//					Element durabilityChild = document.createElement("Durability");
-//					durabilityChild.appendChild(document.createTextNode(String.valueOf(currentItem.getItemDurability())));
-//					nameChild.appendChild(durabilityChild);
+					//Adding itemTag as "Root" for each Item
+					Element itemRoot = document.createElement("Item");
+					rootElement.appendChild(itemRoot);
+					
+					//Adding name Child 
+					Element nameChild = document.createElement("Name");
+					nameChild.appendChild(document.createTextNode(currentItem.getItemName()));
+					itemRoot.appendChild(nameChild);
+					
 					//Adding quantity Child
-					Element quantityChild = document.createElement("Quantity");
-					quantityChild.appendChild(document.createTextNode(String.valueOf(currentItem.getItemQuantity())));
-					nameChild.appendChild(quantityChild);
+					if(currentItem.getItemQuantity() != 0) {
+						Element quantityChild = document.createElement("Quantity");
+						quantityChild.appendChild(document.createTextNode(String.valueOf(currentItem.getItemQuantity())));
+						itemRoot.appendChild(quantityChild);
+					}
 					
 					//Adding price Child
-					Element priceChild = document.createElement("Price");
-					priceChild.appendChild(document.createTextNode(String.valueOf(currentItem.getItemPrice())));
-					nameChild.appendChild(priceChild);
+					if(currentItem.getItemPrice() != 0) {
+						Element priceChild = document.createElement("Price");
+						priceChild.appendChild(document.createTextNode(String.valueOf(currentItem.getItemPrice())));
+						itemRoot.appendChild(priceChild);
+					}
 					
 					//Adding damage Child
-					Element damageChild = document.createElement("Damage");
-					damageChild.appendChild(document.createTextNode(String.valueOf(currentItem.getItemDamage())));
-					nameChild.appendChild(damageChild);
+					if(currentItem.getItemDamage() != 0) {
+						Element damageChild = document.createElement("Damage");
+						damageChild.appendChild(document.createTextNode(String.valueOf(currentItem.getItemDamage())));
+						itemRoot.appendChild(damageChild);
+					}
 					
 					//Adding isQuestItem Child
 					Element isQuestItemChild = document.createElement("QuestItem");
 					isQuestItemChild.appendChild(document.createTextNode(String.valueOf(currentItem.getIsQuestItem())));
-					nameChild.appendChild(isQuestItemChild);
+					itemRoot.appendChild(isQuestItemChild);
 				
+					//Adding durability Child
+//					Element durabilityChild = document.createElement("Durability");
+//					durabilityChild.appendChild(document.createTextNode(String.valueOf(currentItem.getItemDurability())));
+//					nameChild.appendChild(durabilityChild);
+					
 //					//Adding category Child
 //					Element categoryChild = document.createElement("Category");
 //					categoryChild.appendChild(document.createTextNode(String.valueOf(currentItem.getCategory())));
@@ -117,8 +130,7 @@ public class XMLController {
 					DOMSource source = new DOMSource(document);
 					StreamResult result = new StreamResult(new File(inventoryListFilepath));
 					transformer.transform(source, result);
-					
-					
+										
 					// Console output
 //					StreamResult consoleResult = new StreamResult(System.out);
 //			        transformer.transform(source, consoleResult);
@@ -130,10 +142,66 @@ public class XMLController {
 		
 		}
 	
-	public void xmlReadInventoryList() {
+	public ArrayList<ItemModel> xmlReadInventoryList() {
+		
+		ArrayList<ItemModel> itemList = new ArrayList<ItemModel>();
+		
+		try {
+			
+			if(fileExistsInventoryList.exists()) {
+				//Building steps for a Document
+				DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+				DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+				Document document = documentBuilder.parse(inventoryListFilepath);
+				document.normalize();
+				// Getting all Childs from the Root. in this Case Item Tag
+				NodeList itemNodeList = document.getElementsByTagName("Item");
+				
+				for (int i = 0; i < itemNodeList.getLength(); i++) {
+				    Node itemNode = itemNodeList.item(i);
+				    
+					// Element casting is necessary for using Element methods
+					Element itemElement = (Element) itemNode;
+
+					String itemName = itemElement.getElementsByTagName("Name").item(0).getTextContent();
+					System.out.println(itemName);
+					boolean isQuestItem = Boolean.parseBoolean(itemElement.getElementsByTagName("QuestItem").item(0).getTextContent());
+					System.out.println(isQuestItem);
+					int quantity = Integer.parseInt(itemElement.getElementsByTagName("Quantity").item(0).getTextContent());
+					System.out.println(quantity);
+					
+					NodeList priceNodes = itemElement.getElementsByTagName("Price");
+					NodeList damageNodes = itemElement.getElementsByTagName("Damage");
+					System.out.println(damageNodes.getLength());
+					System.out.println(priceNodes.getLength());
+			
+//					else if (damageNodes.getLength() > 0) {
+//						int damage = Integer.parseInt(itemElement.getElementsByTagName("Damage").item(0).getTextContent());
+//						ItemModel itemModel = new ItemModel(itemName, quantity, price, damage);
+//				    	itemList.add(itemModel);
+//					}
+					if(priceNodes.getLength() == 0 && damageNodes.getLength() == 0){
+				    	ItemModel itemModel = new ItemModel(itemName, quantity);
+				    	itemList.add(itemModel);
+				    
+					}
+					else if(priceNodes.getLength() != 0 && damageNodes.getLength() != 0) {
+						double price = Double.parseDouble(itemElement.getElementsByTagName("Price").item(0).getTextContent());
+						int damage = Integer.parseInt(itemElement.getElementsByTagName("Damage").item(0).getTextContent());
+						ItemModel itemModel = new ItemModel(itemName, quantity, price, damage, isQuestItem);
+				    	itemList.add(itemModel);
+				    	
+					} 
+				}   
+			}
+		}
+		catch (Exception e) {
+			
+		}
+		
+		return itemList; 
 		
 	}
-
 
 
 
