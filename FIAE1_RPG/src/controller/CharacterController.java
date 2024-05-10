@@ -1,53 +1,80 @@
+/*
+ * What happens after a lvl up:
+ * - add: change BaseArmour
+ * - add: change BaseDmg
+ * - add: change max HP/MP
+ * 
+ * XP:
+ * - add: XP conditions for lvl up
+ * - add: % of actual lvl progress
+ * 
+ * ???:
+ * Wie werden Verbesserungen durch Ausrüsten technisch umgesetzt?
+ */
+
 package controller;
 
-import model.CharacterModel;	
+import model.CharacterModel;
 import model.PlayerCharacterModel;
 
 public class CharacterController {
 	
+	// creates a new player character
 	PlayerCharacterModel playerCharacterModel;
-	
-	/* defines max Points, so HP/MP can't fall below 0
-	private int maxHealthPoints; needed?
-	private int maxManaPoints; needed? */
-	
-	// create a new player character, sets Level to 1 
-	// Singleton-pattern required?
 	
 	public void createCharacter() {
 		
 		playerCharacterModel = new PlayerCharacterModel(null, null, 0, 0, 0, 0, 0, 0);
 		playerCharacterModel.setLevel(1); 
-		playerCharacterModel.setHealthPoints(100); // not final
-		playerCharacterModel.setBaseArmour(5); // not final
-		playerCharacterModel.setManaPoints(100); // not final
-		playerCharacterModel.setBaseDmg(10); // not final
-		playerCharacterModel.setAbilityList(null); // not final
-		playerCharacterModel.setInventoryList(null); // weapons, armour? not final
+		playerCharacterModel.setHealthPoints(100);
+		playerCharacterModel.setCurrentHealthPoints(100);
+		playerCharacterModel.setBaseArmour(5);
+		playerCharacterModel.setManaPoints(100);
+		playerCharacterModel.setCurrentManaPoints(100);
+		playerCharacterModel.setBaseDmg(10);
+		playerCharacterModel.setAbilityList(null);
+		playerCharacterModel.setInventoryList(null);
 	
 	} 
 	
-	// Change HP; TO DO: >= 0 = Game Over
-	
-	public void updateHealthpoints(int updateHP) {	
-		
-		// TODO: Methoden in Model müssen noch für HP erstellt werden
-		// später Comments entfernen!
-		
-		// int hp = playerCharacterModel.get_healthPoints();
-		// playerCharacterModel.set_healthPoints(hp + updateHP);
-		// How to solve this with getter/setter?
-			
+	// adds +1 to character level
+	public void levelupCharacter() {
+		if (playerCharacterModel.getLevel() >= 100) // Max. LVL = 100; can be changed
+			playerCharacterModel.setLevel(100);
+		else {
+			playerCharacterModel.setLevel(playerCharacterModel.getLevel() + 1);
+		}
 	}
 	
-	// Change Mana; TO DO: >= 0 = 0
+	// Update Healthpoints; GP can't go below 0 or exceed the max HP
+	// TO DO: What happens if current HP are 0 or below? Game over screen?
+	public void updateHealthpoints(int updateHP) {	
+		if (playerCharacterModel.getCurrentHealthPoints() + updateHP <= 0) {
+			playerCharacterModel.setCurrentHealthPoints(0);
+		} else if (playerCharacterModel.getCurrentHealthPoints() + updateHP > playerCharacterModel.getHealthPoints()) {
+			playerCharacterModel.setHealthPoints(playerCharacterModel.getHealthPoints());
+		} else {
+			int hp = playerCharacterModel.getHealthPoints();
+			playerCharacterModel.setHealthPoints(hp + updateHP);	
+		}
+	}
 	
-	public void updateMana(int updateMana) {	
-		
-		// int mp = playerCharacterModel.get_healthPoints();
-		// playerCharacterModel.set_healthPoints(mp + updateMana);
-		// How to solve this with getter/setter?
-		
+	// Update ManaPoints; MP can't go below 0 or exceed the max MP
+	// TO DO ERROR: The method setExpPoints(int) in the type PlayerCharacterModel is not applicable for the arguments (double)	QuestController.java	/FIAE1_RPG/src/controller	line 43	Java Problem
+	public void updateMana(int updateMP) {	
+		if (playerCharacterModel.getCurrentManaPoints() + updateMP <= 0) {
+			playerCharacterModel.setCurrentManaPoints(0);
+		} else if (playerCharacterModel.getCurrentHealthPoints() + updateMP > playerCharacterModel.getManaPoints()) {
+			playerCharacterModel.setManaPoints(playerCharacterModel.getManaPoints());
+		} else {
+			int mp = playerCharacterModel.getManaPoints();
+			playerCharacterModel.setManaPoints(mp + updateMP);	
+		}
+	}
+	
+	// Add experience points
+	public void addXpPoints(int addedXP) {
+		playerCharacterModel.setExpPoints(playerCharacterModel.getExpPoints() + addedXP);
 	}
 	
 
