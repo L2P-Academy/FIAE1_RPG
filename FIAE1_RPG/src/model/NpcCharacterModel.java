@@ -39,4 +39,16 @@ public class NpcCharacterModel extends CharacterModel{
 	public void setQuestGiver(boolean questGiver) {
 		this.isQuestGiver = questGiver;
 	}
+
+
+
+	NpcCharacterModel GuterGoblin = new NpcCharacterModel("Guter Goblin", "Goblin", 40, 15, 8, true, true, true);
+	NpcCharacterModel SchattigeSandra = new NpcCharacterModel("Schattige Sandra", "Elf", 50, 20, 10, true, true, false);
+	NpcCharacterModel GrantigerGünter = new NpcCharacterModel("Grantiger Günter", "Zwerg", 60, 25, 12, true, false, true);
+	NpcCharacterModel NeugierigeNadine = new NpcCharacterModel("Neugierige Nadine", "Mensch", 70, 30, 15, true, false, false);
+	NpcCharacterModel GeheimnisvollerMax = new NpcCharacterModel("Geheimnisvoller Max", "Ork", 80, 35, 18, false, true, true);
+	NpcCharacterModel VertrauenswürdigeTina = new NpcCharacterModel("Vertrauenswürdige Tina", "Troll", 90, 40, 20, false, true, false);
+	NpcCharacterModel ListigerLukas = new NpcCharacterModel("Listiger Lukas", "Gnom", 100, 45, 22, false, false, true);
+	NpcCharacterModel BöserBernd = new NpcCharacterModel("Böser Bernd", "Fee", 110, 50, 25, false, false, false);
+
 }
