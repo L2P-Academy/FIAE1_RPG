@@ -6,6 +6,7 @@ public class CharacterModel {
     private String name;
     private String race;
     private int healthPoints;
+    private int currentHealthPoints;
     private int baseDmg;
     private int baseArmour;
     private ArrayList<ItemModel> inventoryList;
@@ -55,6 +56,14 @@ public class CharacterModel {
 
     public void setHealthPoints(int healthPoints) {
         this.healthPoints = healthPoints;
+    }
+    
+    public int getCurrentHealthPoints() {
+        return currentHealthPoints;
+    }
+
+    public void setCurrentHealthPoints(int currentHealthPoints) {
+        this.currentHealthPoints = currentHealthPoints;
     }
 
     public int getBaseDmg() {

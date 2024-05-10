@@ -8,8 +8,9 @@ import java.util.ArrayList;
 public class PlayerCharacterModel extends CharacterModel {
 	private int level;
 	private int manaPoints;
+	private int currentManaPoints;
 	private int staminaPoints;
-	private double expPoints;
+	private int expPoints;
 	private Dictionary<String, Integer> equipList = new Hashtable<>();
 	private ArrayList<QuestModel> activeQuests;
 	private ArrayList<QuestModel> completedQuests;
@@ -20,6 +21,7 @@ public class PlayerCharacterModel extends CharacterModel {
         setLevel(level);
         setExpPoints(0);
         setManaPoints(manaPoints);
+        setCurrentManaPoints(manaPoints);
         setStaminaPoints(staminaPoints);
         activeQuests = new ArrayList<>();
         completedQuests = new ArrayList<>();
@@ -51,6 +53,14 @@ public class PlayerCharacterModel extends CharacterModel {
 	public void setManaPoints(int manaPoints) {
 		this.manaPoints = manaPoints;
 	}
+	
+	public int getCurrentManaPoints() {
+		return currentManaPoints;
+	}
+
+	public void setCurrentManaPoints(int updatedMP) {
+		this.currentManaPoints = updatedMP;
+	}
 
 	public int getStaminaPoints() {
 		return staminaPoints;
@@ -60,11 +70,11 @@ public class PlayerCharacterModel extends CharacterModel {
 		this.staminaPoints = staminaPoints;
 	}
 
-	public double getExpPoints() {
+	public int getExpPoints() {
 		return expPoints;
 	}
 
-	public void setExpPoints(double expPoints) {
+	public void setExpPoints(int expPoints) {
 		this.expPoints = expPoints;
 	}
 
