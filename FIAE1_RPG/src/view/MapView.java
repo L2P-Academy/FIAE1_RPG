@@ -28,9 +28,12 @@ public class MapView extends JFrame {
 
 	JPanel buttonPanel, mapPanel, mainPanel;
 	JLabel mapTitleLbl;
-	JButton inventoryBtn, characterBtn, questsBtn, settingsBtn; 
+	JButton inventoryBtn, characterBtn, questsBtn, settingsBtn;
 	String mapImagePath = "res/img/MapViewImages/map_start.jpg";
 	String buttonPanelBackgroundPath = "res/img/MapViewImages/ButtonPanelBackground5.jpg"; 
+	
+	//////////////////////////TestButtons////////////////////////////
+	JButton savegameBtn, combatViewBtn, journalViewBtn, creditViewBtn;
 	
 	
 	SoundController soundController;
@@ -54,7 +57,7 @@ public class MapView extends JFrame {
 		
 		//Create buttonPanel with BackgroundImage
 		buttonPanel = new BackGroundPanel(new ImageIcon(buttonPanelBackgroundPath).getImage());
-		buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 200, 0)); //px Abstand horizontal und vertikal
+		buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 100, 0)); //px Abstand horizontal und vertikal
 		
 		//create mapPanel with BackgroundImage
 		mapPanel = new BackGroundPanel(new ImageIcon(mapImagePath).getImage());
@@ -62,7 +65,7 @@ public class MapView extends JFrame {
 		mainPanel = new JPanel(new BorderLayout());
 				
 		//Create Buttons
-		//gameFont = new Font("Old English Text MT", Font.BOLD, 32);
+		gameFont = new Font("Old English Text MT", Font.BOLD, 32);
 		
 		//Create inventoryBtn with bagIcon
 		ImageIcon bagIcon = new ImageIcon(new ImageIcon("res/img/MapViewImages/icon_bag2.png").getImage().getScaledInstance(44, 44, Image.SCALE_SMOOTH));;
@@ -93,6 +96,34 @@ public class MapView extends JFrame {
 		settingsBtn.setBorderPainted(false);	// Remove border
 		settingsBtn.setToolTipText("Einstellungen");
 		
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		/////////////////////////////////////Buttons zum Testen /////////////////////////////////////////////////////////
+		//Create SavegameViewButton
+		savegameBtn = new JButton("Save");
+		savegameBtn.setToolTipText("Save");
+		//Create CombatViewButton
+		combatViewBtn = new JButton("Combat");
+		combatViewBtn.setToolTipText("Combat");
+		//Create Journal ViewButton
+		// journalViewBtn = new JButton("Journal");
+		// journalViewBtn.setToolTipText("Journal");
+		//Create CreditViewButton
+		// creditViewBtn = new JButton("Credit");
+		// creditViewBtn.setToolTipText("Credit");
+		///////////////////////////////////////////Actionlisterners//////////////////////////////////////////////////////
+		savegameBtn.addActionListener(new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+		SavegameView savegameView = new SavegameView();
+		}});
+		combatViewBtn.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+		CombatView combatView = new CombatView();
+		}});
+		///AddActionListener to Journal + CreditView sobald vorhanden
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		
 		//Add ActionListener to buttons
 		inventoryBtn.addActionListener(new ActionListener() {
 		@Override
@@ -118,14 +149,21 @@ public class MapView extends JFrame {
 		settingsBtn.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 		}});
+		
 		//Add buttons to buttonPanel		
 		buttonPanel.add(inventoryBtn);
 		buttonPanel.add(characterBtn);
 		buttonPanel.add(questsBtn);
 		////add settingsBtn to buttonPanel
 		buttonPanel.add(settingsBtn);
+		///////////Testbuttons//////////
+		buttonPanel.add(savegameBtn);
+		buttonPanel.add(combatViewBtn);
+		//buttonPanel.add(journalView);
+		//buttonPanel.add(creditView);
+		////////////////////////////////
 		
-		//Add panels to Window
+		//Add panels to Window(mainPanel)
 		mainPanel.add(buttonPanel, BorderLayout.NORTH);
 		mainPanel.add(mapPanel, BorderLayout.CENTER);
 		getContentPane().add(mainPanel);
@@ -149,6 +187,8 @@ public class MapView extends JFrame {
 	    	}
 		}
 	}
+		
+		
 }
 
 
