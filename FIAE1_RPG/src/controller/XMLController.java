@@ -23,9 +23,6 @@ import org.w3c.dom.NodeList;
 import model.ItemModel;
 
 
-
-
-
 public class XMLController {
 	
 	// Adding Filepaths 
@@ -112,6 +109,11 @@ public class XMLController {
 					Element isQuestItemChild = document.createElement("QuestItem");
 					isQuestItemChild.appendChild(document.createTextNode(String.valueOf(currentItem.getIsQuestItem())));
 					itemRoot.appendChild(isQuestItemChild);
+					
+					//Adding itemDescription Child
+					Element itemDescriptionChild = document.createElement("Descriptiopn");
+					isQuestItemChild.appendChild(document.createTextNode(String.valueOf(currentItem.getItemDescription())));
+					itemRoot.appendChild(itemDescriptionChild);
 				
 					//Adding durability Child
 //					Element durabilityChild = document.createElement("Durability");
@@ -188,7 +190,8 @@ public class XMLController {
 					else if(priceNodes.getLength() != 0 && damageNodes.getLength() != 0) {
 						double price = Double.parseDouble(itemElement.getElementsByTagName("Price").item(0).getTextContent());
 						int damage = Integer.parseInt(itemElement.getElementsByTagName("Damage").item(0).getTextContent());
-						ItemModel itemModel = new ItemModel(itemName, quantity, price, damage, isQuestItem);
+						String itemDescription = String.valueOf(itemElement.getElementsByTagName("Description").item(0).getTextContent());
+						ItemModel itemModel = new ItemModel(itemName, quantity, price, damage, isQuestItem, itemDescription);
 				    	itemList.add(itemModel);
 				    	
 					} 
@@ -200,15 +203,7 @@ public class XMLController {
 		}
 		
 		return itemList; 
-		
 	}
-
-
-
-
-
-
-
 }
 
 
