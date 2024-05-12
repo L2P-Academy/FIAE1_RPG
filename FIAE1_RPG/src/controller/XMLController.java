@@ -20,34 +20,209 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import model.AbilityModel;
 import model.ItemModel;
+import model.PlayerCharacterModel;
 
 
 public class XMLController {
 	
 	// Adding Filepaths 
-	//private String characterInfoFilepath = "res/xml/characterInfo.xml";
+	private String characterInfoFilepath = "res/xml/characterInfo.xml";
 	private String inventoryListFilepath = "res/xml/inventoryList.xml";
-	//private String progressFilepath= "res/xml/progress.xml";
+	private String progressFilepath= "res/xml/progress.xml";
 	
 	// Adding Existens Varriable for Verafication in Write Methods
-	//private File fileExistsCharacterInfo = new File(characterInfoFilepath);
+	private File fileExistsCharacterInfo = new File(characterInfoFilepath);
 	private File fileExistsInventoryList = new File(inventoryListFilepath);
-	//private File fileExistsProgress = new File(progressFilepath);
+	private File fileExistsProgress = new File(progressFilepath);
 	
 	
 	
-	public void xmlWriteCharacterInfo(){	
+	public void xmlWriteCharacterInfo(PlayerCharacterModel playerCharacterModel){	
 		
+		//create a xml File If no exists
+		if(!fileExistsCharacterInfo.exists()) {
+			try {
+				File progress = new File(characterInfoFilepath);				
+			}
+							
+			catch (Exception e) {
+				e.printStackTrace();
+			}			
+		}
+				
+		try {
+			//Building steps for a Document
+			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+			Document document = documentBuilder.newDocument();
+			
+			//Adding Root Element and multiple Elements from the Root - CharacterModel 
+			Element rootElement = document.createElement("CharacterInfo");
+			document.appendChild(rootElement);
+			
+			Element nameElement = document.createElement("Name");
+			nameElement.appendChild(document.createTextNode(playerCharacterModel.getName()));
+			rootElement.appendChild(nameElement);
+			
+			Element raceElement = document.createElement("Race");
+			raceElement.appendChild(document.createTextNode(playerCharacterModel.getRace()));
+			rootElement.appendChild(raceElement);
+			
+			Element healthPointsElement = document.createElement("HealthPoints");
+			healthPointsElement.appendChild(document.createTextNode(String.valueOf(playerCharacterModel.getHealthPoints())));
+			rootElement.appendChild(healthPointsElement);
+			
+			Element currentHealthPointsElement = document.createElement("CurrentHealthPoints");
+			currentHealthPointsElement.appendChild(document.createTextNode(String.valueOf(playerCharacterModel.getCurrentHealthPoints())));
+			rootElement.appendChild(currentHealthPointsElement);
+			
+			Element baseDmgElement = document.createElement("BaseDmg");
+			baseDmgElement.appendChild(document.createTextNode(String.valueOf(playerCharacterModel.getBaseDmg())));
+			rootElement.appendChild(baseDmgElement);
+			
+			Element baseArmourElement = document.createElement("BaseArmour");
+			baseArmourElement.appendChild(document.createTextNode(String.valueOf(playerCharacterModel.getBaseArmour())));
+			rootElement.appendChild(baseArmourElement);
+			
+			// Adding new "Root" for the AbilityList
+			Element abilityList = document.createElement("AbilityList");
+			rootElement.appendChild(abilityList);
+			
+			//For Loop for every Ability in the playerCharacter's AbilityList 
+			for(AbilityModel currentAbility : playerCharacterModel.getAbilityList()) {
+				
+				Element abilityRoot = document.createElement("Ability");
+				abilityList.appendChild(abilityRoot);
+				
+				Element abilityName = document.createElement("Name");
+				abilityName.appendChild(document.createTextNode(currentAbility.getName()));
+				abilityRoot.appendChild(abilityName);
+				
+				Element abilityIsRanged = document.createElement("Ranged");
+				abilityIsRanged.appendChild(document.createTextNode(String.valueOf(currentAbility.getIsRanged())));
+				abilityRoot.appendChild(abilityIsRanged);
+				
+				Element abilityIsAOE = document.createElement("AOE");
+				abilityIsAOE.appendChild(document.createTextNode(String.valueOf(currentAbility.getIsAOE())));
+				abilityRoot.appendChild(abilityIsAOE);
+				
+				// Eventually need to change into a List loop 
+				Element abilityElement = document.createElement("Element");
+				abilityElement.appendChild(document.createTextNode(String.valueOf(currentAbility.getElementsList())));
+				abilityRoot.appendChild(abilityElement);
+			}
+			
+			//Adding multiple Elements from the Root - PlayerCharacterModel
+				
+			Element manaPointsElement = document.createElement("ManaPoints");
+			manaPointsElement.appendChild(document.createTextNode(String.valueOf(playerCharacterModel.getManaPoints())));
+			rootElement.appendChild(manaPointsElement);
+			
+			Element currentManaPointsElement = document.createElement("CurrentManaPoints");
+			currentManaPointsElement.appendChild(document.createTextNode(String.valueOf(playerCharacterModel.getCurrentManaPoints())));
+			rootElement.appendChild(currentManaPointsElement);
+			
+			Element staminaPointsElement = document.createElement("StaminaPoints");
+			staminaPointsElement.appendChild(document.createTextNode(String.valueOf(playerCharacterModel.getStaminaPoints())));
+			rootElement.appendChild(staminaPointsElement);
+			
+			
+			// Write Content into the File
+			TransformerFactory tFactory = TransformerFactory.newInstance();
+			Transformer transformer = tFactory.newTransformer(new StreamSource(new File("res/xml/formatierung.xslt")));
+			DOMSource source = new DOMSource(document);
+			StreamResult result = new StreamResult(new File(characterInfoFilepath));
+			transformer.transform(source, result);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
+		
+		
 	public void xmlReadCharacterInfo() {
 		
 	}
-	public void xmlWriteProgress() {
+	public void xmlWriteProgress(PlayerCharacterModel playerCharacterModel) {
 		
+		//create a xml File If no exists
+		if(!fileExistsProgress.exists()) {
+			try {
+				File progress = new File(progressFilepath);				
+			}
+					
+			catch (Exception e) {
+				e.printStackTrace();
+			}			
+		}
+		
+		try {
+			//Building steps for a Document
+			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+			Document document = documentBuilder.newDocument();
+			
+			//Adding root Element
+			Element rootElement = document.createElement("Progress");
+			document.appendChild(rootElement);
+			
+			//Adding Level Element
+			Element levelElement = document.createElement("Level");
+			levelElement.appendChild(document.createTextNode(String.valueOf(playerCharacterModel.getLevel())));
+			rootElement.appendChild(levelElement);
+			
+			//Adding CurrentExpPoints Element
+			Element currentExpPoints = document.createElement("CurrentExpPoints");
+			currentExpPoints.appendChild(document.createTextNode(String.valueOf(playerCharacterModel.getExpPoints())));
+			rootElement.appendChild(currentExpPoints);
+			
+			// Write Content into the File
+			TransformerFactory tFactory = TransformerFactory.newInstance();
+			Transformer transformer = tFactory.newTransformer(new StreamSource(new File("res/xml/formatierung.xslt")));
+			DOMSource source = new DOMSource(document);
+			StreamResult result = new StreamResult(new File(progressFilepath));
+			transformer.transform(source, result);
+			
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+				
 	}
-	public void xmlReadProgress() {		
+	public void xmlReadProgress(PlayerCharacterModel playerCharacterModel) {	
+		
+			try {
+						
+				if(fileExistsProgress.exists()) {
+					
+					//Building steps for a Document
+					DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+					DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+					Document document = documentBuilder.parse(progressFilepath);
+					document.normalize();
+					
+					//Getting all Childs from the Root. in this Case Progress Tag
+					NodeList progressNodeList = document.getElementsByTagName("Progress");
+					
+					//Getting Value of Level and currentExpPoint Attribute 
+					Node progressNode = progressNodeList.item(0);
+					Element progressElement = (Element) progressNode;
+					
+					//Set Value's to the playerCharacterModel
+					int levelInt = Integer.parseInt(progressElement.getElementsByTagName("Level").item(0).getTextContent());
+					playerCharacterModel.setLevel(levelInt);
+					int currentExpPointsInt = Integer.parseInt(progressElement.getElementsByTagName("CurrentExpPoints").item(0).getTextContent());
+					playerCharacterModel.setExpPoints(currentExpPointsInt);
+				}
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+					
 	}
+	
 	public void xmlWriteInventoryList(ArrayList<ItemModel> itemList) {
 		
 		//create a xml File If no exists
