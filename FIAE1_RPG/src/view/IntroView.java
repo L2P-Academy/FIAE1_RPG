@@ -3,6 +3,7 @@ package view;
 import javax.swing.*;
 
 import controller.SoundController;
+import model.SerializationIDs;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 public class IntroView extends JFrame {
 
+	private static final long serialVersionUID = SerializationIDs.introViewID;
 	private SoundController soundController;
 	private JButton nextBtn;
     private JTextArea scrollingTextArea;
@@ -36,7 +38,8 @@ public class IntroView extends JFrame {
     public IntroView() {
         setTitle("Intro");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1200, 800);
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
+		setUndecorated(true);
         
         // Soundcontroller Init
         soundController = new SoundController();
@@ -59,7 +62,7 @@ public class IntroView extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				soundController.playButtonClickSound();
 				soundController.stopMusicLoop();
-				MapView mapView = new MapView();
+				new MapView();
 				dispose();
 				
 			}

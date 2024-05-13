@@ -7,9 +7,12 @@ import java.awt.Image;
 
 import javax.swing.JPanel;
 
+import model.SerializationIDs;
+
 // Helper Class for Background Drawing in Main Menu
 public class BackGroundPanel extends JPanel{
 	
+	private static final long serialVersionUID = SerializationIDs.backGroundPanelID;
 	private Image backgroundImage;
 	
 	public BackGroundPanel(Image backgroundImage) {

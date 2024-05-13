@@ -7,189 +7,195 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.ImageObserver;
-import java.awt.image.ImageProducer;
-import java.io.File;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 
 import controller.SoundController;
-
+import model.SerializationIDs;
 
 public class MapView extends JFrame {
 
+	private static final long serialVersionUID = SerializationIDs.mapViewID;
 	JPanel buttonPanel, mapPanel, mainPanel;
 	JLabel mapTitleLbl;
 	JButton inventoryBtn, characterBtn, questsBtn, settingsBtn;
 	String mapImagePath = "res/img/MapViewImages/map_start.jpg";
-	String buttonPanelBackgroundPath = "res/img/MapViewImages/ButtonPanelBackground5.jpg"; 
-	
-	//////////////////////////TestButtons////////////////////////////
+	String buttonPanelBackgroundPath = "res/img/MapViewImages/ButtonPanelBackground5.jpg";
+
+	////////////////////////// TestButtons////////////////////////////
 	JButton savegameBtn, combatViewBtn, journalViewBtn, creditViewBtn;
-	
-	
+
 	SoundController soundController;
-	
-	
+
 	Font gameFont;
-	
+
 	public MapView() {
-		
+
 		setTitle("Weltkarte");
-		setSize(1200, 800);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
+		setUndecorated(true);
+		
 		soundController = new SoundController();
-	
-		//Create Panels
+
+		// Create Panels
 		mainPanel = new JPanel(new BorderLayout());
-		
-		//Create BackgroundMusic
-		soundController.playAmbientSound("res/soundFX/music/Map_Music.wav");
-		////soundController.stopAmbientSound();
-		
-		//Create buttonPanel with BackgroundImage
+
+		// Create BackgroundMusic
+		soundController.playMusicLoop("res/soundFX/music/Map_Music.wav");
+
+		// Create buttonPanel with BackgroundImage
 		buttonPanel = new BackGroundPanel(new ImageIcon(buttonPanelBackgroundPath).getImage());
-		buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 100, 0)); //px Abstand horizontal und vertikal
-		
-		//create mapPanel with BackgroundImage
+		buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 100, 0)); // px Abstand horizontal und vertikal
+
+		// create mapPanel with BackgroundImage
 		mapPanel = new BackGroundPanel(new ImageIcon(mapImagePath).getImage());
 		mapPanel.setLayout(new BorderLayout());
 		mainPanel = new JPanel(new BorderLayout());
-				
-		//Create Buttons
+
+		// Create Buttons
 		gameFont = new Font("Old English Text MT", Font.BOLD, 32);
-		
-		//Create inventoryBtn with bagIcon
-		ImageIcon bagIcon = new ImageIcon(new ImageIcon("res/img/MapViewImages/icon_bag2.png").getImage().getScaledInstance(44, 44, Image.SCALE_SMOOTH));;
+
+		// Create inventoryBtn with bagIcon
+		ImageIcon bagIcon = new ImageIcon(new ImageIcon("res/img/MapViewImages/icon_bag2.png").getImage()
+				.getScaledInstance(44, 44, Image.SCALE_SMOOTH));
+		;
 		inventoryBtn = new JButton(bagIcon);
 		inventoryBtn.setContentAreaFilled(false); // Make button transparent
-		inventoryBtn.setBorderPainted(false);	// Remove border	
+		inventoryBtn.setBorderPainted(false); // Remove border
 		inventoryBtn.setToolTipText("Inventar"); // hoverText
-		
-		//Create CharacterBtn with characterIcon
-		ImageIcon characterIcon = new ImageIcon(new ImageIcon("res/img/MapViewImages/icon_character2.png").getImage().getScaledInstance(44, 44, Image.SCALE_SMOOTH));;
+
+		// Create CharacterBtn with characterIcon
+		ImageIcon characterIcon = new ImageIcon(new ImageIcon("res/img/MapViewImages/icon_character2.png").getImage()
+				.getScaledInstance(44, 44, Image.SCALE_SMOOTH));
+		;
 		characterBtn = new JButton(characterIcon);
 		characterBtn.setContentAreaFilled(false); // Make button transparent
-		characterBtn.setBorderPainted(false);	// Remove border
+		characterBtn.setBorderPainted(false); // Remove border
 		characterBtn.setToolTipText("Charakter");
-		
-		
-		//Create questsBtn with questsIcon
-		ImageIcon questsIcon = new ImageIcon(new ImageIcon("res/img/MapViewImages/icon_quests2.png").getImage().getScaledInstance(44, 44, Image.SCALE_SMOOTH));;
+
+		// Create questsBtn with questsIcon
+		ImageIcon questsIcon = new ImageIcon(new ImageIcon("res/img/MapViewImages/icon_quests2.png").getImage()
+				.getScaledInstance(44, 44, Image.SCALE_SMOOTH));
+		;
 		questsBtn = new JButton(questsIcon);
 		questsBtn.setContentAreaFilled(false); // Make button transparent
-		questsBtn.setBorderPainted(false);		// Remove border
+		questsBtn.setBorderPainted(false); // Remove border
 		questsBtn.setToolTipText("Quests");
-		
-		//Create Gear-Icon for Settings-Button
-		ImageIcon gearIcon = new ImageIcon(new ImageIcon("res/img/MapViewImages/icon_settings3.png").getImage().getScaledInstance(44, 44, Image.SCALE_SMOOTH));;
+
+		// Create Gear-Icon for Settings-Button
+		ImageIcon gearIcon = new ImageIcon(new ImageIcon("res/img/MapViewImages/icon_settings3.png").getImage()
+				.getScaledInstance(44, 44, Image.SCALE_SMOOTH));
+		;
 		settingsBtn = new JButton(gearIcon);
 		settingsBtn.setContentAreaFilled(false); // Make button transparent
-		settingsBtn.setBorderPainted(false);	// Remove border
+		settingsBtn.setBorderPainted(false); // Remove border
 		settingsBtn.setToolTipText("Einstellungen");
-		
+
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		/////////////////////////////////////Buttons zum Testen /////////////////////////////////////////////////////////
-		//Create SavegameViewButton
+		///////////////////////////////////// Buttons zum Testen
+		///////////////////////////////////////////////////////////////////////////////////////////////////////////////// /////////////////////////////////////////////////////////
+		// Create SavegameViewButton
 		savegameBtn = new JButton("Save");
 		savegameBtn.setToolTipText("Save");
-		//Create CombatViewButton
+		// Create CombatViewButton
 		combatViewBtn = new JButton("Combat");
 		combatViewBtn.setToolTipText("Combat");
-		//Create Journal ViewButton
+		// Create Journal ViewButton
 		// journalViewBtn = new JButton("Journal");
 		// journalViewBtn.setToolTipText("Journal");
-		//Create CreditViewButton
+		// Create CreditViewButton
 		// creditViewBtn = new JButton("Credit");
 		// creditViewBtn.setToolTipText("Credit");
-		///////////////////////////////////////////Actionlisterners//////////////////////////////////////////////////////
+		/////////////////////////////////////////// Actionlisterners//////////////////////////////////////////////////////
 		savegameBtn.addActionListener(new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-		SavegameView savegameView = new SavegameView();
-		}});
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				SavegameView savegameView = new SavegameView();
+			}
+		});
 		combatViewBtn.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-		CombatView combatView = new CombatView(("Forest"));
-		}});
-		///AddActionListener to Journal + CreditView sobald vorhanden
+			public void actionPerformed(ActionEvent e) {
+				CombatView combatView = new CombatView(("Forest"));
+				soundController.stopMusicLoop();
+			}
+		});
+		/// AddActionListener to Journal + CreditView sobald vorhanden
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		//Add ActionListener to buttons
+
+		// Add ActionListener to buttons
 		inventoryBtn.addActionListener(new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-		soundController.playFxSound("res/soundFX/fxEffects/cloth-inventory.wav");
-		InventoryView inventoryView = new InventoryView();
-		}});
-					
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				soundController.playFxSound("res/soundFX/fxEffects/cloth-inventory.wav");
+				InventoryView inventoryView = new InventoryView();
+			}
+		});
+
 		characterBtn.addActionListener(new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-		soundController.playButtonClickSound();
-		CharacterView characterView = new CharacterView();
-		}});
-					 
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				soundController.playButtonClickSound();
+				CharacterView characterView = new CharacterView(); // TODO: Controller anbinden
+			}
+		});
+
 		questsBtn.addActionListener(new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-		soundController.playFxSound("res/soundFX/fxEffects/turn_page.wav");
-		QuestView questView = new QuestView();
-		}});
-					 
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				soundController.playFxSound("res/soundFX/fxEffects/turn_page.wav");
+				JournalView journalView = new JournalView();
+			}
+		});
+
 		settingsBtn.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-		}});
-		
-		//Add buttons to buttonPanel		
+			public void actionPerformed(ActionEvent e) {
+				SettingsView settingsView = new SettingsView();
+			}
+		});
+
+		// Add buttons to buttonPanel
 		buttonPanel.add(inventoryBtn);
 		buttonPanel.add(characterBtn);
 		buttonPanel.add(questsBtn);
-		////add settingsBtn to buttonPanel
+		//// add settingsBtn to buttonPanel
 		buttonPanel.add(settingsBtn);
-		///////////Testbuttons//////////
+		/////////// Testbuttons//////////
 		buttonPanel.add(savegameBtn);
 		buttonPanel.add(combatViewBtn);
-		//buttonPanel.add(journalView);
-		//buttonPanel.add(creditView);
+		// buttonPanel.add(journalView);
+		// buttonPanel.add(creditView);
 		////////////////////////////////
-		
-		//Add panels to Window(mainPanel)
+
+		// Add panels to Window(mainPanel)
 		mainPanel.add(buttonPanel, BorderLayout.NORTH);
 		mainPanel.add(mapPanel, BorderLayout.CENTER);
 		getContentPane().add(mainPanel);
 		setLocationRelativeTo(null);
-		setVisible(true);	
+		setVisible(true);
 	}
-		
-		//Custom JPanel with background image
-		class BackGroundPanel extends JPanel {
+
+	// Custom JPanel with background image
+	class BackGroundPanel extends JPanel {
+		private static final long serialVersionUID = SerializationIDs.backGroundPanelID;
 		private Image backgroundImage;
 
 		public BackGroundPanel(Image backgroundImage) {
-		this.backgroundImage = backgroundImage;
+			this.backgroundImage = backgroundImage;
 		}
 
-			@Override
+		@Override
 		protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		if (backgroundImage != null) {
-	    g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
-	    	}
+			super.paintComponent(g);
+			if (backgroundImage != null) {
+				g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+			}
 		}
 	}
-		
-		
+
 }
-
-
-

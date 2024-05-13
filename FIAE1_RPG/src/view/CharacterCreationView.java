@@ -1,5 +1,13 @@
 package view;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -7,23 +15,15 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.ListModel;
-import javax.swing.border.Border;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import model.SerializationIDs;
 public class CharacterCreationView extends JFrame{
-	
+
+	private static final long serialVersionUID = SerializationIDs.characterCreationViewID;
 	JPanel mainPanel, northPanel, southPanel, eastPanel, westPanel, centerPanel, namePanel/**/,westBtnPanel/**/, westImgPanel/**/;
 	JTextField characterName;
 	JLabel characterPreview, nameLBL, testLbl;
-	JButton finishBtn, forwardBtn/**/, backBtn/**/;
+	JButton finishBtn, forwardBtn/**/, backBtn/**/; // in UML eintragen 
 	JList<String> lookElements;
 	Font gameFont, gameFontSmall;
 	
@@ -31,8 +31,9 @@ public class CharacterCreationView extends JFrame{
 	public CharacterCreationView() {
 			
 		setTitle("Charaktererstellung");
-		setSize(1200, 800);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
+		setUndecorated(true);
 		
 		//  Set Fontvalues
 		gameFont = new Font("Old English Text MT", Font.BOLD, 64);
@@ -111,7 +112,7 @@ public class CharacterCreationView extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				// Close Window if finishbtn is klicked 
-				IntroView introView = new IntroView();
+				new IntroView();
 				dispose();
 				
 			}

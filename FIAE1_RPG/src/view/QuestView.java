@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -20,9 +19,12 @@ import javax.swing.JTextArea;
 import controller.QuestController;
 import controller.SoundController;
 import model.QuestModel;
+import model.SerializationIDs;
 
 public class QuestView extends JFrame{
 	
+	private static final long serialVersionUID = SerializationIDs.questViewID;
+
 	//Controller
 	QuestController questController;
 	
@@ -66,8 +68,10 @@ public class QuestView extends JFrame{
 		
 		//Create Window
 		setTitle("Neue Quest!");
-		setSize(1200, 800);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
+		setUndecorated(true);
+		
 		soundController = new SoundController();
 		
 		//Create Font
@@ -168,7 +172,7 @@ public class QuestView extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				soundController.playButtonClickSound();
-				MapView mapView = new MapView();
+				new MapView();
 				soundController.stopMusicLoop();
 				dispose();	
 			}
@@ -179,7 +183,7 @@ public class QuestView extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				soundController.playButtonClickSound();
-				MapView mapView = new MapView();
+				new MapView();
 				soundController.stopMusicLoop();
 				dispose();	
 			}

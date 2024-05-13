@@ -65,7 +65,7 @@ public class MainMenuView extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				soundController.playButtonClickSound();
 				soundController.stopMusicLoop();
-				CharacterCreationView characterCreationView = new CharacterCreationView();
+				new CharacterCreationView();
 				dispose();
 			}
 		});
@@ -75,7 +75,7 @@ public class MainMenuView extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				soundController.playButtonClickSound();
-				SavegameView savegameView = new SavegameView();
+				new SavegameView();
 
 			}
 		});

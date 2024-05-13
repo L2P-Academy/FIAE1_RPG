@@ -14,7 +14,6 @@
 
 package controller;
 
-import model.CharacterModel;
 import model.PlayerCharacterModel;
 
 public class CharacterController {

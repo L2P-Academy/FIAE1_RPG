@@ -14,20 +14,19 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
-import javax.swing.plaf.BorderUIResource;
-import javax.swing.plaf.basic.BasicScrollBarUI;
 import javax.swing.table.DefaultTableModel;
 
 import controller.CharacterController;
 import controller.InventoryController;
 import model.ItemModel;
+import model.SerializationIDs;
 
 public class InventoryView extends JFrame{
 	
+	private static final long serialVersionUID = SerializationIDs.inventoryViewID;
 	//Controller
 	InventoryController inventoryController;
 	CharacterController characterController;
@@ -60,8 +59,9 @@ public class InventoryView extends JFrame{
 	
 	public InventoryView() {
         setTitle("Inventar");
-        setSize(1200, 800);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
+		setUndecorated(true);
                 
 //        goldBalance = characterController.getGoldBalance();
 //        inventoryList = characterController.getInventoryList();
@@ -175,7 +175,6 @@ public class InventoryView extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				MapView mapView = new MapView();
 				dispose();
 				
 			}
