@@ -32,20 +32,38 @@ public class QuestModel {
 		this.questTarget = questTarget;
 	}
 	
+	// Example 
+	// QuestModel test = new QuestModel(title, description, questID, isMainQuest, rewardGold, rewardExpPoints, questItemRequired, levelRequired, questNPC, questProgress, questTarget);
+	
 	// Example objects to test
-	QuestModel TheDragonCave = new QuestModel("Die Drachenhöhle", "Ein Drache terrorisiert die Landschaft...", 1, true, 1000, 15, getQuestItemRequired(), 15, getQuestNPC(), 5, 1);
+	QuestModel TheDragonCave = new QuestModel("Die Drachenhöhle", "Ein Drache terrorisiert die Landschaft...", 1, true, 250, 500, getQuestItemRequired(), 10, getQuestNPC(), 5, 1);
 	
-	QuestModel TheForest = new QuestModel("Der Dunkelwald", "Erkunde die Geheimnisse des Dunkelwaldes ", 2, false, 50, 0, getQuestItemRequired(), 0, getQuestNPC(), 0, 2);
-	
-	QuestModel TheTrollBridge = new QuestModel("Die Troll-Brücken-Maut", "Ein Troll hat sich unter einer Brücke niedergelassen und verlangt\r\n"
-			+ "Maut von Reisenden...", 3, false, 45, 0, getQuestItemRequired(), 3, getQuestNPC(), 0, 3);
+	QuestModel TheCursedAmulet = new QuestModel("Der Fluch des Knochenamuletts", "Ein verfluchtes Amulett wurde aus einem heiligen Tempel\r\n"
+			+ "gestohlen und bringt...", 2, true, 500, 15, getQuestItemRequired(), 15, getQuestNPC(), 5, 2);
 	
 	QuestModel TheCursedGrave = new QuestModel("Der Fluch des Vergessenen Grabmals", "Dorfbewohner verschwinden, und Gerüchte über ein\r\n"
-			+ "verfluchtes Grabmal in den nahegelegenen Bergen machen die Runde...", 4, false, 70, 0, getQuestItemRequired(), 0, getQuestNPC(), 0, 4);
+			+ "verfluchtes Grabmal in den nahegelegenen Bergen machen die Runde...", 3, false, 70, 0, getQuestItemRequired(), 0, getQuestNPC(), 0, 3);
+	
+	QuestModel TheGhostForest = new QuestModel("Der Geisterwald", "Erkunde die Geheimnisse des Geisterwaldes... ", 4, false, 50, 0, getQuestItemRequired(), 0, getQuestNPC(), 0, 4);
+	
+	QuestModel TheLostExpedition = new QuestModel("Die Verlorene Expedition", "Eine Expedition in unerforschtes Gebiet ist verschwunden...", 5, false, 55, 0, getQuestItemRequired(), 0, getQuestNPC(), 0, 5);
 	
 	QuestModel TheHerbalist = new QuestModel("Die Bitte des Kräutersammlers", "Ein örtlicher Kräutersammler sucht seltene Kräuter, die tief\r\n"
-			+ "im Wald zu finden sind...", 5, false, 55, 0, getQuestItemRequired(), 0, getQuestNPC(), 0, 5);
-
+			+ "im Wald zu finden sind...", 6, false, 55, 0, getQuestItemRequired(), 0, getQuestNPC(), 0, 6);
+	
+	QuestModel TheTrollBridge = new QuestModel("Die Troll-Brücken-Maut", "Ein Troll hat sich unter einer Brücke niedergelassen und verlangt\r\n"
+			+ "Maut von Reisenden...", 7, false, 45, 0, getQuestItemRequired(), 3, getQuestNPC(), 0, 7);
+	
+	QuestModel TheBandits = new QuestModel("Das Versteck der Banditen", "Eine Gruppe von Banditen hat in einer nahegelegenen Höhle ein\r\n"
+			+ "Lager aufgeschlagen und terrorisiert Reisende...", 8, false, 250, 500, getQuestItemRequired(), 10, getQuestNPC(), 1, 8);
+	
+	QuestModel TheLostBlacksmith = new QuestModel("Der verschwundene Schmiedelehrling", "Der Lehrling des Dorfschmieds ist verschwunden...", 9, false, 60, 100, getQuestItemRequired(), 2, getQuestNPC(), 1, 9);
+	
+	QuestModel TheGhostGraveyard = new QuestModel("Der Geisterfriedhof", "Ein Friedhof am Stadtrand ist von ruhelosen Skeletten befallen...", 10, false, 75, 100, getQuestItemRequired(), 3, getQuestNPC(), 1, 10);
+	
+	QuestModel HaraldsRoster = new QuestModel("Haralds Hahn", "Kikeriki! Oh warte mal, hast du zufällig ein grosses, praechtiges Huhn\r\n"
+			+ "gesehen...", 11, false, 75, 100, getQuestItemRequired(), 2, getQuestNPC(), 1, 11);
+	
 	// Getter & Setter
 	public String getTitle() {
 		return title;
