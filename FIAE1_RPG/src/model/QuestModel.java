@@ -31,6 +31,20 @@ public class QuestModel {
 		this.questProgress = questProgress;
 		this.questTarget = questTarget;
 	}
+	
+	// Example objects to test
+	QuestModel TheDragonCave = new QuestModel("Die Drachenhöhle", "Ein Drache terrorisiert die Landschaft...", 1, true, 1000, 15, getQuestItemRequired(), 15, getQuestNPC(), 5, 1);
+	
+	QuestModel TheForest = new QuestModel("Der Dunkelwald", "Erkunde die Geheimnisse des Dunkelwaldes ", 2, false, 50, 0, getQuestItemRequired(), 0, getQuestNPC(), 0, 2);
+	
+	QuestModel TheTrollBridge = new QuestModel("Die Troll-Brücken-Maut", "Ein Troll hat sich unter einer Brücke niedergelassen und verlangt\r\n"
+			+ "Maut von Reisenden...", 3, false, 45, 0, getQuestItemRequired(), 3, getQuestNPC(), 0, 3);
+	
+	QuestModel TheCursedGrave = new QuestModel("Der Fluch des Vergessenen Grabmals", "Dorfbewohner verschwinden, und Gerüchte über ein\r\n"
+			+ "verfluchtes Grabmal in den nahegelegenen Bergen machen die Runde...", 4, false, 70, 0, getQuestItemRequired(), 0, getQuestNPC(), 0, 4);
+	
+	QuestModel TheHerbalist = new QuestModel("Die Bitte des Kräutersammlers", "Ein örtlicher Kräutersammler sucht seltene Kräuter, die tief\r\n"
+			+ "im Wald zu finden sind...", 5, false, 55, 0, getQuestItemRequired(), 0, getQuestNPC(), 0, 5);
 
 	// Getter & Setter
 	public String getTitle() {
