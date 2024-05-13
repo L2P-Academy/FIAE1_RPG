@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
@@ -14,6 +15,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
@@ -24,7 +27,7 @@ public class CombatView extends JFrame{ //implements ActionListener{
 	
 	
 	*/
-	JPanel topPanel, botPanel, cornerPanel, partyPanel;
+	JPanel topPanel, botPanel, cornerPanel, partyPanel, dialoguePanel;
 	JLabel dialogueLabel, 
 		   hero1Label, hero2Label, hero3Label, hero4Label,
 		   hero1Profile, hero2Profile, hero3Profile, hero4Profile,
@@ -41,13 +44,16 @@ public class CombatView extends JFrame{ //implements ActionListener{
 	String hero4PicString = "res/img/ProfElias.jpg";
 	String spaceBackground = "res/img/spaceBackground.jpg";
 	String combatBackground = "";
+	private String dialogueText = "Hello there";
+	private JTextArea scrollingTextArea;
 	Border border = BorderFactory.createLineBorder(Color.black, 1);
 	boolean isFightOver = false; // used to check wether the fight is over, can be happen after reaching 0 HP to any side or end via event.
+	
 	
 	public CombatView(String combatBackground) {
 		// Font settings
 		btnFont = new Font("Old English Text MT", Font.BOLD, 24);
-		textFont = new Font("Calisto MT", Font.PLAIN, 32);
+		textFont = new Font("Calisto MT", Font.PLAIN, 24);
 		
 		// adding main Panels
 		addTopPanel(combatBackground);
@@ -95,6 +101,7 @@ public class CombatView extends JFrame{ //implements ActionListener{
 		botPanel.setBorder(border);
 		addCornerPanel();
 		preparePartyPanel();
+		addDialoguePanel();
 		getContentPane().add(botPanel);
 		//botPanel.setVisible(false);
 	 }
@@ -109,15 +116,51 @@ public class CombatView extends JFrame{ //implements ActionListener{
 		addCharacterPanel(hero3Label, hero3PicString, hero3Profile, hero3Name, hero3NameString, 220+220+45);
 		addCharacterPanel(hero4Label, hero4PicString, hero4Profile, hero4Name, hero4NameString, 220+220+220+60);
 		getContentPane().add(partyPanel);
-		//partyPanel.setVisible(false);
+		partyPanel.setVisible(false);
 	 }
+
+	 private void addDialoguePanel() {
+		dialoguePanel = new JPanel(null);
+		dialoguePanel.setBackground(new Color(20,20,50));
+		dialoguePanel.setBounds(25, 511, 950, 250);
+		dialoguePanel.setBorder(border);
+		botPanel.add(dialoguePanel);
+		
+		scrollingTextArea = new JTextArea(dialogueText);
+	    scrollingTextArea.setFont(textFont); // Schriftart anpassen
+	    scrollingTextArea.setLineWrap(true); // Textumbruch aktivieren
+	    scrollingTextArea.setWrapStyleWord(true); // Wortumbruch aktivieren
+	    scrollingTextArea.setEditable(false); // Text nicht editierbar machen
+	    //scrollingTextArea.setPreferredSize(new Dimension(950, 250));
+	    scrollingTextArea.setBackground(new Color(50, 20, 50));
+	    //dialoguePanel.add(new JScrollPane(scrollingTextArea));
+	    JScrollPane scrollPane = new JScrollPane(scrollingTextArea);
+	    scrollPane.setBounds(30,516,940,240);
+	    
+		getContentPane().add(scrollPane);
+	 }
+	 
 	 private void addCornerPanel() {
 		cornerPanel = new JPanel(null);
 		cornerPanel.setBackground(new Color(20,20,50));
 		cornerPanel.setBounds(1000, 511, 186, 250);
 		cornerPanel.setBorder(border);	
 		btn1 = new JButton();
-		btn2 = new JButton();
+		
+		btn1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Toggle label visibility
+            	showButton(btn3,"Flüchten");
+            	showButton(btn4,"Inventar");
+            	showButton(btn5,"Kämpfen");
+                btn1.setEnabled(false);
+                dialoguePanel.setVisible(false);
+                partyPanel.setVisible(true);
+            }
+        });
+		
+		btn2= new JButton();
 		btn3 = new JButton();
 		btn4 = new JButton();
 		btn5 = new JButton();
@@ -157,4 +200,5 @@ public class CombatView extends JFrame{ //implements ActionListener{
 		heroLabel.add(heroName);
 		
 	 }
+	 
 }
