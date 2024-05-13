@@ -45,7 +45,7 @@ public class XMLController {
 		//create a xml File If no exists
 		if(!fileExistsCharacterInfo.exists()) {
 			try {
-				File progress = new File(characterInfoFilepath);				
+				new File(characterInfoFilepath);				
 			}
 							
 			catch (Exception e) {
@@ -151,7 +151,7 @@ public class XMLController {
 		//create a xml File If no exists
 		if(!fileExistsProgress.exists()) {
 			try {
-				File progress = new File(progressFilepath);				
+				new File(progressFilepath);				
 			}
 					
 			catch (Exception e) {
@@ -229,7 +229,7 @@ public class XMLController {
 		//create a xml File If no exists
 		if(!fileExistsInventoryList.exists()) {
 			try {
-				File inventoryList = new File(inventoryListFilepath);				
+				new File(inventoryListFilepath);				
 			}
 			
 			catch (Exception e) {

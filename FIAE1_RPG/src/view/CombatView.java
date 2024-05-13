@@ -1,9 +1,6 @@
 package view;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -20,8 +17,12 @@ import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
+import controller.SoundController;
+import model.SerializationIDs;
+
 public class CombatView extends JFrame{ //implements ActionListener{
 	
+	private static final long serialVersionUID = SerializationIDs.combatViewID;
 	/* things to add when going in combat
 		Check for combatEnviroment, check for enemies
 	
@@ -48,27 +49,29 @@ public class CombatView extends JFrame{ //implements ActionListener{
 	private JTextArea scrollingTextArea;
 	Border border = BorderFactory.createLineBorder(Color.black, 1);
 	boolean isFightOver = false; // used to check wether the fight is over, can be happen after reaching 0 HP to any side or end via event.
+	SoundController soundController;
 	
 	
 	public CombatView(String combatBackground) {
 		// Font settings
 		btnFont = new Font("Old English Text MT", Font.BOLD, 24);
 		textFont = new Font("Calisto MT", Font.PLAIN, 24);
+		soundController = new SoundController();
 		
 		// adding main Panels
 		addTopPanel(combatBackground);
 		addBotPanel();
 		showButton(btn1, "Weiter");
 		
-		this.setTitle("Combat");
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setSize(1200,800);
-		this.setResizable(false);
+		setTitle("Kampf");
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
+		setUndecorated(true);
 		//
+		soundController.playMusicLoop("res/soundFX/music/Combat_Music.wav");
 		
-		this.setLocationRelativeTo(null);
-		this.setLayout(null);
-		this.setVisible(true);
+		setLocationRelativeTo(null);
+		setVisible(true);
 	}	
 	
 		// this method exists to add 5 buttons to the cornerPanel
@@ -160,8 +163,20 @@ public class CombatView extends JFrame{ //implements ActionListener{
             }
         });
 		
-		btn2= new JButton();
+		btn2 = new JButton();
 		btn3 = new JButton();
+		
+		btn3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	soundController.stopMusicLoop();
+            	soundController.playMusicLoop("res/soundFX/music/Map_Music.wav");
+            	dispose();
+            	
+            }
+        });
+		
+		
 		btn4 = new JButton();
 		btn5 = new JButton();
 		addButton(btn1,195);

@@ -1,15 +1,15 @@
 package view;
 
-import java.awt.BorderLayout;
-import java.awt.Image;
-
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import model.SerializationIDs;
+
 public class CharacterView extends JFrame{
 	
+	private static final long serialVersionUID = SerializationIDs.characterViewID;
 	JLabel playerName;
 	JPanel backgroundPanel, valuesPanel, equipPanel, charaPanel;
 	String charaProfileImg = "res/img/placeholderImg.png";
@@ -17,25 +17,11 @@ public class CharacterView extends JFrame{
 	ImageIcon CharImgIcon, introImgIcon;
 	
 	public CharacterView() {
-		setTitle("namePlaceholder");
-		setSize(1200, 800);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
+		setTitle("Charakterübersicht");
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
+		setUndecorated(true);
 		
-		backgroundPanel = new BackGroundPanel(new ImageIcon(CharImagPath).getImage());
-		backgroundPanel.setLayout(new BorderLayout());
-		
-		JPanel CharaPanel = new JPanel();
-		charaPanel.setSize(100, 200);
-		
-		JLabel IconHolder = new JLabel();
-		IconHolder.setIcon(new javax.swing.ImageIcon(getClass().getResource(charaProfileImg)));
-	    CharaPanel.add(IconHolder);
-	    CharaPanel.setLayout(new BorderLayout());  
-	  
-	    backgroundPanel.add(CharaPanel, BorderLayout.WEST);
-	    
-	    getContentPane().add(backgroundPanel);
-		pack();
 		setLocationRelativeTo(null);
 		setVisible(true);
 	}

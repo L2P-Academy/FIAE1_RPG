@@ -3,6 +3,8 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -11,8 +13,12 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 
+import model.SerializationIDs;
+
 public class SavegameView extends JFrame {
-	JButton saveBtn, loadBtn, deleteBtn, backBtn;
+
+	private static final long serialVersionUID = SerializationIDs.saveGameViewID;
+	JButton saveBtn, loadBtn, deleteBtn, backBtn, closeGameBtn;
 	JLabel titleLbl;
 	JPanel buttonPnl, listPnl, mainPnl;
 	JTable saveTbl;
@@ -22,8 +28,9 @@ public class SavegameView extends JFrame {
 public SavegameView() {
 	
 	setTitle("Savegames");
-	setSize(1200, 800);
-	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+	setExtendedState(JFrame.MAXIMIZED_BOTH);
+	setUndecorated(true);
 	
 	//create Panels
 	buttonPnl = new JPanel(new FlowLayout());
@@ -40,6 +47,7 @@ public SavegameView() {
 	loadBtn = new JButton("Spiel laden");
 	deleteBtn = new JButton("Spielstand löschen");
 	backBtn = new JButton("Zurück");
+	closeGameBtn = new JButton("Spiel beenden");
 	
 	// create Table
 	saveTbl = new JTable(10, 2);
@@ -53,6 +61,24 @@ public SavegameView() {
 	buttonPnl.add(loadBtn);
 	buttonPnl.add(deleteBtn);
 	buttonPnl.add(backBtn);
+	buttonPnl.add(closeGameBtn);
+	
+	// add ActionListeners to Buttons
+	backBtn.addActionListener(new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			dispose();			
+		}
+	});
+	
+	closeGameBtn.addActionListener(new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			System.exit(0);			
+		}
+	});
 	
 	//add Lable to Panel
 	listPnl.add(titleLbl, BorderLayout.NORTH);
