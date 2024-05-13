@@ -118,7 +118,7 @@ public class MapView extends JFrame {
 		}});
 		combatViewBtn.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
-		CombatView combatView = new CombatView();
+		CombatView combatView = new CombatView(("Forest"));
 		}});
 		///AddActionListener to Journal + CreditView sobald vorhanden
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
