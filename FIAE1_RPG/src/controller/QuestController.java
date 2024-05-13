@@ -37,10 +37,11 @@ public class QuestController {
 	}
 
 	// Method to retrieve completed quest for the player
-	public void completeQuest(PlayerCharacterModel player, QuestModel quest) {
+	public void completeQuest(PlayerCharacterModel player, QuestModel quest, ItemModel gold) {
 		if (player.getActiveQuests().contains(quest)) {
 			player.getActiveQuests().remove(quest);
-			player.setExpPoints(player.getExpPoints() + quest.getRewardExpPoints() + quest.getRewardGold());
+			player.setExpPoints(player.getExpPoints() + quest.getRewardExpPoints());
+			gold.setItemQuantity((int) (gold.getItemQuantity() + quest.getRewardGold()));
 		}
 	}
 
