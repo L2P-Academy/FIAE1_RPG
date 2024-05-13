@@ -1,1 +1,25 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?><CharacterInfo>
+    <Name>Rida</Name>
+    <Race>Elf</Race>
+    <HealthPoints>100</HealthPoints>
+    <CurrentHealthPoints>0</CurrentHealthPoints>
+    <BaseDmg>5</BaseDmg>
+    <BaseArmour>20</BaseArmour>
+    <AbilityList>
+        <Ability>
+            <Name>Frostnova</Name>
+            <Ranged>true</Ranged>
+            <AOE>true</AOE>
+            <Element>[]</Element>
+        </Ability>
+        <Ability>
+            <Name>Feuerball</Name>
+            <Ranged>true</Ranged>
+            <AOE>false</AOE>
+            <Element>[]</Element>
+        </Ability>
+    </AbilityList>
+    <ManaPoints>50</ManaPoints>
+    <CurrentManaPoints>50</CurrentManaPoints>
+    <StaminaPoints>20</StaminaPoints>
+</CharacterInfo>

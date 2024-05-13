@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?><InventoryList>
-    <Stein>
-        <Durability>100</Durability>
-        <Quantity>20</Quantity>
+    <Item>
+        <Name>Weintrauben</Name>
+        <Quantity>1</Quantity>
         <Price>10.0</Price>
-        <Damage>1</Damage>
         <QuestItem>false</QuestItem>
-    </Stein>
-    <Schwert>
-        <Durability>10</Durability>
-        <Quantity>2</Quantity>
-        <Price>1.0</Price>
-        <Damage>100</Damage>
-        <QuestItem>true</QuestItem>
-    </Schwert>
-    <Axt>
-        <Durability>50</Durability>
-        <Quantity>5</Quantity>
-        <Price>100.0</Price>
-        <Damage>50</Damage>
+        <Description>Zuckrig süße Trauben</Description>
+    </Item>
+    <Item>
+        <Name>Großer Heiltrank</Name>
+        <Quantity>1</Quantity>
+        <Price>85.0</Price>
         <QuestItem>false</QuestItem>
-    </Axt>
+        <Description>Heilt dich schnell und gut</Description>
+    </Item>
+    <Item>
+        <Name>Manatrank</Name>
+        <Quantity>1</Quantity>
+        <Price>50.0</Price>
+        <QuestItem>false</QuestItem>
+        <Description>Ein durchschnittlicher Manatrank</Description>
+    </Item>
 </InventoryList>
