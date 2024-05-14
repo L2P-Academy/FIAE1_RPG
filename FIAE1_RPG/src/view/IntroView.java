@@ -60,11 +60,10 @@ public class IntroView extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				soundController.playButtonClickSound();
 				soundController.stopMusicLoop();
+				soundController.playButtonClickSound();				
 				new MapView();
-				dispose();
-				
+				dispose();				
 			}
 		});
         
@@ -74,8 +73,9 @@ public class IntroView extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
 
-        animateText();
         soundController.playMusicLoop("res/soundFX/music/Intro_Music.wav");
+        animateText();
+        
     }
 
     private void animateText() {
