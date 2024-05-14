@@ -43,7 +43,7 @@ public class CombatView extends JFrame{
 	private JProgressBar enemy1hp, enemy2hp, player1hp;
 	private Timer timer;
 	
-	
+	 
 	public CombatView(String battleLocation) {
 		
 		// frame initialize
