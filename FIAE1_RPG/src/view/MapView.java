@@ -27,7 +27,7 @@ public class MapView extends JFrame {
 	String buttonPanelBackgroundPath = "res/img/MapViewImages/ButtonPanelBackground5.jpg";
 
 	////////////////////////// TestButtons////////////////////////////
-	JButton savegameBtn, combatViewBtn, journalViewBtn, creditViewBtn;
+	JButton savegameBtn, combatViewBtn, journalViewBtn;
 
 	SoundController soundController;
 
@@ -109,8 +109,8 @@ public class MapView extends JFrame {
 		// journalViewBtn = new JButton("Journal");
 		// journalViewBtn.setToolTipText("Journal");
 		// Create CreditViewButton
-		creditViewBtn = new JButton("Credits");
-		creditViewBtn.setToolTipText("Hier passieren lustige Sachen");
+		creditsBtn = new JButton("Credits");
+		creditsBtn.setToolTipText("Hier passieren lustige Sachen");
 		/////////////////////////////////////////// Actionlisterners//////////////////////////////////////////////////////
 		savegameBtn.addActionListener(new ActionListener() {
 			@Override
@@ -156,7 +156,7 @@ public class MapView extends JFrame {
 			}
 		});
 		
-		creditViewBtn.addActionListener(new ActionListener() {
+		creditsBtn.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -173,8 +173,7 @@ public class MapView extends JFrame {
 		/////////// Testbuttons//////////
 		buttonPanel.add(savegameBtn);
 		buttonPanel.add(combatViewBtn);
-		// buttonPanel.add(journalView);
-		// buttonPanel.add(creditView);
+		buttonPanel.add(creditsBtn);
 		////////////////////////////////
 
 		// Add panels to Window(mainPanel)
