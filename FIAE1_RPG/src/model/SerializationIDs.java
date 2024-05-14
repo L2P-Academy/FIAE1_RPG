@@ -19,6 +19,7 @@ public class SerializationIDs implements Serializable{
 	public static final long saveGameViewID = 11L;
 	public static final long settingsViewID = 12L;
 	public static final long journalViewID = 13L;
+	public static final long creditViewID = 14L;
 	
 	private SerializationIDs() {
 		// empty private constructor to deny Instance creation
