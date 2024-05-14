@@ -8,6 +8,7 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Timer;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -40,8 +41,9 @@ public class CombatView extends JFrame{
 	private Image resizedImage;
 	private ImageIcon enemy1Icon, enemy2Icon, player1Icon;
 	private JProgressBar enemy1hp, enemy2hp, player1hp;
+	private Timer timer;
 	
-	
+	 
 	public CombatView(String battleLocation) {
 		
 		// frame initialize
@@ -50,6 +52,7 @@ public class CombatView extends JFrame{
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setUndecorated(true);
 		soundController = new SoundController();
+		timer = new Timer();
 		
 		//// create main background Panel
 		battleBackgroundPath = "res/img/BattleBackgrounds/" + battleLocation;
@@ -200,18 +203,23 @@ public class CombatView extends JFrame{
 				if (enemy1hp.getValue() != 0) {
 					soundController.playFxSound("res/soundFX/fxEffects/sword_sound.wav");
 					enemy1hp.setValue((enemy1hp.getValue()-10));
-				}
-				else if (enemy2hp.getValue() != 0) {
+				} else if (enemy2hp.getValue() != 0) {
 					soundController.playFxSound("res/soundFX/fxEffects/sword_sound.wav");
 					enemy2hp.setValue((enemy2hp.getValue()-10));
-				}
-				else {
+				} else {
 					soundController.playFxSound("res/soundFX/fxEffects/helloThere_sound.wav");
 					dialogueText.setText("Ich.. habe es endlich.. geschafft!");
 					clickBtn.setEnabled(false);
+				} if (enemy2hp.getValue() == 0) {
+					clickBtn.setEnabled(false);
+					//dialogueText.setText("");
+					//dialogueText.setText(dialogueText.getText() + "");
+					//dialogueText.setText(dialogueText.getText() + "");
+					dialogueText.setText(dialogueText.getText() + "...! Endlich. Das war ein harter Kampf.\nIch bin fast ins schwitzen gekommen.");
 				}
 			}
 		});
+		
 
 				// add buttons to the button Panel
 		
