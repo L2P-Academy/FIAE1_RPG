@@ -10,11 +10,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
@@ -26,14 +29,17 @@ public class CombatView extends JFrame{
 
 	private static final long serialVersionUID = SerializationIDs.combatViewID;
 	
-	private JPanel heroPanel, backgroundPanel, textPanel, hero1picture, enemyPanel, enemy1picture, topPanel;
-	private JLabel hero1nameLabel, hero1hpLabel, enemy1nameLabel, enemy1hpLabel, dialogueTopMessage;
-	private JButton continueBtn;
+	private JPanel buttonPanel, heroPanel, backgroundPanel, textPanel, enemyPanel, topPanel, enemy1Panel, enemy2Panel;
+	private JLabel enemy1Label, enemy2Label, enemy2hpLabel, dialogueTopMessage, hero1Label;
+	private JButton continueBtn, clickBtn;
 	private SoundController soundController;
 	private JTextArea dialogueText;
 	private String battleBackgroundPath;
 	private Font defaultFont = new Font("Calisto MT", Font.PLAIN, 26);
 	private String enemyPath = "res/img/EnemyPortraits/";
+	private Image resizedImage;
+	private ImageIcon enemy1Icon, enemy2Icon, player1Icon;
+	private JProgressBar enemy1hp, enemy2hp, player1hp;
 	
 	
 	public CombatView(String battleLocation) {
@@ -51,45 +57,111 @@ public class CombatView extends JFrame{
 		backgroundPanel.setLayout(new BorderLayout());
 		getContentPane().add(backgroundPanel);
 		
-		/// add topPanel (empty)
+			/// add leftPanel (empty)
 		topPanel = new JPanel();
-		topPanel.setPreferredSize(new Dimension(0,500));
+		topPanel.setPreferredSize(new Dimension(150,0));
 		topPanel.setOpaque(false);
 		
-		/// add enemyPanel on the center of main
+			/// add enemyPanel on the center of main
 		enemyPanel = new JPanel();
+		enemyPanel.setLayout(new BoxLayout(enemyPanel, BoxLayout.X_AXIS));
 		enemyPanel.setOpaque(false);
 		
-		// add enemy1picture to the enemyPanel
-		enemy1picture = new BackGroundPanel(new ImageIcon(enemyPath+"Wolf2.png").getImage().getScaledInstance(250, 250, Image.SCALE_SMOOTH)); 
-		enemyPanel.add(enemy1picture);
+				// prepare enemy1 
+		enemy1Panel = new JPanel();
+		enemy1Panel.setLayout(new BoxLayout(enemy1Panel, BoxLayout.Y_AXIS));
+		enemy1Panel.setOpaque(false);
+		enemy1Panel.setMaximumSize(new Dimension(200,300));
 		
-		/// add heroPanel on the right of main
+		enemy1Label = new JLabel();
+		
+		resizedImage = new ImageIcon(enemyPath+"Wolf2.png").getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+		enemy1Icon = new ImageIcon(resizedImage);
+		enemy1Label.setIcon(enemy1Icon);
+		enemy1Label.setPreferredSize(new Dimension(200,200));
+		enemy1Label.setText("Wolf 01");
+		enemy1Label.setFont(defaultFont);
+		enemy1Label.setForeground(Color.white);
+		enemy1Label.setVerticalTextPosition(JLabel.TOP);
+		enemy1Label.setHorizontalTextPosition(JLabel.CENTER);
+		enemy1Label.setIconTextGap(-25);
+		
+		enemy1hp = new JProgressBar(0,40);
+		enemy1hp.setForeground(Color.green);
+		enemy1hp.setBackground(Color.red);
+		enemy1hp.setValue(40);
+
+		enemy1Panel.add(enemy1Label);
+		enemy1Panel.add(enemy1hp);
+		
+				// prepare enemy2 
+		enemy2Panel = new JPanel();
+		enemy2Panel.setLayout(new BoxLayout(enemy2Panel, BoxLayout.Y_AXIS));
+		enemy2Panel.setOpaque(false);
+		enemy2Panel.setMaximumSize(new Dimension(200,300));
+		
+		enemy2Label = new JLabel();
+		
+		resizedImage = new ImageIcon(enemyPath+"Wolf2.png").getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+		enemy2Icon = new ImageIcon(resizedImage);
+		enemy2Label.setIcon(enemy2Icon);
+		enemy2Label.setText("Wolf 02");
+		enemy2Label.setFont(defaultFont);
+		enemy2Label.setForeground(Color.white);
+		enemy2Label.setVerticalTextPosition(JLabel.TOP);
+		enemy2Label.setHorizontalTextPosition(JLabel.CENTER);
+		enemy2Label.setIconTextGap(-25);
+		enemy2hpLabel = new JLabel();
+		enemy2Label.add(enemy2hpLabel);
+
+		enemy2hp = new JProgressBar(0,30);
+		enemy2hp.setForeground(Color.green);
+		enemy2hp.setBackground(Color.red);
+		enemy2hp.setValue(30);
+
+		enemy2Panel.add(enemy2Label);
+		enemy2Panel.add(enemy2hp);
+		
+				// add enemie labels to the enemyPanel
+		enemyPanel.add(enemy1Panel);
+		enemyPanel.add(Box.createRigidArea(new Dimension(50,0)));
+		enemyPanel.add(enemy2Panel);
+		
+		
+			/// add heroPanel on the right of main		
 		heroPanel = new JPanel();
-		heroPanel.setLayout(new FlowLayout());
-		heroPanel.setPreferredSize(new Dimension(200, 600));
-		
-		// add heroes name, picture and HP to the heroPanel
-		hero1nameLabel = new JLabel("Zwerg Magier");
-		hero1nameLabel.setFont(defaultFont);
-		hero1nameLabel.setForeground(Color.white);
-		
-		hero1picture = new BackGroundPanel(new ImageIcon("res/img/CharacterPortraits/male_dwarf1.png").getImage()
-		.getScaledInstance(200,200,Image.SCALE_SMOOTH));
+		heroPanel.setLayout(new BoxLayout(heroPanel, BoxLayout.Y_AXIS));
 		heroPanel.setOpaque(false);
+		heroPanel.setMaximumSize(new Dimension(200, 1000));
 		
-		hero1hpLabel = new JLabel();
-		hero1hpLabel.setBackground(Color.green);
+				// add heroes name, picture and HP to the heroPanel
+		resizedImage = new ImageIcon("res/img/CharacterPortraits/male_dwarf1.png").getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+		player1Icon = new ImageIcon(resizedImage);
+		hero1Label = new JLabel();
+		hero1Label.setIcon(player1Icon);
+		hero1Label.setText("Zwergenmagier");
+		hero1Label.setFont(defaultFont);
+		hero1Label.setForeground(Color.white);
+		hero1Label.setVerticalTextPosition(JLabel.TOP);
+		hero1Label.setHorizontalTextPosition(JLabel.CENTER);
+		hero1Label.setIconTextGap(-25);
 		
-		heroPanel.add(hero1nameLabel);
-		heroPanel.add(hero1picture);
-		heroPanel.add(hero1hpLabel);
+		player1hp = new JProgressBar(0,50);
+		player1hp.setForeground(Color.green);
+		player1hp.setBackground(Color.red);
+		player1hp.setValue(45);
+		player1hp.setMaximumSize(new Dimension(400, 20));
 		
-		/// add textPanel on the bottom of main
+
+		heroPanel.add(Box.createRigidArea(new Dimension(0,100)));
+		heroPanel.add(player1hp);
+		heroPanel.add(hero1Label);
+		
+			/// add textPanel on the bottom of main
 		textPanel = new JPanel();
 		textPanel.setLayout(new BorderLayout());
 		
-		// add dialogue Text and Name Label to the textPanel
+				// add dialogue Text and Name Label to the textPanel
 		dialogueTopMessage = new JLabel("Player Hero");
 		dialogueTopMessage.setFont(new Font("Calisto MT", Font.BOLD, 28));
 		
@@ -100,13 +172,16 @@ public class CombatView extends JFrame{
         dialogueText.setEditable(false); // Text nicht editierbar machen
         dialogueText.setPreferredSize(new Dimension(400, 120));
         dialogueText.setBackground(new Color(245, 245, 220));
-        dialogueText.setText("Bei Moradin!\nEin leerer Kampfplatz!");
+        dialogueText.setText("Bei Moradin!\nEin Kampf steht mir hervor!");
         
 		
-		// add Buttons to the textPanel
+				// prepare Buttons
 		continueBtn = new JButton("Weiter");
 		beautifyButtons(continueBtn);
-		// Continue Button function
+		clickBtn = new JButton("Click");
+		beautifyButtons(clickBtn);
+		
+				// Continue Button function
 		continueBtn.addActionListener(new ActionListener() {
 			
 
@@ -118,13 +193,43 @@ public class CombatView extends JFrame{
 			}
 		});
 
+				// Click Button function
+		clickBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (enemy1hp.getValue() != 0) {
+					soundController.playFxSound("res/soundFX/fxEffects/sword_sound.wav");
+					enemy1hp.setValue((enemy1hp.getValue()-10));
+				}
+				else if (enemy2hp.getValue() != 0) {
+					soundController.playFxSound("res/soundFX/fxEffects/sword_sound.wav");
+					enemy2hp.setValue((enemy2hp.getValue()-10));
+				}
+				else {
+					soundController.playFxSound("res/soundFX/fxEffects/helloThere_sound.wav");
+					dialogueText.setText("Ich.. habe es endlich.. geschafft!");
+					clickBtn.setEnabled(false);
+				}
+			}
+		});
+
+				// add buttons to the button Panel
+		
+		buttonPanel = new JPanel();
+		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+		buttonPanel.add(continueBtn, BorderLayout.EAST);
+		buttonPanel.add(clickBtn, BorderLayout.EAST);
+		
+			/// add all Panels onto the text Panel
+		
 		textPanel.add(dialogueText, BorderLayout.CENTER);
 		textPanel.add(dialogueTopMessage, BorderLayout.NORTH);
-		textPanel.add(continueBtn, BorderLayout.EAST);
+		textPanel.add(buttonPanel, BorderLayout.EAST);
+		
 		
 	
 		// frame finish-up
-		backgroundPanel.add(topPanel, BorderLayout.NORTH);
+		backgroundPanel.add(topPanel, BorderLayout.WEST);
 		backgroundPanel.add(enemyPanel, BorderLayout.CENTER);
 		backgroundPanel.add(textPanel, BorderLayout.SOUTH);
 		backgroundPanel.add(heroPanel, BorderLayout.EAST);
