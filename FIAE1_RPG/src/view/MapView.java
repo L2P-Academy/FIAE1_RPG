@@ -120,7 +120,7 @@ public class MapView extends JFrame {
 		});
 		combatViewBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				CombatView combatView = new CombatView(("Forest"));
+				CombatView combatView = new CombatView("Forest01.jpg");
 				soundController.stopMusicLoop();
 			}
 		});
