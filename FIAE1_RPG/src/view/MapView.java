@@ -22,7 +22,7 @@ public class MapView extends JFrame {
 	private static final long serialVersionUID = SerializationIDs.mapViewID;
 	JPanel buttonPanel, mapPanel, mainPanel;
 	JLabel mapTitleLbl;
-	JButton inventoryBtn, characterBtn, questsBtn, settingsBtn;
+	JButton inventoryBtn, characterBtn, questsBtn, settingsBtn, creditsBtn;
 	String mapImagePath = "res/img/MapViewImages/map_start.jpg";
 	String buttonPanelBackgroundPath = "res/img/MapViewImages/ButtonPanelBackground5.jpg";
 
@@ -63,7 +63,7 @@ public class MapView extends JFrame {
 		// Create inventoryBtn with bagIcon
 		ImageIcon bagIcon = new ImageIcon(new ImageIcon("res/img/MapViewImages/icon_bag2.png").getImage()
 				.getScaledInstance(44, 44, Image.SCALE_SMOOTH));
-		;
+		
 		inventoryBtn = new JButton(bagIcon);
 		inventoryBtn.setContentAreaFilled(false); // Make button transparent
 		inventoryBtn.setBorderPainted(false); // Remove border
@@ -72,7 +72,7 @@ public class MapView extends JFrame {
 		// Create CharacterBtn with characterIcon
 		ImageIcon characterIcon = new ImageIcon(new ImageIcon("res/img/MapViewImages/icon_character2.png").getImage()
 				.getScaledInstance(44, 44, Image.SCALE_SMOOTH));
-		;
+		
 		characterBtn = new JButton(characterIcon);
 		characterBtn.setContentAreaFilled(false); // Make button transparent
 		characterBtn.setBorderPainted(false); // Remove border
@@ -81,7 +81,7 @@ public class MapView extends JFrame {
 		// Create questsBtn with questsIcon
 		ImageIcon questsIcon = new ImageIcon(new ImageIcon("res/img/MapViewImages/icon_quests2.png").getImage()
 				.getScaledInstance(44, 44, Image.SCALE_SMOOTH));
-		;
+		
 		questsBtn = new JButton(questsIcon);
 		questsBtn.setContentAreaFilled(false); // Make button transparent
 		questsBtn.setBorderPainted(false); // Remove border
@@ -90,7 +90,7 @@ public class MapView extends JFrame {
 		// Create Gear-Icon for Settings-Button
 		ImageIcon gearIcon = new ImageIcon(new ImageIcon("res/img/MapViewImages/icon_settings3.png").getImage()
 				.getScaledInstance(44, 44, Image.SCALE_SMOOTH));
-		;
+		
 		settingsBtn = new JButton(gearIcon);
 		settingsBtn.setContentAreaFilled(false); // Make button transparent
 		settingsBtn.setBorderPainted(false); // Remove border
@@ -109,8 +109,8 @@ public class MapView extends JFrame {
 		// journalViewBtn = new JButton("Journal");
 		// journalViewBtn.setToolTipText("Journal");
 		// Create CreditViewButton
-		// creditViewBtn = new JButton("Credit");
-		// creditViewBtn.setToolTipText("Credit");
+		creditViewBtn = new JButton("Credits");
+		creditViewBtn.setToolTipText("Hier passieren lustige Sachen");
 		/////////////////////////////////////////// Actionlisterners//////////////////////////////////////////////////////
 		savegameBtn.addActionListener(new ActionListener() {
 			@Override
@@ -124,10 +124,7 @@ public class MapView extends JFrame {
 				soundController.stopMusicLoop();
 			}
 		});
-		/// AddActionListener to Journal + CreditView sobald vorhanden
-		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+		
 		// Add ActionListener to buttons
 		inventoryBtn.addActionListener(new ActionListener() {
 			@Override
@@ -156,6 +153,14 @@ public class MapView extends JFrame {
 		settingsBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				SettingsView settingsView = new SettingsView();
+			}
+		});
+		
+		creditViewBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				CreditView creditView = new CreditView();				
 			}
 		});
 
