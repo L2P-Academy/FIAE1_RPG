@@ -31,7 +31,14 @@ public class EndScreenPanel extends JPanel implements ActionListener{
 				+ "Cedric Antunes\n"
 				+ "Samael Schröder\n"
 				+ "Christian Gassmann\n"
+				+ "Michael Seifert\n"
+				+ "Dennis Schlaps\n"
+				+ "Maximilian Gietz\n"
+				+ "Maxim Heilmann\n"
+				+ "David Spielberger\n"
+				+ "Christoph Dondit\n"
 				+ "Rida Faouzi\n"
+				+ "Rolf Clemenz\n"
 				+ "\n"
 				+ "Music\n"
 				+ "Lexin_Music (StartMenü, Map)\n"
@@ -50,7 +57,9 @@ public class EndScreenPanel extends JPanel implements ActionListener{
 				+ "floraphonic (MonsterFX, ArrowShotFX, DragonFX\n"
 				+ "Universfield (ClickFX)\n"
 				+ "Pixabay\n"
-				+ "SergeQuadrado (ByeFX)\n";
+				+ "SergeQuadrado (ByeFX)\n"
+				+ "\n"
+				+ "Artists / Illustration\n";
 				
 		creditTimer.start();
 	}
@@ -70,7 +79,7 @@ public class EndScreenPanel extends JPanel implements ActionListener{
 		for(String line : text.split("\n")) {
 			int stringLength = (int)g2d.getFontMetrics().getStringBounds(line, g2d).getWidth();
 			int x = getWidth()/2 - stringLength/2;
-			g2d.drawString(line, x, y += 28);
+			g2d.drawString(line, x, y += 32);
 		}
 	}
 	
@@ -78,7 +87,7 @@ public class EndScreenPanel extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		// System.out.println(textY);		
 		textY--;
-		if (textY < -900) {
+		if (textY < -1200) {
 			creditTimer.stop();			
 		}
 		repaint();
