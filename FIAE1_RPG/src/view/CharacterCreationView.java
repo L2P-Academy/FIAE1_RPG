@@ -42,10 +42,17 @@ public class CharacterCreationView extends JFrame{
 	private Font gameFont, gameFontSmall;
 	private SoundController soundController;
 	private ArrayList<String> raceList, genderList, shapeList;
-	private int index = 1;
 	
-	// Sampel Image to load into centerPanel
-	private String previewCharacterImgPath = "res/img/CharacterPortraits/female_elf1.png"; //Test-Datei
+	
+	// Set Indexes
+	private int raceIndex = 0;
+	private int genderIndex = 0;
+	private int shapeIndex = 0;
+	
+	// Sampel Image Paths
+	private String femaleElf = "res/img/CharacterPortraits/female_elf1.png"; //Test-Datei
+	private String maleHuman = "res/img/CharacterPortraits/male_human1.png";
+	private String femaleHuman = "res/img/CharacterPortraits/female_human1.png";
 	
 	public CharacterCreationView() {
 			
@@ -100,8 +107,42 @@ public class CharacterCreationView extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				getNextEntry(pickRaceLbl, raceList);				
+				raceIndex = getNextEntry(pickRaceLbl, raceList, raceIndex);
+				
+				switch (raceIndex) {
+				case 0:
+					changePreviewImg(maleHuman);
+					break;
+				case 2:
+					changePreviewImg(femaleElf);
+					break;	
+					
+				default:
+					break;
+				}
 			}
+		});
+		
+		leftRaceBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				raceIndex = getPreviousEntry(pickRaceLbl, raceList, raceIndex);
+				
+				switch (raceIndex) {
+				case 0:
+					changePreviewImg(maleHuman);
+					break;
+				case 2:
+					changePreviewImg(femaleElf);
+					break;	
+					
+				default:
+					break;
+				}
+				
+			}
+			
 		});
 		
 		// create ArrayList for Genders
@@ -132,7 +173,15 @@ public class CharacterCreationView extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				soundController.playButtonClickSound();
-				getNextEntry(pickGenderLbl, genderList);		
+				genderIndex = getNextEntry(pickGenderLbl, genderList, genderIndex);		
+			}
+		});
+		
+		leftGenderBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				genderIndex = getPreviousEntry(pickGenderLbl, genderList, genderIndex);				
 			}
 		});
 		
@@ -152,6 +201,22 @@ public class CharacterCreationView extends JFrame{
 		shapePanel.add(shapeLbl);
 		shapePanel.add(pickShapeLbl);
 		shapePanel.add(shapeBtnPanel);
+		
+		rightShapeBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				shapeIndex = getNextEntry(pickShapeLbl, shapeList, shapeIndex);				
+			}
+		});
+		
+		leftShapeBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				shapeIndex = getPreviousEntry(pickShapeLbl, shapeList, shapeIndex);				
+			}
+		});
 		
 		// Create Label and TextFields
 		charNameTxtField = new JTextField();
@@ -198,7 +263,7 @@ public class CharacterCreationView extends JFrame{
 		southPanel.add(finishBtn, BorderLayout.CENTER);
 		
 		// add image to centerPanel
-		JLabel imageLabel = new JLabel(new ImageIcon(previewCharacterImgPath));
+		JLabel imageLabel = new JLabel(new ImageIcon(femaleHuman));
 		centerPanel.add(imageLabel);
 		centerPanel.setBackground(Color.BLUE);
 	
@@ -253,20 +318,41 @@ public class CharacterCreationView extends JFrame{
 			});
 		}
 		 
-		 private void getNextEntry(JLabel targetLabel, ArrayList<String> list) {			 
+		 // Get next Entry from ArrayLists and iterate through
+		 // return actual Indexes
+		 private int getNextEntry(JLabel targetLabel, ArrayList<String> list, int index) {			 
 			 
 			 // TODO: Character Race must be changed depending on index
-			 targetLabel.setText(list.get(index));
 			 index += 1;
-			 targetLabel.repaint();
-			 
 			 if (index >= list.size()) {
 				 index = 0;
-			}			 
+			}
+			 
+			 targetLabel.setText(list.get(index));
+			 targetLabel.repaint();
+			 return index;			 
 		 }
 		 
-		 // TODO:
-		 private void getPreviousEntry() {
+		 // Get previous Entry from ArrayLists and iterate through
+		 // return actual Indexes
+		 private int getPreviousEntry(JLabel targetLabel, ArrayList<String> list, int index) {
+			 index -= 1;
+			 if (index < 0) {
+				 index = (list.size()-1);
+			}	
 			 
+			 targetLabel.setText(list.get(index));
+			 targetLabel.repaint();
+			 return index;	 
 		 }
+		 
+		 // Cleanup centerPanel, Create new imageLabel and add imageLabel to centerPanel 
+		 private void changePreviewImg(String imgPath) {
+			centerPanel.removeAll(); 
+			 
+			JLabel imageLabel = new JLabel(new ImageIcon(imgPath));		
+			centerPanel.add(imageLabel);
+			centerPanel.setBackground(Color.BLUE);
+		}
+		 
 }
