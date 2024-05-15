@@ -12,17 +12,17 @@ public class ItemModel {
 	private String itemDescription;
 
 	// Item-Liste:
+	
 	// https://more2learn-my.sharepoint.com/:x:/g/personal/ssch467_more2learn_de/EcYh5wDUl6xOkwiXIFZANVQB8GkH7YTvfICZ9erPfrlPkA?e=BddI87
-	//
-	// (enthält auch Infos zu consumable/usable + Description für Views)
 
-	// TO-DO 10.05.
-	//
-	// Items, items, items
+	// (enthält auch Infos zu consumable/usable + Description für Views)
 
 	// Constructors
 
+	// 3 Stück weil EquipModel 2 braucht
+
 	// Standard Constructor
+
 	public ItemModel(String itemName, int itemQuantity, double itemPrice, int itemDamage, boolean isQuestItem,
 			String itemDescription) {
 		this.itemName = itemName;
@@ -34,6 +34,7 @@ public class ItemModel {
 	}
 
 	// Constructor für Quest-Items
+
 	public ItemModel(String itemName, int itemQuantity) {
 		this.itemName = itemName;
 		this.itemQuantity = itemQuantity;
@@ -41,7 +42,8 @@ public class ItemModel {
 	}
 
 	// Constructor für Equipment
-	public ItemModel(String itemName, int itemQuantity, double itemPrice, int itemDamage, String itemDescription ) {
+
+	public ItemModel(String itemName, int itemQuantity, double itemPrice, int itemDamage, String itemDescription) {
 		this.itemName = itemName;
 		this.itemQuantity = itemQuantity;
 		this.itemPrice = itemPrice;
@@ -100,16 +102,20 @@ public class ItemModel {
 		this.itemDescription = itemDescription;
 	}
 
-	//
 	// --------------------------------------------------------------------------
+
 	// Item-Liste
-	//
+
 	// https://more2learn-my.sharepoint.com/:x:/g/personal/ssch467_more2learn_de/EcYh5wDUl6xOkwiXIFZANVQB8GkH7YTvfICZ9erPfrlPkA?e=BddI87
 	//
 	// ItemModel itemName = new ItemModel
 	// Bezeichnung, itemQuantity,itemPrice,itemDamage,isQuestItem, itemDescription
 
+	// Basic
+
 	ItemModel Gold = new ItemModel("Gold", 1, 1, 0, false, "Gold.");
+
+	// Potions (consumable)
 
 	ItemModel KleinerHeiltrank = new ItemModel("Kleiner Heiltrank", 1, 20, 0, false, "Füllt einige HP wieder auf.");
 
@@ -134,6 +140,8 @@ public class ItemModel {
 
 	ItemModel Wiederbelebungstrank = new ItemModel("Wiederbelebungstrank", 1, 190, 0, false,
 			"Deine zweite Chance - nur einmal verwendbar");
+
+	// Food (consumable)
 
 	ItemModel Brot = new ItemModel("Brot", 1, 5, 0, false, "Ein frischer Laib Brot");
 
@@ -163,6 +171,15 @@ public class ItemModel {
 
 	ItemModel ScheibeToast = new ItemModel("Scheibe Toast", 1, 4, 0, false, "Wichtig ist das Weißbrot, ist doch klar!");
 
+	// Special Items (consumable & usable)
+
+	ItemModel Ueberraschungsei = new ItemModel("Überraschungsei", 1, 300, 0, false,
+			"Enthält eines von Haralds hochwertigen Hühnchen");
+
+	// Trash
+
+	ItemModel EinGlasDreck = new ItemModel("Ein Glas Dreck", 1, 2, 0, false, "Wer würde Dreck in ein Glas … ach egal");
+
 	ItemModel Seil = new ItemModel("Seil", 1, 5, 0, false, "Gut zum Klettern");
 
 	ItemModel Stock = new ItemModel("Stock", 1, 2, 0, false, "Ein Stock.");
@@ -179,12 +196,7 @@ public class ItemModel {
 
 	ItemModel Monsterleber = new ItemModel("Monsterleber", 1, 5, 0, false, "Nicht mehr ganz funktionstüchtiges Organ");
 
-	ItemModel Banditenkopf = new ItemModel("Banditenkopf", 1, 0, 0, true, "Der war mal an jemandem dran");
-
-	ItemModel Ueberraschungsei = new ItemModel("Überraschungsei", 1, 300, 0, false,
-			"Enthält eines von Haralds hochwertigen Hühnchen");
-
-	ItemModel EinGlasDreck = new ItemModel("Ein Glas Dreck", 1, 2, 0, false, "Wer würde Dreck in ein Glas … ach egal");
+	// Pets (can be equipped?)
 
 	ItemModel FlugunfaehigesHuhn = new ItemModel("Flugunfähiges Huhn (Pet)", 1, 200, 0, false,
 			"Ist das ein Dodo verkleidet als Huhn?");
@@ -201,7 +213,11 @@ public class ItemModel {
 	ItemModel GepanzertesFlughuhn = new ItemModel("Gepanzertes Flughuhn (Mount)", 1, 3, 0, false,
 			"Theoretisch ein gutes Reittier, aber sehr klein.");
 
+	// Quest items
+
 	ItemModel MassiverHolzhahn = new ItemModel("Massiver Holzhahn", 1, 0, 0, true,
 			"Erstaunlich großer Hahn aus Holz, der wohl Harald gehört");
+
+	ItemModel Banditenkopf = new ItemModel("Banditenkopf", 1, 0, 0, true, "Der war mal an jemandem dran");
 
 }
