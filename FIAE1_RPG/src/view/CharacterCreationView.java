@@ -11,6 +11,7 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.font.ImageGraphicAttribute;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -24,6 +25,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 
 import controller.SoundController;
 
@@ -32,7 +34,7 @@ public class CharacterCreationView extends JFrame{
 
 	private static final long serialVersionUID = SerializationIDs.characterCreationViewID;
 	private JPanel mainPanel, northPanel, southPanel, eastPanel, westPanel, 
-	centerPanel, namePanel/**/,raceBtnPanel/**/, genderBtnPanel, 
+	centerPanel,raceBtnPanel/**/, genderBtnPanel, 
 	racePanel, genderPanel, shapePanel, shapeBtnPanel;
 	private JTextField charNameTxtField;
 	private JLabel chooseCharLbl, nameLbl, raceLbl, pickRaceLbl, genderLbl, pickGenderLbl, shapeLbl,
@@ -46,14 +48,22 @@ public class CharacterCreationView extends JFrame{
 	
 	// Set Indexes
 	private int raceIndex = 0;
-	private int genderIndex = 0;
+	private int genderIndex = 1;
 	private int shapeIndex = 0;
 	
-	// Sampel Image Paths
-	private String femaleElf = "res/img/CharacterPortraits/female_elf1.png"; //Test-Datei
-	private String maleHuman = "res/img/CharacterPortraits/male_human1.png";
-	private String femaleHuman = "res/img/CharacterPortraits/female_human1.png";
+	// Image Paths
 	
+	private final String[][] imagePaths = {
+			{"res/img/CharacterPortraits/male_human5.png","res/img/CharacterPortraits/female_human3.png","res/img/CharacterPortraits/enby_human1.png"},
+			{"res/img/CharacterPortraits/male_orc1.png", "res/img/CharacterPortraits/female_orc1.png", null},
+			{"res/img/CharacterPortraits/male_elf1.png", "res/img/CharacterPortraits/female_elf2.png", "res/img/CharacterPortraits/enby_elf1.png"},
+			{"res/img/CharacterPortraits/male_dwarf1.png", "res/img/CharacterPortraits/female_dwarf2.png", null},
+			{"res/img/CharacterPortraits/male_fairy1.png", "res/img/CharacterPortraits/female_fairy1.png", "res/img/CharacterPortraits/enby_fairy1.png"},
+			{"res/img/CharacterPortraits/male_goblin3.png", "res/img/CharacterPortraits/female_goblin1.png",null},
+			{"res/img/CharacterPortraits/male_troll1.png", "res/img/CharacterPortraits/female_troll2.png", null},
+			{"res/img/CharacterPortraits/male_undead1.png", "res/img/CharacterPortraits/female_undead1.png", "res/img/CharacterPortraits/enby_undead1.png"}
+	};
+		
 	public CharacterCreationView() {
 			
 		setTitle("Charaktererstellung");
@@ -84,6 +94,10 @@ public class CharacterCreationView extends JFrame{
 		raceList.add("Ork");
 		raceList.add("Elf");
 		raceList.add("Zwerg");
+		raceList.add("Fee");
+		raceList.add("Goblin");
+		raceList.add("Troll");
+		raceList.add("Untot");
 		
 		// create Race Panel and Components
 		racePanel = new JPanel();
@@ -107,19 +121,9 @@ public class CharacterCreationView extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				soundController.playButtonClickSound();
 				raceIndex = getNextEntry(pickRaceLbl, raceList, raceIndex);
-				
-				switch (raceIndex) {
-				case 0:
-					changePreviewImg(maleHuman);
-					break;
-				case 2:
-					changePreviewImg(femaleElf);
-					break;	
-					
-				default:
-					break;
-				}
+				chooseImgPath(raceIndex, genderIndex);
 			}
 		});
 		
@@ -127,19 +131,9 @@ public class CharacterCreationView extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				soundController.playButtonClickSound();
 				raceIndex = getPreviousEntry(pickRaceLbl, raceList, raceIndex);
-				
-				switch (raceIndex) {
-				case 0:
-					changePreviewImg(maleHuman);
-					break;
-				case 2:
-					changePreviewImg(femaleElf);
-					break;	
-					
-				default:
-					break;
-				}
+				chooseImgPath(raceIndex, genderIndex);
 				
 			}
 			
@@ -173,7 +167,8 @@ public class CharacterCreationView extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				soundController.playButtonClickSound();
-				genderIndex = getNextEntry(pickGenderLbl, genderList, genderIndex);		
+				genderIndex = getNextEntry(pickGenderLbl, genderList, genderIndex);
+				chooseImgPath(raceIndex, genderIndex);
 			}
 		});
 		
@@ -181,7 +176,9 @@ public class CharacterCreationView extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				genderIndex = getPreviousEntry(pickGenderLbl, genderList, genderIndex);				
+				soundController.playButtonClickSound();
+				genderIndex = getPreviousEntry(pickGenderLbl, genderList, genderIndex);
+				chooseImgPath(raceIndex, genderIndex);
 			}
 		});
 		
@@ -201,6 +198,9 @@ public class CharacterCreationView extends JFrame{
 		shapePanel.add(shapeLbl);
 		shapePanel.add(pickShapeLbl);
 		shapePanel.add(shapeBtnPanel);
+		
+		// add image to centerPanel
+		chooseImgPath(raceIndex, genderIndex);
 		
 		rightShapeBtn.addActionListener(new ActionListener() {
 			
@@ -255,17 +255,9 @@ public class CharacterCreationView extends JFrame{
 		westPanel.add(racePanel);
 		westPanel.add(genderPanel);
 		eastPanel.add(shapePanel);
-//		westPanel.add(raceLbl);
-//		westPanel.add(pickRaceLbl);
-//		westPanel.add(raceBtnPanel);
 		
 		// Place finishBtn on southPanel
 		southPanel.add(finishBtn, BorderLayout.CENTER);
-		
-		// add image to centerPanel
-		JLabel imageLabel = new JLabel(new ImageIcon(femaleHuman));
-		centerPanel.add(imageLabel);
-		centerPanel.setBackground(Color.BLUE);
 	
 		// Place Elements on mainPanel
 		mainPanel.add(northPanel, BorderLayout.NORTH);
@@ -282,8 +274,7 @@ public class CharacterCreationView extends JFrame{
 				// TODO Auto-generated method stub
 				// Close Window if finishbtn is clicked
 				new IntroView();
-				dispose();
-				
+				dispose(); 
 			}
 		});
 		
@@ -346,13 +337,16 @@ public class CharacterCreationView extends JFrame{
 			 return index;	 
 		 }
 		 
-		 // Cleanup centerPanel, Create new imageLabel and add imageLabel to centerPanel 
-		 private void changePreviewImg(String imgPath) {
-			centerPanel.removeAll(); 
-			 
-			JLabel imageLabel = new JLabel(new ImageIcon(imgPath));		
-			centerPanel.add(imageLabel);
-			centerPanel.setBackground(Color.BLUE);
-		}
-		 
+		 //Choose Image-Path by using (array) imagePaths
+		 private void chooseImgPath(int raceIndex, int genderIndex) {
+			 String imagePath = imagePaths[raceIndex][genderIndex];
+			 if (imagePath != null) {
+				 centerPanel.removeAll();
+				 ImageIcon icon = new ImageIcon(imagePath);
+				 JLabel label = new JLabel(icon);
+				 centerPanel.add(label);
+				 centerPanel.revalidate();
+				 centerPanel.repaint();
+			 }
+		 }
 }
