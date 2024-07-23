@@ -1,100 +1,112 @@
 package model;
 
-import java.util.ArrayList;
-
 public class CharacterModel {
-    private String name;
-    private String race;
-    private int healthPoints;
-    private int currentHealthPoints;
-    private int baseDmg;
-    private int baseArmour;
-    private ArrayList<ItemModel> inventoryList;
-    private ArrayList<AbilityModel> abilityList;
 
-    // Constructor
-    public CharacterModel(String name, String race, int healthPoints, int baseDmg, int baseArmour) {
-        this.name = name;
-        this.race = race;
-        this.healthPoints = healthPoints;
-        this.baseDmg = baseDmg;
-        this.baseArmour = baseArmour;
-        this.inventoryList = new ArrayList<>();
-        this.abilityList = new ArrayList<>();
-    }
-    
-	// Method to add an item to the inventory
-    public void addToInventory(ItemModel item) {
-        inventoryList.add(item);
-    }
-    
-    // Method to add an ability to the ability list
-    public void addToAbility(AbilityModel ability) {
-    	abilityList.add(ability);
-    }
+	private int characterID, raceID, classID, currentHP, maxHP, 
+	currentMana, maxMana, currentXP, maxXP, level;
+	private String name;
 
-    // Getter & Setter
-    public String getName() {
-        return name;
-    }
+	public CharacterModel(int characterID, int raceID, int classID, int currentHP, int maxHP, int currentMana,
+			int maxMana, int currentXP, int maxXP, int level, String name) {
+		super();
+		this.characterID = characterID;
+		this.raceID = raceID;
+		this.classID = classID;
+		this.currentHP = currentHP;
+		this.maxHP = maxHP;
+		this.currentMana = currentMana;
+		this.maxMana = maxMana;
+		this.currentXP = currentXP;
+		this.maxXP = maxXP;
+		this.level = level;
+		this.name = name;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public int getCharacterID() {
+		return characterID;
+	}
 
-    public String getRace() {
-        return race;
-    }
+	public void setCharacterID(int characterID) {
+		this.characterID = characterID;
+	}
 
-    public void setRace(String race) {
-        this.race = race;
-    }
+	public int getRaceID() {
+		return raceID;
+	}
 
-    public int getHealthPoints() {
-        return healthPoints;
-    }
+	public void setRaceID(int raceID) {
+		this.raceID = raceID;
+	}
 
-    public void setHealthPoints(int healthPoints) {
-        this.healthPoints = healthPoints;
-    }
-    
-    public int getCurrentHealthPoints() {
-        return currentHealthPoints;
-    }
+	public int getClassID() {
+		return classID;
+	}
 
-    public void setCurrentHealthPoints(int currentHealthPoints) {
-        this.currentHealthPoints = currentHealthPoints;
-    }
+	public void setClassID(int classID) {
+		this.classID = classID;
+	}
 
-    public int getBaseDmg() {
-        return baseDmg;
-    }
+	public int getCurrentHP() {
+		return currentHP;
+	}
 
-    public void setBaseDmg(int baseDmg) {
-        this.baseDmg = baseDmg;
-    }
+	public void setCurrentHP(int currentHP) {
+		this.currentHP = currentHP;
+	}
 
-    public int getBaseArmour() {
-        return baseArmour;
-    }
+	public int getMaxHP() {
+		return maxHP;
+	}
 
-    public void setBaseArmour(int baseArmour) {
-        this.baseArmour = baseArmour;
-    }
+	public void setMaxHP(int maxHP) {
+		this.maxHP = maxHP;
+	}
 
-    public ArrayList<ItemModel> getInventoryList() {
-        return inventoryList;
-    }
+	public int getCurrentMana() {
+		return currentMana;
+	}
 
-    public void setInventoryList(ArrayList<ItemModel> inventoryList) {
-        this.inventoryList = inventoryList;
-    }
+	public void setCurrentMana(int currentMana) {
+		this.currentMana = currentMana;
+	}
 
-    public ArrayList<AbilityModel> getAbilityList() {
-        return abilityList;
-    }
+	public int getMaxMana() {
+		return maxMana;
+	}
 
-    public void setAbilityList(ArrayList<AbilityModel> abilityList) {
-        this.abilityList = abilityList;
-    }
+	public void setMaxMana(int maxMana) {
+		this.maxMana = maxMana;
+	}
+
+	public int getCurrentXP() {
+		return currentXP;
+	}
+
+	public void setCurrentXP(int currentXP) {
+		this.currentXP = currentXP;
+	}
+
+	public int getMaxXP() {
+		return maxXP;
+	}
+
+	public void setMaxXP(int maxXP) {
+		this.maxXP = maxXP;
+	}
+
+	public int getLevel() {
+		return level;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 }

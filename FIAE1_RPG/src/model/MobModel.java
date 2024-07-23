@@ -1,6 +1,6 @@
 package model;
 
-public class MobModel extends CharacterModel {
+public class MobModel extends CharacterModel_OLD {
 	private boolean isFriendly;
 	private int level;
 	private boolean isFlying;
