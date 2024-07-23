@@ -5,7 +5,7 @@ import java.util.Hashtable;
 import java.util.ArrayList;
 
 
-public class PlayerCharacterModel extends CharacterModel {
+public class PlayerCharacterModel extends CharacterModel_OLD {
 	private int level;
 	private int manaPoints;
 	private int currentManaPoints;

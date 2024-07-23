@@ -1,7 +1,7 @@
 package model;
 
 
-public class NpcCharacterModel extends CharacterModel{
+public class NpcCharacterModel extends CharacterModel_OLD{
 
 	boolean isFriendly;
 	boolean isTrader;
