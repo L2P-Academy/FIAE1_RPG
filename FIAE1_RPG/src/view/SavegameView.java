@@ -17,7 +17,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
 import controller.SQLController;
-import model.CharacterModel;
+import model.PlayerCharacterModel;
 import model.SerializationIDs;
 
 public class SavegameView extends JFrame {
@@ -118,7 +118,7 @@ public SavegameView() {
 private void loadCharacterInformation() {
 	// create controller and model for data transfer
 	SQLController sqlController = new SQLController();
-	CharacterModel characterModel = sqlController.getCharacterInformation(1);
+	PlayerCharacterModel characterModel = sqlController.getCharacterInformation(1);
 	
 	if (characterModel != null) {
 		tableModel.setRowCount(0);

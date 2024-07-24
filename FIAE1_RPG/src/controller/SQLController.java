@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-import model.CharacterModel;
+import model.PlayerCharacterModel;
 
 public class SQLController {
 
@@ -24,8 +24,8 @@ public class SQLController {
 		}
 	}
 
-	public CharacterModel getCharacterInformation(int characterID) {
-		CharacterModel character = null;
+	public PlayerCharacterModel getCharacterInformation(int characterID) {
+		PlayerCharacterModel character = null;
 		try (Connection connection = DriverManager.getConnection(URL, USER, PW)) {
 
 			// SQL-Statement Object
@@ -48,7 +48,7 @@ public class SQLController {
 				int maxXP = resultSet.getInt("MaxXP");
 				int level = resultSet.getInt("Level");
 				
-				character = new CharacterModel(characterID, raceID, classID, currentHP, maxHP, currentMana, maxMana, currentXP, maxXP, level, name);
+				character = new PlayerCharacterModel(characterID, raceID, classID, currentHP, maxHP, currentMana, maxMana, currentXP, maxXP, level, name);
 						
 				System.out.println("Charakterinformationen geladen");
 			} else {

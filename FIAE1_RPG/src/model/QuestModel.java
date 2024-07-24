@@ -2,32 +2,32 @@ package model;
 
 public class QuestModel {
 	private int questID;
-	private String name;
-	private String description;
 	private int reqLevel;
 	private int rewardXP;
-	private double rewardGold;
-	private boolean isMainQuest;
 	private int itemID;
+	private int rewardGold;
+	private boolean isMainQuest;
+	private String name;
+	private String description;
 
 	// Constructor
-	public QuestModel(int questID, String name, String description, int reqLevel, int rewardXP, double rewardGold,
-			boolean isMainQuest, int itemID) {
+	public QuestModel(int questID, int reqLevel, int rewardXP, int itemID, int rewardGold, boolean isMainQuest,
+			String name, String description) {
 		super();
 		this.questID = questID;
-		this.name = name;
-		this.description = description;
 		this.reqLevel = reqLevel;
 		this.rewardXP = rewardXP;
+		this.itemID = itemID;
 		this.rewardGold = rewardGold;
 		this.isMainQuest = isMainQuest;
-		this.itemID = itemID;
+		this.name = name;
+		this.description = description;
 	}
 
 	// Getter & Setter
 	public int getQuestID() {
 		return questID;
-	}
+	}	
 
 	public void setQuestID(int questID) {
 		this.questID = questID;
@@ -65,11 +65,11 @@ public class QuestModel {
 		this.rewardXP = rewardXP;
 	}
 
-	public double getRewardGold() {
+	public int getRewardGold() {
 		return rewardGold;
 	}
 
-	public void setRewardGold(double rewardGold) {
+	public void setRewardGold(int rewardGold) {
 		this.rewardGold = rewardGold;
 	}
 

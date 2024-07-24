@@ -3,6 +3,8 @@ public class NpcModel {
 	private int npcID, questID, hp, killXP, level, itemID;
 	private String  name, category;
 	
+	// Categories from Database: Trader, Mob, Companion, Innkeeper
+	
 	public NpcModel(int npcID, int questID, int hp, int killXP, int level, int itemID, String category, String name) {
 		super();
 		this.npcID = npcID;

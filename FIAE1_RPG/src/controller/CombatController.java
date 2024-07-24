@@ -2,11 +2,10 @@ package controller;
 
 import java.util.ArrayList;
 import java.util.Collections;
-
-import model.CharacterModel_OLD;
+import model.PlayerCharacterModel;
 
 public class CombatController {
-	private ArrayList<CharacterModel_OLD> combatants;
+	private ArrayList<PlayerCharacterModel> combatants;
 	private int currentTurnIndex;
 
 	// Constructor
@@ -16,7 +15,7 @@ public class CombatController {
 	}
 
 	// Method to add a combatant to the encounter
-	public void addCombatant(CharacterModel_OLD combatant) {
+	public void addCombatant(PlayerCharacterModel combatant) {
 		combatants.add(combatant);
 	}
 
