@@ -1,34 +1,51 @@
 package model; // v0.2
 
-import java.util.ArrayList;
-
-public class AbilityModel {
+public class AbilityModel <AbilityElement extends Enum<AbilityElement>>{
 	
+	private int abilityID, damage, level;
 	private String name;
-	private boolean isRanged, isAOE;
-	private ArrayList<String> elementsList; // neutral, fire, water, wind, earth?
+	private boolean isAOE;
+	private AbilityElement abilityElement;
 	
-	// Constructors
+	public enum AbilityElement {
+		Fire, Water, Earth, Light, Darkness, Neutral, Holy
+	}
 	
-	public AbilityModel(String name, boolean isRanged, boolean isAOE){ // model for ranged and AOE
+	public AbilityModel(int abilityID, int damage, int level, String name, boolean isAOE,
+			model.AbilityModel.AbilityElement abilityElement) {
+		super();
+		this.abilityID = abilityID;
+		this.damage = damage;
+		this.level = level;
 		this.name = name;
-		this.isRanged = isRanged;
 		this.isAOE = isAOE;
-		this.elementsList = new ArrayList<>();
-	}
-	
-	public AbilityModel(String name, boolean isRanged) { // model for ranged
-		this.name = name;
-		this.isRanged = isRanged;
-		this.elementsList = new ArrayList<>();
-	}
-	
-	public AbilityModel() { // model for close
-		this.elementsList = new ArrayList<>();
+		this.abilityElement = abilityElement;
 	}
 
-	// Getters and Setters
-	
+	public int getAbilityID() {
+		return abilityID;
+	}
+
+	public void setAbilityID(int abilityID) {
+		this.abilityID = abilityID;
+	}
+
+	public int getDamage() {
+		return damage;
+	}
+
+	public void setDamage(int damage) {
+		this.damage = damage;
+	}
+
+	public int getLevel() {
+		return level;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -37,25 +54,20 @@ public class AbilityModel {
 		this.name = name;
 	}
 
-	public boolean getIsRanged() {
-        return isRanged;
-    }
+	public boolean isAOE() {
+		return isAOE;
+	}
 
-    public void setIsRanged(boolean isRanged) {
-        this.isRanged = isRanged;
-    }
-	public boolean getIsAOE() {
-        return isAOE;
-    }
+	public void setAOE(boolean isAOE) {
+		this.isAOE = isAOE;
+	}
 
-    public void setIsAOE(boolean isAOE) {
-        this.isAOE = isAOE;
-    }
-    public ArrayList<String> getElementsList() {
-        return elementsList;
-    }
+	public AbilityElement getAbilityElement() {
+		return abilityElement;
+	}
 
-    public void setElementsList(ArrayList<String> elementsList) {
-        this.elementsList = elementsList;
-    }
+	public void setAbilityElement(AbilityElement abilityElement) {
+		this.abilityElement = abilityElement;
+	}
+	
 }

@@ -1,43 +1,99 @@
 package model;
 
-import java.util.Dictionary;
-import java.util.Hashtable;
-import java.util.ArrayList;
+public class PlayerCharacterModel {
 
+	private int characterID, raceID, classID, currentHP, maxHP, 
+	currentMana, maxMana, currentXP, maxXP, level;
+	private String name;
 
-public class PlayerCharacterModel extends CharacterModel_OLD {
-	private int level;
-	private int manaPoints;
-	private int currentManaPoints;
-	private int staminaPoints;
-	private int expPoints;
-	private Dictionary<String, Integer> equipList = new Hashtable<>();
-	private ArrayList<QuestModel> activeQuests;
-	private ArrayList<QuestModel> completedQuests;
-	
-	// Constructor
-	public PlayerCharacterModel(String name, String race, int level, int healthPoints, int manaPoints, int staminaPoints, int baseDmg, int baseArmour) {
-		super(name, race, healthPoints, baseDmg, baseArmour);
-        setLevel(level);
-        setExpPoints(0);
-        setManaPoints(manaPoints);
-        setCurrentManaPoints(manaPoints);
-        setStaminaPoints(staminaPoints);
-        activeQuests = new ArrayList<>();
-        completedQuests = new ArrayList<>();
-    }
-
-	// method to add item to equip
-	public void addItemEquipList(String item, int quantity) {
-		equipList.put(item, quantity);
+	public PlayerCharacterModel(int characterID, int raceID, int classID, int currentHP, int maxHP, int currentMana,
+			int maxMana, int currentXP, int maxXP, int level, String name) {
+		super();
+		this.characterID = characterID;
+		this.raceID = raceID;
+		this.classID = classID;
+		this.currentHP = currentHP;
+		this.maxHP = maxHP;
+		this.currentMana = currentMana;
+		this.maxMana = maxMana;
+		this.currentXP = currentXP;
+		this.maxXP = maxXP;
+		this.level = level;
+		this.name = name;
 	}
-	
-	// method to remove item from equip
-	public void removeItemEquipList(String item) {
-		equipList.remove(item);
+
+	public int getCharacterID() {
+		return characterID;
 	}
-	
-	// Getter & Setter
+
+	public void setCharacterID(int characterID) {
+		this.characterID = characterID;
+	}
+
+	public int getRaceID() {
+		return raceID;
+	}
+
+	public void setRaceID(int raceID) {
+		this.raceID = raceID;
+	}
+
+	public int getClassID() {
+		return classID;
+	}
+
+	public void setClassID(int classID) {
+		this.classID = classID;
+	}
+
+	public int getCurrentHP() {
+		return currentHP;
+	}
+
+	public void setCurrentHP(int currentHP) {
+		this.currentHP = currentHP;
+	}
+
+	public int getMaxHP() {
+		return maxHP;
+	}
+
+	public void setMaxHP(int maxHP) {
+		this.maxHP = maxHP;
+	}
+
+	public int getCurrentMana() {
+		return currentMana;
+	}
+
+	public void setCurrentMana(int currentMana) {
+		this.currentMana = currentMana;
+	}
+
+	public int getMaxMana() {
+		return maxMana;
+	}
+
+	public void setMaxMana(int maxMana) {
+		this.maxMana = maxMana;
+	}
+
+	public int getCurrentXP() {
+		return currentXP;
+	}
+
+	public void setCurrentXP(int currentXP) {
+		this.currentXP = currentXP;
+	}
+
+	public int getMaxXP() {
+		return maxXP;
+	}
+
+	public void setMaxXP(int maxXP) {
+		this.maxXP = maxXP;
+	}
+
 	public int getLevel() {
 		return level;
 	}
@@ -46,63 +102,11 @@ public class PlayerCharacterModel extends CharacterModel_OLD {
 		this.level = level;
 	}
 
-	public int getManaPoints() {
-		return manaPoints;
+	public String getName() {
+		return name;
 	}
 
-	public void setManaPoints(int manaPoints) {
-		this.manaPoints = manaPoints;
-	}
-	
-	public int getCurrentManaPoints() {
-		return currentManaPoints;
-	}
-
-	public void setCurrentManaPoints(int updatedMP) {
-		this.currentManaPoints = updatedMP;
-	}
-
-	public int getStaminaPoints() {
-		return staminaPoints;
-	}
-
-	public void setStaminaPoints(int staminaPoints) {
-		this.staminaPoints = staminaPoints;
-	}
-
-	public int getExpPoints() {
-		return expPoints;
-	}
-
-	public void setExpPoints(int expPoints) {
-		this.expPoints = expPoints;
-	}
-
-	public Dictionary<String, Integer> getEquipList() {
-		return equipList;
-	}
-	
-	public void setEquipList(Dictionary<String, Integer> equipList) {
-		this.equipList = equipList;
-	}
-
-	public ArrayList<QuestModel> getActiveQuests() {
-        return activeQuests;
-    }
-
-    public void setActiveQuests(ArrayList<QuestModel> activeQuests) {
-        this.activeQuests = activeQuests;
-    }
-
-    public void addActiveQuest(QuestModel quest) {
-        activeQuests.add(quest);
-    }
-
-	public ArrayList<QuestModel> getCompletedQuests() {
-		return completedQuests;
-	}
-
-	public void setCompletedQuests(ArrayList<QuestModel> completedQuests) {
-		this.completedQuests = completedQuests;
+	public void setName(String name) {
+		this.name = name;
 	}
 }

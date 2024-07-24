@@ -1,44 +1,74 @@
 package model;
 
-public class ItemModel<Type extends Enum<Type>> {
+public class ItemModel {
     private int itemID;
-    private String name;
-    private boolean isEquip;
     private int value;
     private int requiredLevel;
-    private boolean isQuestItem;
-    private String description;
     private int damage;
     private int defense;
-    private Type type;
+    private boolean isQuestItem, isEquip;
+    private String description;
+    private String name;
+    private Slot slot;
 
     public enum Slot {
         HEAD, CHEST, HANDS, LEGS, FEET, NONE
     }
     
-    public ItemModel(int itemID, String name, boolean isEquip, int value, Type type, int requiredLevel, boolean isQuestItem, String description, int damage, int defense) {
-        super();
-    	this.itemID = itemID;
-        this.name = name;
-        this.isEquip = isEquip;
-        this.value = value;
-        this.requiredLevel = requiredLevel;
-        this.isQuestItem = isQuestItem;
-        this.description = description;
-        this.damage = damage;
-        this.defense = defense;
-
-    }
-    
-    
+    public ItemModel(int itemID, int value, int requiredLevel, int damage, int defense, boolean isQuestItem,
+			boolean isEquip, String description, String name, Slot slot) {
+		super();
+		this.itemID = itemID;
+		this.value = value;
+		this.requiredLevel = requiredLevel;
+		this.damage = damage;
+		this.defense = defense;
+		this.isQuestItem = isQuestItem;
+		this.isEquip = isEquip;
+		this.description = description;
+		this.name = name;
+		this.slot = slot;
+	}
 
     // Getter und Setter
-    
-    public int getItemID() {
+
+	public int getItemID() {
         return itemID;
     }
 
-    public void setItemID(int itemID) {
+    public int getDamage() {
+		return damage;
+	}
+
+	public void setDamage(int damage) {
+		this.damage = damage;
+	}
+
+	public boolean isEquip() {
+		return isEquip;
+	}
+
+	public void setEquip(boolean isEquip) {
+		this.isEquip = isEquip;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public Slot getSlot() {
+		return slot;
+	}
+
+	public void setSlot(Slot slot) {
+		this.slot = slot;
+	}
+
+	public void setItemID(int itemID) {
         this.itemID = itemID;
     }
 
@@ -48,14 +78,6 @@ public class ItemModel<Type extends Enum<Type>> {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public boolean isEquip() {
-        return isEquip;
-    }
-
-    public void setEquip(boolean isEquip) {
-        this.isEquip = isEquip;
     }
 
     public int getValue() {
@@ -74,7 +96,7 @@ public class ItemModel<Type extends Enum<Type>> {
         this.requiredLevel = requiredLevel;
     }
 
-    public boolean isQuestItem() {
+    public boolean getIsQuestItem() {
         return isQuestItem;
     }
 
@@ -82,19 +104,19 @@ public class ItemModel<Type extends Enum<Type>> {
         this.isQuestItem = isQuestItem;
     }
 
-    public String getDescription() {
+    public String getItemDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setItemDescription(String description) {
         this.description = description;
     }
 
-    public int getDamage() {
+    public int getItemDamage() {
         return damage;
     }
 
-    public void setDamage(int damage) {
+    public void setItemDamage(int damage) {
         this.damage = damage;
     }
 
@@ -106,12 +128,12 @@ public class ItemModel<Type extends Enum<Type>> {
         this.defense = defense;
     }
 
-	public Type getType() {
-		return type;
+	public Slot getType() {
+		return slot;
 	}
 
-	public void setType(Type type) {
-		this.type = type;
+	public void setType(Slot slot) {
+		this.slot = slot;
 	}
 }
     
