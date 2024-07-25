@@ -1,11 +1,15 @@
 package model;
 public class NpcModel {
 	private int npcID, questID, hp, killXP, level, itemID;
-	private String  name, category;
+	private String  name;
+	private NpcCategory category;
 	
 	// Categories from Database: Trader, Mob, Companion, Innkeeper
+	public enum NpcCategory {
+		TRADER, MOB, COMPANION, INNKEEPER
+	}
 	
-	public NpcModel(int npcID, int questID, int hp, int killXP, int level, int itemID, String category, String name) {
+	public NpcModel(int npcID, int questID, int hp, int killXP, int level, int itemID, NpcCategory category, String name) {
 		super();
 		this.npcID = npcID;
 		this.questID = questID;
@@ -60,10 +64,10 @@ public class NpcModel {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getCategory() {
+	public NpcCategory getCategory() {
 		return category;
 	}
-	public void setCategory(String category) {
+	public void setCategory(NpcCategory category) {
 		this.category = category;
 	}
 	
