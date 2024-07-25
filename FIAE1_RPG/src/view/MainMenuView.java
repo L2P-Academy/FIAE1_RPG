@@ -74,8 +74,12 @@ public class MainMenuView extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				soundController.stopMusicLoop();
 				soundController.playButtonClickSound();
+				//TODO: musicClip throws NPE on LoadingScreen
+//				SavegameView savegameView = 
 				new SavegameView();
+//				savegameView.musicClip = soundController.getMusicClip();
 
 			}
 		});
@@ -102,7 +106,7 @@ public class MainMenuView extends JFrame {
 	}
 
 	// Modify Buttons
-	private void beautifyButton(JButton button) {
+	public void beautifyButton(JButton button) {
 		button.setFocusPainted(false);
 		button.setBackground(new Color(10, 50, 100));
 		button.setForeground(Color.WHITE);
