@@ -4,6 +4,13 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
+
+
+
+import java.sql.PreparedStatement;
 
 import model.PlayerCharacterModel;
 
@@ -33,10 +40,13 @@ public class SQLController {
 
 			// query Character information from database -> Load Game
 			// TODO: add dynamic character selection!
-			String query = "SELECT * FROM playercharacter WHERE CharacterID = 1";
-			ResultSet resultSet = statement.executeQuery(query);
+			String query = "SELECT * FROM playercharacter";
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
+//			preparedStatement.setInt(1, characterID);
+			
+			ResultSet resultSet = preparedStatement.executeQuery();
 
-			if (resultSet.next()) {
+			while(resultSet.next()) {
 				String name = resultSet.getString("Name");
 				int raceID = resultSet.getInt("RaceID");
 				int classID = resultSet.getInt("ClassID");
@@ -51,8 +61,6 @@ public class SQLController {
 				character = new PlayerCharacterModel(characterID, raceID, classID, currentHP, maxHP, currentMana, maxMana, currentXP, maxXP, level, name);
 						
 				System.out.println("Charakterinformationen geladen");
-			} else {
-				System.out.println("Kein Charakter mit der angegebenen ID gefunden.");
 			}
 
 			resultSet.close();
@@ -63,5 +71,60 @@ public class SQLController {
 			e.printStackTrace();
 		}
 		return character;
+	}
+	
+public void setCharacterInformation(PlayerCharacterModel character) {
+		
+		try (Connection connection = DriverManager.getConnection(URL, USER, PW)) {
+			
+
+			String query = "INSERT INTO playercharacter (CharacterID, Name, RaceID, ClassID, CurrentXP, MaxXP, Level, CurrentHP, MaxHP, CurrentMana, MaxMana)"
+					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+				
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
+			preparedStatement.setInt(1, character.getCharacterID());
+			preparedStatement.setString(2, character.getName());
+			preparedStatement.executeUpdate(query);
+			System.out.println("Charakterinformationen wurden gespeichert");
+		}
+		catch (Exception e) {
+			System.out.println("Charakterinformation nicht gespeichert.");// TODO: handle exception
+		}
+		
+	}
+
+	public void insertIntoTable(String tableName, Map<String, String> columnValueMap) {
+		
+		try (Connection connection = DriverManager.getConnection(URL, USER, PW)) {
+		
+			StringBuilder columns = new StringBuilder();
+			StringBuilder wildcards = new StringBuilder();
+			
+			for (String column: columnValueMap.keySet()) {
+				columns.append(column).append(",");
+				wildcards.append("?,");		
+			}
+			
+			columns.setLength(columns.length()-1);
+			wildcards.setLength(wildcards.length()-1);
+			
+			String query = "INSERT INTO " + tableName + " (" + columns + ") VALUES (" + wildcards + ")";
+			
+			try (PreparedStatement preparedStatement = connection.prepareStatement(query)){
+				
+				int index = 1;
+				for (String value : columnValueMap.values()) {
+					preparedStatement.setString(index++, value);
+				}
+				
+				preparedStatement.executeUpdate();
+				System.out.println("Daten wurden in die Tabelle " + tableName + " hinzugefügt!");
+			} 
+		} 
+		catch (Exception e) {
+			System.out.println("Fehler bei der Datenübertragung in die Tabelle " + tableName + " !");
+			e.printStackTrace();
+		}
+	
 	}
 }
