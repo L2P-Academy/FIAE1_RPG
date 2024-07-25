@@ -56,11 +56,23 @@ public class QuestView extends JFrame {
 
 	public QuestView() {
 
-		// Create window
-		setTitle("Neue Quest!");
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setExtendedState(JFrame.MAXIMIZED_BOTH);
-		setUndecorated(true);
+	    // Create example quest
+	    questModel = new QuestModel(
+	        1, // questID
+	        10, // reqLevel
+	        100, // rewardXP
+	        2, // itemID
+	        50, // rewardGold
+	        true, // isMainQuest
+	        "Die verlorene Klinge", // name
+	        "Finde die verlorene Klinge im dunklen Wald." // description
+	    );
+	    
+	    // Create window
+        setTitle("Neue Quest!");
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setUndecorated(true);
 
 		soundController = new SoundController();
 
@@ -92,8 +104,9 @@ public class QuestView extends JFrame {
 		questItemPnl.setPreferredSize(new Dimension(250, 500));
 
 		// Quest title panel
-		questTitlePnl = new JPanel(new BorderLayout());
-
+		questItemLbl = new JLabel("Item: " + questModel.getItemID());
+		questItemPnl.add(questItemLbl);
+		
 		// Main panel
 		mainPnl = new JPanel(new BorderLayout());
 
@@ -108,6 +121,12 @@ public class QuestView extends JFrame {
 		// Create quest title background
 		questTitlePnl = new BackGroundPanel(new ImageIcon(questTitleBackground).getImage());
 		questTitlePnl.setLayout(new FlowLayout(FlowLayout.CENTER));
+		
+		
+		// Accept quest button
+		questBgPnl.add(scrollPane);
+		questTitlePnl.add(questTitleLbl);
+
 
 		// Set scroll pane size
 		scrollPane.setPreferredSize(new Dimension(600, 340));
