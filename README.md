@@ -1,6 +1,6 @@
 Titel: FIAE1_RPG
 
-Lernprojekt Comcave Kurs 425518 unter Leitung von L2P Academy
+Lernprojekt Comcave Kurs ***518 unter Leitung von L2P Academy
 
 Textbasiertes RPG, programmiert in Java via Eclipse
 
