@@ -7,20 +7,28 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 import controller.SoundController;
 import model.SerializationIDs;
+import view.AnimationComponents.MapAnimationPanel;
+import view.AnimationComponents.MapCharacter;
+import view.AnimationComponents.Waypoint;
 
 public class MapView extends JFrame {
 
 	private static final long serialVersionUID = SerializationIDs.mapViewID;
-	JPanel buttonPanel, mapPanel, mainPanel;
+	JPanel buttonPanel, mainPanel;
 	JLabel mapTitleLbl;
 	JButton inventoryBtn, characterBtn, questsBtn, settingsBtn, creditsBtn;
 	String mapImagePath = "res/img/MapViewImages/map_start.jpg";
@@ -32,6 +40,9 @@ public class MapView extends JFrame {
 	SoundController soundController;
 
 	Font gameFont;
+	List<Waypoint> waypoints;
+	MapCharacter mapCharacter;
+	MapAnimationPanel mapPanel;
 
 	public MapView() {
 
@@ -53,7 +64,7 @@ public class MapView extends JFrame {
 		buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 100, 0)); // px Abstand horizontal und vertikal
 
 		// create mapPanel with BackgroundImage
-		mapPanel = new BackGroundPanel(new ImageIcon(mapImagePath).getImage());
+		mapPanel = new MapAnimationPanel(new ImageIcon(mapImagePath).getImage());
 		mapPanel.setLayout(new BorderLayout());
 		mainPanel = new JPanel(new BorderLayout());
 
@@ -115,12 +126,12 @@ public class MapView extends JFrame {
 		savegameBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				SavegameView savegameView = new SavegameView();
+				new SavegameView();
 			}
 		});
 		combatViewBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				CombatView combatView = new CombatView("Forest01.jpg");
+				new CombatView("Forest01.jpg");
 				soundController.stopMusicLoop();
 			}
 		});
@@ -130,7 +141,7 @@ public class MapView extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				soundController.playFxSound("res/soundFX/fxEffects/cloth-inventory.wav");
-				InventoryView inventoryView = new InventoryView();
+				new InventoryView();
 			}
 		});
 
@@ -138,7 +149,7 @@ public class MapView extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				soundController.playButtonClickSound();
-				CharacterView characterView = new CharacterView(); // TODO: Controller anbinden
+				new CharacterView(); // TODO: Controller anbinden
 			}
 		});
 
@@ -146,13 +157,13 @@ public class MapView extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				soundController.playFxSound("res/soundFX/fxEffects/turn_page.wav");
-				JournalView journalView = new JournalView();
+				new JournalView();
 			}
 		});
 
 		settingsBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				SettingsView settingsView = new SettingsView();
+				new SettingsView();
 			}
 		});
 		
@@ -160,7 +171,7 @@ public class MapView extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				CreditView creditView = new CreditView();				
+				new CreditView();				
 			}
 		});
 
@@ -182,24 +193,54 @@ public class MapView extends JFrame {
 		getContentPane().add(mainPanel);
 		setLocationRelativeTo(null);
 		setVisible(true);
-	}
-
-	// Custom JPanel with background image
-	class BackGroundPanel extends JPanel {
-		private static final long serialVersionUID = SerializationIDs.backGroundPanelID;
-		private Image backgroundImage;
-
-		public BackGroundPanel(Image backgroundImage) {
-			this.backgroundImage = backgroundImage;
-		}
-
-		@Override
-		protected void paintComponent(Graphics g) {
-			super.paintComponent(g);
-			if (backgroundImage != null) {
-				g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+		
+		// waypoints / targets for movement
+		waypoints = new ArrayList<>();
+		waypoints.add(new Waypoint(100, 100));
+		waypoints.add(new Waypoint(300, 200));
+		waypoints.add(new Waypoint(500, 400));
+		waypoints.add(new Waypoint(700, 400));
+		waypoints.add(new Waypoint(600, 500));
+		waypoints.add(new Waypoint(800, 200));
+		waypoints.add(new Waypoint(100, 500));
+		waypoints.add(new Waypoint(1000, 200));
+		
+		// Starting position for map character
+		mapCharacter = new MapCharacter(50, 50);
+		
+		// set waypoints and character for mapAnimationPanel
+		mapPanel.setWayPoints(waypoints);
+		mapPanel.setMapCharacter(mapCharacter);
+		
+		mapPanel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				Waypoint closestWaypoint = null;
+				double minDistance = Double.MAX_VALUE;
+				for (Waypoint waypoint : waypoints) {
+					double distance = waypoint.distanceTo(e.getX(), e.getY());
+					if (distance < minDistance) {
+						minDistance = distance;
+						closestWaypoint = waypoint;						
+					}
+				}
+				if (closestWaypoint != null) {
+					mapCharacter.moveTo(closestWaypoint.getX(), closestWaypoint.getY());
+				}				
 			}
-		}
+		});
+		// Animation timer for map updates
+		Timer timer = new Timer(30, new ActionListener() {			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				mapCharacter.update();
+				mapPanel.repaint();
+//				if (mapCharacter.isAtTarget()) {
+//					new QuestView();
+//				}
+			}
+		});
+		timer.start();
 	}
 
 }
