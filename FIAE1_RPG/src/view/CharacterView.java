@@ -12,8 +12,8 @@ public class CharacterView extends JFrame{
 	private static final long serialVersionUID = SerializationIDs.characterViewID;
 	JLabel playerName;
 	JPanel backgroundPanel, valuesPanel, equipPanel, charaPanel;
-	String charaProfileImg = "res/img/placeholderImg.png";
-	String CharImagPath = "res/img/CharBackground.png";
+	String charaProfileImg = "res/img/MenuImages/placeholderImg.png";
+	String CharImagPath = "res/img/MenuImages/CharBackground.png";
 	ImageIcon CharImgIcon, introImgIcon;
 	
 	public CharacterView() {

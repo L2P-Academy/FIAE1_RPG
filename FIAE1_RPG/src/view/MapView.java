@@ -31,8 +31,8 @@ public class MapView extends JFrame {
 	JPanel buttonPanel, mainPanel;
 	JLabel mapTitleLbl;
 	JButton inventoryBtn, characterBtn, questsBtn, settingsBtn, creditsBtn;
-	String mapImagePath = "res/img/MapViewImages/map_start.jpg";
-	String buttonPanelBackgroundPath = "res/img/MapViewImages/ButtonPanelBackground5.jpg";
+	String mapImagePath = "res/img/MapViewImages/Map_Start_Suggestion.png";
+	String buttonPanelBackgroundPath = "res/img/MapViewImages/ButtonPanelBackground6.png";
 
 	////////////////////////// TestButtons////////////////////////////
 	JButton savegameBtn, combatViewBtn, journalViewBtn;
@@ -61,7 +61,7 @@ public class MapView extends JFrame {
 
 		// Create buttonPanel with BackgroundImage
 		buttonPanel = new BackGroundPanel(new ImageIcon(buttonPanelBackgroundPath).getImage());
-		buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 100, 0)); // px Abstand horizontal und vertikal
+		buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 100, 20)); // px Abstand horizontal und vertikal
 
 		// create mapPanel with BackgroundImage
 		mapPanel = new MapAnimationPanel(new ImageIcon(mapImagePath).getImage());
