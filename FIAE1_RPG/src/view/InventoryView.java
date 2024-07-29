@@ -46,7 +46,7 @@ public class InventoryView extends JFrame{
     JPanel closeInvBtnPan, equipBtnPan, unequipBtnPan;
     
     //Images
-	String introImgPath = "res/img/InventoryBackground.png";
+	String introImgPath = "res/img/MenuImages/InventoryBackground.png";
 	
 	//Font
 	Font gameFont;

@@ -29,7 +29,7 @@ public class JournalView extends JFrame {
 	private JLabel titleLbl;
 	private BackGroundPanel backgroundPnl;
 	private JPanel buttonPnl;
-	private String backgroundImgPath = "res/img/JournalView_Background.jpg";
+	private String backgroundImgPath = "res/img/MenuImages/JournalView_Background.jpg";
 	private JTable questsTbl;
 	private Font gameFont;
 

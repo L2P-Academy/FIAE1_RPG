@@ -42,9 +42,9 @@ public class QuestView extends JFrame {
 	JScrollPane scrollPane;
 
 	// Background
-	String questBackgroundPath = "res/img/QuestDescBack.png";
-	String questItemBackground = "res/img/QuestItem_Placeholder.png";
-	String questTitleBackground = "res/img/QuestTitleBackground.png";
+	String questBackgroundPath = "res/img/MenuImages/QuestDescBack.png";
+	String questItemBackground = "res/img/MenuImages/QuestItem_Placeholder.png";
+	String questTitleBackground = "res/img/MenuImages/QuestTitleBackground.png";
 
 	// Font
 	Font gameFont;
