@@ -1,23 +1,31 @@
 package model;
 
-public class ItemModel {
-    private int itemID;
-    private int value;
-    private int requiredLevel;
-    private int damage;
-    private int defense;
-    private boolean isQuestItem, isEquip;
-    private String description;
-    private String name;
-    private Slot slot;
+/**
+ * @author Weirdmustard
+ * @version 1.3 - last modified 28.07.24
+ * @since 02.05.24
+ * @summary The ItemModel contains all attributes assignable to any item in the
+ *          game
+ */
 
-    public enum Slot {
-        HEAD, CHEST, HANDS, LEGS, FEET, NONE
-    }
-    
-    public ItemModel(int itemID, int value, int requiredLevel, int damage, int defense, boolean isQuestItem,
+public class ItemModel {
+	private int itemID;
+	private int value;
+	private int requiredLevel;
+	private int damage;
+	private int defense;
+	private boolean isQuestItem;
+	private boolean isEquip;
+	private String description;
+	private String name;
+	private Slot slot;
+
+	public enum Slot {
+		HEAD, CHEST, HANDS, LEGS, FEET, NONE
+	}
+
+	public ItemModel(int itemID, int value, int requiredLevel, int damage, int defense, boolean isQuestItem,
 			boolean isEquip, String description, String name, Slot slot) {
-		super();
 		this.itemID = itemID;
 		this.value = value;
 		this.requiredLevel = requiredLevel;
@@ -30,18 +38,50 @@ public class ItemModel {
 		this.slot = slot;
 	}
 
-    // Getter und Setter
+	// getter and setter
 
 	public int getItemID() {
-        return itemID;
-    }
+		return itemID;
+	}
 
-    public int getDamage() {
+	public int getValue() {
+		return value;
+	}
+
+	public void setValue(int value) {
+		this.value = value;
+	}
+
+	public int getRequiredLevel() {
+		return requiredLevel;
+	}
+
+	public void setRequiredLevel(int requiredLevel) {
+		this.requiredLevel = requiredLevel;
+	}
+
+	public int getDamage() {
 		return damage;
 	}
 
 	public void setDamage(int damage) {
 		this.damage = damage;
+	}
+
+	public int getDefense() {
+		return defense;
+	}
+
+	public void setDefense(int defense) {
+		this.defense = defense;
+	}
+
+	public boolean isQuestItem() {
+		return isQuestItem;
+	}
+
+	public void setQuestItem(boolean isQuestItem) {
+		this.isQuestItem = isQuestItem;
 	}
 
 	public boolean isEquip() {
@@ -64,76 +104,20 @@ public class ItemModel {
 		return slot;
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public void setSlot(Slot slot) {
 		this.slot = slot;
 	}
 
 	public void setItemID(int itemID) {
-        this.itemID = itemID;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getValue() {
-        return value;
-    }
-
-    public void setValue(int value) {
-        this.value = value;
-    }
-
-    public int getRequiredLevel() {
-        return requiredLevel;
-    }
-
-    public void setRequiredLevel(int requiredLevel) {
-        this.requiredLevel = requiredLevel;
-    }
-
-    public boolean getIsQuestItem() {
-        return isQuestItem;
-    }
-
-    public void setQuestItem(boolean isQuestItem) {
-        this.isQuestItem = isQuestItem;
-    }
-
-    public String getItemDescription() {
-        return description;
-    }
-
-    public void setItemDescription(String description) {
-        this.description = description;
-    }
-
-    public int getItemDamage() {
-        return damage;
-    }
-
-    public void setItemDamage(int damage) {
-        this.damage = damage;
-    }
-
-    public int getDefense() {
-        return defense;
-    }
-
-    public void setDefense(int defense) {
-        this.defense = defense;
-    }
-
-	public Slot getType() {
-		return slot;
+		this.itemID = itemID;
 	}
 
-	public void setType(Slot slot) {
-		this.slot = slot;
-	}
 }
-    
