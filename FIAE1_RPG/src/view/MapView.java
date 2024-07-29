@@ -196,17 +196,28 @@ public class MapView extends JFrame {
 		
 		// waypoints / targets for movement
 		waypoints = new ArrayList<>();
-		waypoints.add(new Waypoint(100, 100));
-		waypoints.add(new Waypoint(300, 200));
-		waypoints.add(new Waypoint(500, 400));
-		waypoints.add(new Waypoint(700, 400));
-		waypoints.add(new Waypoint(600, 500));
-		waypoints.add(new Waypoint(800, 200));
-		waypoints.add(new Waypoint(100, 500));
-		waypoints.add(new Waypoint(1000, 200));
+		waypoints.add(new Waypoint(1, 200, 50, "res/img/MapViewImages/icon_bag4.png")); // Start
+//		waypoints.add(new Waypoint(350, 100)); // Waldrand
+//		waypoints.add(new Waypoint(500, 100)); // Grabmal
+//		waypoints.add(new Waypoint(350, 400)); // Geisterwald
+//		waypoints.add(new Waypoint(400, 500)); // Hexensee
+//		waypoints.add(new Waypoint(200, 600)); // Trollbrücke
+//		waypoints.add(new Waypoint(250, 750)); // Banditenlager
+//		waypoints.add(new Waypoint(600, 850)); // Auenhain
+//		waypoints.add(new Waypoint(1000, 950)); // Schmied
+//		waypoints.add(new Waypoint(950, 600)); // Dorfbrücke
+//		waypoints.add(new Waypoint(650, 400)); // Travincal
+//		waypoints.add(new Waypoint(150, 350)); // Geisterfriedhof
+//		waypoints.add(new Waypoint(850, 250)); // Tempel
+//		waypoints.add(new Waypoint(700, 600)); // Drachenhort
+//		waypoints.add(new Waypoint(1300, 500)); // Bauernhof
+//		waypoints.add(new Waypoint(1500, 750)); // Hafen
+//		waypoints.add(new Waypoint(1700, 250)); // Stadtmauer
+//		waypoints.add(new Waypoint(1650, 100)); // Hauptstadt TO BE NAMED
+//		waypoints.add(new Waypoint(1900, 100)); // Fährhafen
 		
 		// Starting position for map character
-		mapCharacter = new MapCharacter(50, 50);
+		mapCharacter = new MapCharacter(90, 20);
 		
 		// set waypoints and character for mapAnimationPanel
 		mapPanel.setWayPoints(waypoints);

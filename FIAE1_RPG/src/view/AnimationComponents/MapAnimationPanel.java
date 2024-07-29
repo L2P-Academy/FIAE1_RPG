@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import model.SerializationIDs;
@@ -31,13 +32,18 @@ public class MapAnimationPanel extends JPanel{
 			g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
 		}
 		// draw waypoints
-		g.setColor(Color.BLUE);
-		for (Waypoint waypoint : waypoints) {
-			g.fillOval(waypoint.getX() - 5, waypoint.getY() - 5, 30, 30);
+		if (waypoints != null) {
+			for (Waypoint waypoint : waypoints) {
+				ImageIcon icon = new ImageIcon(waypoint.getIconPath());
+				Image img = icon.getImage();
+				g.drawImage(img, waypoint.getX() - img.getWidth(null) / 2, waypoint.getY() - img.getHeight(null) / 2, this);
+			}			
 		}
 		
 		// draw mapCharacter
-		mapCharacter.draw(g);
+		if (mapCharacter != null) {
+			mapCharacter.draw(g);
+		}		
 		
 	}
 	
