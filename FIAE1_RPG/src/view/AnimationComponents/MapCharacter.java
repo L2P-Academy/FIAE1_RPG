@@ -2,18 +2,23 @@ package view.AnimationComponents;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Image;
+
+import javax.swing.ImageIcon;
 
 public class MapCharacter {
 	private int x, y, targetX, targetY;
 	private double speed = 4;
 	private boolean atTarget = false;
+	private Image characterImage;
 	
 	public MapCharacter(int x, int y) {
 		this.x = x;
 		this.y = y;
 		this.targetX = x;
 		this.targetY = y;
-	}
+		this.characterImage = new ImageIcon("res/img/MapViewImages/icon_character2.png").getImage();
+		}
 	
 	public void moveTo(int targetX, int targetY) {
 		this.targetX = targetX;
@@ -66,7 +71,9 @@ public class MapCharacter {
 	}
 	
 	public void draw(Graphics g) {
-		g.setColor(Color.RED);
-		g.fillOval(x - 5, y - 5, 30, 30);
+		int size = 40;
+		g.drawImage(characterImage, x - size / 2, y - size/2, size, size, null);
+//		g.setColor(Color.RED);
+//		g.fillOval(x - 5, y - 5, 30, 30);
 	}
 }
