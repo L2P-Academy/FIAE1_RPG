@@ -73,25 +73,25 @@ public class SQLController {
 		return character;
 	}
 	
-public void setCharacterInformation(PlayerCharacterModel character) {
-		
-		try (Connection connection = DriverManager.getConnection(URL, USER, PW)) {
-			
-
-			String query = "INSERT INTO playercharacter (CharacterID, Name, RaceID, ClassID, CurrentXP, MaxXP, Level, CurrentHP, MaxHP, CurrentMana, MaxMana)"
-					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-				
-			PreparedStatement preparedStatement = connection.prepareStatement(query);
-			preparedStatement.setInt(1, character.getCharacterID());
-			preparedStatement.setString(2, character.getName());
-			preparedStatement.executeUpdate(query);
-			System.out.println("Charakterinformationen wurden gespeichert");
-		}
-		catch (Exception e) {
-			System.out.println("Charakterinformation nicht gespeichert.");// TODO: handle exception
-		}
-		
-	}
+//	public void setCharacterInformation(PlayerCharacterModel character) {
+//		
+//		try (Connection connection = DriverManager.getConnection(URL, USER, PW)) {
+//			
+//
+//			String query = "INSERT INTO playercharacter (CharacterID, Name, RaceID, ClassID, CurrentXP, MaxXP, Level, CurrentHP, MaxHP, CurrentMana, MaxMana)"
+//					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+//				
+//			PreparedStatement preparedStatement = connection.prepareStatement(query);
+//			preparedStatement.setInt(1, character.getCharacterID());
+//			preparedStatement.setString(2, character.getName());
+//			preparedStatement.executeUpdate(query);
+//			System.out.println("Charakterinformationen wurden gespeichert");
+//		}
+//		catch (Exception e) {
+//			System.out.println("Charakterinformation nicht gespeichert.");// TODO: handle exception
+//		}
+//		
+//	}
 
 	public void insertIntoTable(String tableName, Map<String, String> columnValueMap) {
 		
@@ -126,5 +126,45 @@ public void setCharacterInformation(PlayerCharacterModel character) {
 			e.printStackTrace();
 		}
 	
+	}
+
+	public void deleteCharacter(int characterID) {
+		
+		try(Connection connection = DriverManager.getConnection(URL, USER, PW)) {
+			
+			if(characterID != 0){
+				String query = "DELETE FROM playercharacter WHERE playercharacter.CharacterID = " + characterID;
+				PreparedStatement preparedStatement = connection.prepareStatement(query);
+				preparedStatement.executeUpdate();
+				System.out.println("Charakter gelöscht!");
+			} 
+			else {
+				System.out.println("Ungültige CharacterID.");
+			}
+		
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	public boolean doesDataExist(String tableName) {
+		
+		boolean dataExist = false;
+		
+		try (Connection connection = DriverManager.getConnection(URL, USER, PW)) {
+			
+			String query = "SELECT COUNT(*) FROM " + tableName;
+			PreparedStatement preparedStatment = connection.prepareStatement(query);
+			ResultSet result = preparedStatment.executeQuery();
+			int Quantity = result.getInt(0);
+			if(Quantity > 0) {
+				dataExist = true;
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return dataExist;
 	}
 }

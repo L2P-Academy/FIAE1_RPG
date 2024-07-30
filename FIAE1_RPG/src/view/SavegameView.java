@@ -36,6 +36,7 @@ public class SavegameView extends JFrame {
 	private DefaultTableModel tableModel;
 	private SoundController soundController;
 	public Clip musicClip;
+	SQLController sqlController = new SQLController();
 
 	public SavegameView() {
 
@@ -124,7 +125,15 @@ public class SavegameView extends JFrame {
 				System.exit(0);
 			}
 		});
-
+		
+		deleteBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				sqlController.deleteCharacter(1);
+						
+			}
+		});
 		// Load all Character information
 		loadCharacterInformation();
 
@@ -143,8 +152,7 @@ public class SavegameView extends JFrame {
 	}
 
 	private void loadCharacterInformation() {
-		// create controller and model for data transfer
-		SQLController sqlController = new SQLController();
+		// create model for data transfer
 		PlayerCharacterModel characterModel = sqlController.getCharacterInformation(1);
 
 		if (characterModel != null) {
