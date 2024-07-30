@@ -25,6 +25,7 @@ import javax.swing.plaf.basic.BasicProgressBarUI;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
+import controller.SQLController;
 import model.SerializationIDs;
 
 public class CharacterView extends JFrame{
@@ -38,6 +39,7 @@ public class CharacterView extends JFrame{
 	private JTable equipTbl;
 	private JScrollPane scrollPane;
 	private JProgressBar hpBar, manaBar, xpBar;
+	private SQLController sqlController;
 	
 	public CharacterView() {
 		setTitle("Charakterübersicht");
@@ -45,7 +47,7 @@ public class CharacterView extends JFrame{
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setUndecorated(true);		
 		setLocationRelativeTo(null);
-		
+		sqlController = new SQLController();
 		// Main Panel
 		mainEquipPnl = new JPanel(new BorderLayout());
 		
@@ -183,10 +185,8 @@ public class CharacterView extends JFrame{
 		
 		// Right Side Table
 		String[] columnNames = {"Name", "Slot", "Dmg", "Def", "LvL"};
-		Object[][] data = {
-			{"Schwert", "Waffe", "10", "0", "1"},
-			{"Schild", "Waffe", "0", "8", "1"},
-	};
+		Object[][] data = sqlController.getEquipFromInventory(); 
+	
 		
 		// Table Model
 		Font tableHeaderFont = new Font("Old English Text MT", Font.BOLD, 32);
