@@ -1,0 +1,2 @@
+vollbild:true
+lautstaerke:13

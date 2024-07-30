@@ -40,7 +40,7 @@ public class SQLController {
 
 			// query Character information from database -> Load Game
 			// TODO: add dynamic character selection!
-			String query = "SELECT * FROM playercharacter";
+			String query = "SELECT * FROM playercharacter WHERE characterID = " + characterID;
 			PreparedStatement preparedStatement = connection.prepareStatement(query);
 //			preparedStatement.setInt(1, characterID);
 			

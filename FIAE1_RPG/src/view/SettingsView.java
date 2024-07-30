@@ -97,7 +97,7 @@ public class SettingsView extends JFrame{
 		backButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e){
-			 dispose(); //Closes the Window
+			dispose(); //Closes the Window
 			}
 		});
 		
