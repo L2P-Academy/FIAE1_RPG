@@ -30,7 +30,7 @@ public class MapView extends JFrame {
 	private static final long serialVersionUID = SerializationIDs.mapViewID;
 	JPanel buttonPanel, mainPanel;
 	JLabel mapTitleLbl;
-	JButton inventoryBtn, characterBtn, questsBtn, settingsBtn, creditsBtn;
+	JButton characterBtn, inventoryBtn, questsBtn, settingsBtn, saveBtn, creditsBtn;
 	String mapImagePath = "res/img/MapViewImages/Map_Start_Suggestion.png";
 	String buttonPanelBackgroundPath = "res/img/MapViewImages/ButtonPanelBackground6.png";
 
@@ -61,7 +61,7 @@ public class MapView extends JFrame {
 
 		// Create buttonPanel with BackgroundImage
 		buttonPanel = new BackGroundPanel(new ImageIcon(buttonPanelBackgroundPath).getImage());
-		buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 100, 20)); // px Abstand horizontal und vertikal
+		buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 100, 10)); // px Abstand horizontal und vertikal
 
 		// create mapPanel with BackgroundImage
 		mapPanel = new MapAnimationPanel(new ImageIcon(mapImagePath).getImage());
@@ -72,8 +72,8 @@ public class MapView extends JFrame {
 		gameFont = new Font("Old English Text MT", Font.BOLD, 32);
 
 		// Create inventoryBtn with bagIcon
-		ImageIcon bagIcon = new ImageIcon(new ImageIcon("res/img/MapViewImages/icon_bag2.png").getImage()
-				.getScaledInstance(44, 44, Image.SCALE_SMOOTH));
+		ImageIcon bagIcon = new ImageIcon(new ImageIcon("res/img/MapViewImages/New_Button_Panel/new_inventory_icon.png").getImage()
+				.getScaledInstance(60, 60, Image.SCALE_SMOOTH));
 		
 		inventoryBtn = new JButton(bagIcon);
 		inventoryBtn.setContentAreaFilled(false); // Make button transparent
@@ -81,8 +81,8 @@ public class MapView extends JFrame {
 		inventoryBtn.setToolTipText("Inventar"); // hoverText
 
 		// Create CharacterBtn with characterIcon
-		ImageIcon characterIcon = new ImageIcon(new ImageIcon("res/img/MapViewImages/icon_character2.png").getImage()
-				.getScaledInstance(44, 44, Image.SCALE_SMOOTH));
+		ImageIcon characterIcon = new ImageIcon(new ImageIcon("res/img/MapViewImages/New_Button_Panel/new_character_icon.png").getImage()
+				.getScaledInstance(60, 60, Image.SCALE_SMOOTH));
 		
 		characterBtn = new JButton(characterIcon);
 		characterBtn.setContentAreaFilled(false); // Make button transparent
@@ -90,8 +90,8 @@ public class MapView extends JFrame {
 		characterBtn.setToolTipText("Charakter");
 
 		// Create questsBtn with questsIcon
-		ImageIcon questsIcon = new ImageIcon(new ImageIcon("res/img/MapViewImages/icon_quests2.png").getImage()
-				.getScaledInstance(44, 44, Image.SCALE_SMOOTH));
+		ImageIcon questsIcon = new ImageIcon(new ImageIcon("res/img/MapViewImages/New_Button_Panel/new_quest_icon.png").getImage()
+				.getScaledInstance(60, 60, Image.SCALE_SMOOTH));
 		
 		questsBtn = new JButton(questsIcon);
 		questsBtn.setContentAreaFilled(false); // Make button transparent
@@ -99,29 +99,41 @@ public class MapView extends JFrame {
 		questsBtn.setToolTipText("Quests");
 
 		// Create Gear-Icon for Settings-Button
-		ImageIcon gearIcon = new ImageIcon(new ImageIcon("res/img/MapViewImages/icon_settings3.png").getImage()
-				.getScaledInstance(44, 44, Image.SCALE_SMOOTH));
+		ImageIcon gearIcon = new ImageIcon(new ImageIcon("res/img/MapViewImages/New_Button_Panel/new_settings_icon.png").getImage()
+				.getScaledInstance(60, 60, Image.SCALE_SMOOTH));
 		
 		settingsBtn = new JButton(gearIcon);
 		settingsBtn.setContentAreaFilled(false); // Make button transparent
 		settingsBtn.setBorderPainted(false); // Remove border
 		settingsBtn.setToolTipText("Einstellungen");
-
-		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		///////////////////////////////////// Buttons zum Testen
-		///////////////////////////////////////////////////////////////////////////////////////////////////////////////// /////////////////////////////////////////////////////////
+		
 		// Create SavegameViewButton
-		savegameBtn = new JButton("Save");
-		savegameBtn.setToolTipText("Save");
+		
+		ImageIcon saveIcon = new ImageIcon(new ImageIcon("res/img/MapViewImages/New_Button_Panel/new_save_icon.png").getImage()
+				.getScaledInstance(60, 60, Image.SCALE_SMOOTH));
+		
+		savegameBtn = new JButton(saveIcon);
+		savegameBtn.setContentAreaFilled(false); // Make button transparent
+		savegameBtn.setBorderPainted(false); // Remove border
+		savegameBtn.setToolTipText("Speichern");
+
+		// Create CreditViewButton
+		ImageIcon creditIcon = new ImageIcon(new ImageIcon("res/img/MapViewImages/New_Button_Panel/new_credit_icon.png").getImage()
+				.getScaledInstance(60, 60, Image.SCALE_SMOOTH));
+		
+		creditsBtn = new JButton(creditIcon);
+		creditsBtn.setContentAreaFilled(false); // Make button transparent
+		creditsBtn.setBorderPainted(false); // Remove border
+		creditsBtn.setToolTipText("Credits");
+		
+
 		// Create CombatViewButton
 		combatViewBtn = new JButton("Combat");
-		combatViewBtn.setToolTipText("Combat");
-		// Create Journal ViewButton
-		// journalViewBtn = new JButton("Journal");
-		// journalViewBtn.setToolTipText("Journal");
-		// Create CreditViewButton
-		creditsBtn = new JButton("Credits");
-		creditsBtn.setToolTipText("Hier passieren lustige Sachen");
+		combatViewBtn.setContentAreaFilled(false); // Make button transparent
+		combatViewBtn.setBorderPainted(false); // Remove border
+		combatViewBtn.setToolTipText("Kampf");
+
+
 		/////////////////////////////////////////// Actionlisterners//////////////////////////////////////////////////////
 		savegameBtn.addActionListener(new ActionListener() {
 			@Override
@@ -176,16 +188,15 @@ public class MapView extends JFrame {
 		});
 
 		// Add buttons to buttonPanel
+		
 		buttonPanel.add(inventoryBtn);
 		buttonPanel.add(characterBtn);
 		buttonPanel.add(questsBtn);
-		//// add settingsBtn to buttonPanel
 		buttonPanel.add(settingsBtn);
-		/////////// Testbuttons//////////
 		buttonPanel.add(savegameBtn);
 		buttonPanel.add(combatViewBtn);
 		buttonPanel.add(creditsBtn);
-		////////////////////////////////
+		
 
 		// Add panels to Window(mainPanel)
 		mainPanel.add(buttonPanel, BorderLayout.NORTH);
