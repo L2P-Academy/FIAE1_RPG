@@ -7,9 +7,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
-
-
-
+import java.util.List;
 import java.sql.PreparedStatement;
 
 import model.PlayerCharacterModel;
@@ -30,17 +28,21 @@ public class SQLController {
 			e.printStackTrace();
 		}
 	}
-
+	/**
+	 * Getting Character Information within all Fields and Values from the Database. Using PreparedStatement and Resultset Class.
+	 * @param characterID ID from the Database
+	 * @return PlayerCaracterModel
+	 */
 	public PlayerCharacterModel getCharacterInformation(int characterID) {
 		PlayerCharacterModel character = null;
 		try (Connection connection = DriverManager.getConnection(URL, USER, PW)) {
 
 			// SQL-Statement Object
-			Statement statement = connection.createStatement();
+			//Statement statement = connection.createStatement();
 
 			// query Character information from database -> Load Game
 			// TODO: add dynamic character selection!
-			String query = "SELECT * FROM playercharacter WHERE characterID = " + characterID;
+			String query = "SELECT * FROM playercharacter WHERE CharacterID = " + characterID;
 			PreparedStatement preparedStatement = connection.prepareStatement(query);
 //			preparedStatement.setInt(1, characterID);
 			
@@ -64,7 +66,7 @@ public class SQLController {
 			}
 
 			resultSet.close();
-			statement.close();
+			//statement.close();
 
 		} catch (Exception e) {
 			System.out.println("Fehler beim Laden des Charakters!");
@@ -92,26 +94,34 @@ public class SQLController {
 //		}
 //		
 //	}
-
+	/**
+	 * Dynamic Method to insert any Data into any Table from the Database. Using Stringbuilder Class to build the query String
+	 * and PreparedStatement Class to execute the query.  
+	 * @param tableName Name of the target Table 
+	 * @param columnValueMap Map of fieldnames and values
+	 */
 	public void insertIntoTable(String tableName, Map<String, String> columnValueMap) {
 		
 		try (Connection connection = DriverManager.getConnection(URL, USER, PW)) {
-		
+			
 			StringBuilder columns = new StringBuilder();
 			StringBuilder wildcards = new StringBuilder();
-			
+			// building columns String from all column values and wildcards String ? for every singel value
+			// for loop ends with the last key, in this case the last column name. So ever column name will added
+			// to the columns String + "," . Also the wildcards String gets "?," for each loop pass
 			for (String column: columnValueMap.keySet()) {
 				columns.append(column).append(",");
 				wildcards.append("?,");		
 			}
-			
+			// cut of the last char from the strings, because it is a ","
 			columns.setLength(columns.length()-1);
 			wildcards.setLength(wildcards.length()-1);
-			
+			//building the SQL query
 			String query = "INSERT INTO " + tableName + " (" + columns + ") VALUES (" + wildcards + ")";
-			
+			// try to initialize the PreparedStatement with the query
 			try (PreparedStatement preparedStatement = connection.prepareStatement(query)){
 				
+				//Change Wildcards "?" with the exact column values from the table 
 				int index = 1;
 				for (String value : columnValueMap.values()) {
 					preparedStatement.setString(index++, value);
@@ -127,7 +137,10 @@ public class SQLController {
 		}
 	
 	}
-
+	/**
+	 * Method to delete 1 Data set from the playercharacter table. Using PreparedStatement Class.
+	 * @param characterID 
+	 */
 	public void deleteCharacter(int characterID) {
 		
 		try(Connection connection = DriverManager.getConnection(URL, USER, PW)) {
@@ -147,6 +160,11 @@ public class SQLController {
 			e.printStackTrace();
 		}
 	}
+	/**
+	 * Method to check if a table has at least one Data Set
+	 * @param tableName
+	 * @return boolean 
+	 */
 	public boolean doesDataExist(String tableName) {
 		
 		boolean dataExist = false;
@@ -166,5 +184,70 @@ public class SQLController {
 		}
 		
 		return dataExist;
+	}
+	
+	public Object[][] getEquipFromInventory(){
+		
+		List<Object[]> resultList = new ArrayList<>();
+		
+		try (Connection connection = DriverManager.getConnection(URL, USER, PW)) {
+			
+		
+//			String query = "SELECT inventory.InventoryID, inventory.Quantity, inventory.IsEquiped"
+//					+ ", item.Name, item.Slot, item.Damage, item.Defense "
+//					+ "FROM inventory, item "
+//					+ "WHERE item.ItemID = inventory.ItemID" ;
+			
+			String query = "SELECT i.InventoryID, i.ItemID, i.Quantity, it.Name, it.Slot, it.Damage, it.Defense, it.ReqLevel"
+					+ " FROM inventory i"
+					+ " JOIN item it ON i.ItemID = it.ItemID"
+					+ "	WHERE it.Slot != 'None' ORDER BY it.Name ASC";
+					
+					
+			
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			
+			while(resultSet.next()) {
+				String name = resultSet.getString("Name");
+				String slot = resultSet.getString("Slot");				
+				int inventoryID = resultSet.getInt("InventoryID");
+				int quantity = resultSet.getInt("Quantity");
+				int damage = resultSet.getInt("Damage");
+				int defense = resultSet.getInt("Defense");
+				int reqLevel = resultSet.getInt("ReqLevel");
+				
+				Object[] row = new Object[7];
+				row[0] = name;
+				row[1] = slot;
+				row[2] = damage;
+				row[3] = defense;
+				row[4] = reqLevel;
+				row[5] = inventoryID;
+				row[6] = quantity;
+				
+				resultList.add(row);
+				
+			}
+			
+			
+			
+		} 
+			catch (Exception e) {
+			e.printStackTrace();
+		}
+		return convertListToObjectArray(resultList);
+	}
+	
+	public Object[][] convertListToObjectArray(List<Object[]> list){
+		
+		Object[][] dataArray = new Object[list.size()][7];
+		
+		for(int i = 0; i < list.size(); i++ ) {
+			
+			dataArray[i] = list.get(i);
+		}
+		
+		return dataArray;
 	}
 }
