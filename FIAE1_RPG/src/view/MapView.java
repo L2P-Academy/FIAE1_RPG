@@ -149,7 +149,7 @@ public class MapView extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				soundController.playButtonClickSound();
-				new CharacterView(); // TODO: Controller anbinden
+				new CharacterView();
 			}
 		});
 
