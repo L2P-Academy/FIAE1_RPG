@@ -34,7 +34,7 @@ public class MapAnimationPanel extends JPanel{
 		// draw waypoints
 		if (waypoints != null) {
 			for (Waypoint waypoint : waypoints) {
-				ImageIcon icon = new ImageIcon(waypoint.getIconPath());
+				ImageIcon icon = waypoint.getImage();
 				Image img = icon.getImage();
 				g.drawImage(img, waypoint.getX() - img.getWidth(null) / 2, waypoint.getY() - img.getHeight(null) / 2, this);
 			}			
