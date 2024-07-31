@@ -74,7 +74,6 @@ public class InventoryView extends JFrame{
     	backgroundPanel = new BackGroundPanel(new ImageIcon(introImgPath).getImage());
     	backgroundPanel.setLayout(new BorderLayout());
 
-//    	Hallo
     	// create spacing Panel
     	spacingPanelWest = new JPanel();
     	spacingPanelWest.setOpaque(false);
