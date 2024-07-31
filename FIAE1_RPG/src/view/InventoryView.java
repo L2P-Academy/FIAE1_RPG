@@ -74,6 +74,7 @@ public class InventoryView extends JFrame{
     	backgroundPanel = new BackGroundPanel(new ImageIcon(introImgPath).getImage());
     	backgroundPanel.setLayout(new BorderLayout());
 
+//    	Hallo
     	// create spacing Panel
     	spacingPanelWest = new JPanel();
     	spacingPanelWest.setOpaque(false);
@@ -159,7 +160,7 @@ public class InventoryView extends JFrame{
 		southPanel.add(buttonPanel, BorderLayout.CENTER);
 		southPanel.add(closeInvBtnPan, BorderLayout.SOUTH);
     	
-		// fill the panels with contents
+		// fill the panels with contents 
 		backgroundPanel.add(goldPanel, BorderLayout.NORTH);
 		backgroundPanel.add(spacingPanelWest, BorderLayout.WEST);
 		backgroundPanel.add(tablePanel, BorderLayout.CENTER);
