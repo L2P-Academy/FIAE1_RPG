@@ -6,6 +6,8 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Map;
+import java.util.HashMap;
 
 import javax.sound.sampled.Clip;
 import javax.swing.BorderFactory;
@@ -26,6 +28,7 @@ import model.PlayerCharacterModel;
 import model.SerializationIDs;
 
 public class SavegameView extends JFrame {
+	
 
 	private static final long serialVersionUID = SerializationIDs.saveGameViewID;
 	private JButton saveBtn, loadBtn, deleteBtn, backBtn, closeGameBtn;
@@ -37,6 +40,7 @@ public class SavegameView extends JFrame {
 	private SoundController soundController;
 	public Clip musicClip;
 	SQLController sqlController = new SQLController();
+	PlayerCharacterModel playerCharacter;
 
 	public SavegameView() {
 
@@ -101,7 +105,9 @@ public class SavegameView extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				soundController.playButtonClickSound();				
+				soundController.playButtonClickSound();
+				int selectedRow = saveTbl.getSelectedRow() + 1;
+				playerCharacter = sqlController.getCharacterInformation(selectedRow);
 				new MapView();
 				dispose();
 			}
@@ -130,13 +136,23 @@ public class SavegameView extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				sqlController.deleteCharacter(1);
-						
+				int selectedRow = saveTbl.getSelectedRow() + 1;
+				sqlController.deleteDatasetFromTable(selectedRow, "playercharacter", "CharacterID");
+			}
+		});
+		//TODO : playermap edit
+		saveBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Map<String, String> playerMap = new HashMap<>();
+				sqlController.insertIntoTable("playercharacter", playerMap);
+					
 			}
 		});
 		// Load all Character information
 		loadCharacterInformation();
-
+		
 		// add Label to Panel
 		listPnl.add(titleLbl, BorderLayout.NORTH);
 		listPnl.add(scrollPane, BorderLayout.CENTER);
@@ -152,18 +168,20 @@ public class SavegameView extends JFrame {
 	}
 
 	private void loadCharacterInformation() {
-		// create model for data transfer
-		PlayerCharacterModel characterModel = sqlController.getCharacterInformation(1);
-
-		if (characterModel != null) {
-			tableModel.setRowCount(0);
-		}
-
+		
+		int numberOfDatasets = sqlController.getNumberOfDatasets("playercharacter");
+		// create model for data transfer	
+		for (int i = 1; i <= numberOfDatasets; i++) {
+	
+		PlayerCharacterModel characterModel = sqlController.getCharacterInformation(i);
+		
 		// add character data to table
-		tableModel.addRow(new Object[] { characterModel.getCharacterID(), characterModel.getName(), "Mensch", "Krieger",
+		tableModel.addRow(new Object[] { characterModel.getCharacterID(), characterModel.getName(), 
+				sqlController.convertRaceIDToString(characterModel.getRaceID()), 
+				sqlController.convertClassIDToString(characterModel.getClassID()),
 				characterModel.getCurrentHP(), characterModel.getCurrentMana(), characterModel.getCurrentXP(),
 				characterModel.getLevel() });
-
+		}
 	}
 
 //Modify Buttons
