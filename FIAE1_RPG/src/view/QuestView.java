@@ -2,194 +2,187 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.border.Border;
 
+import controller.SQLController;
 import controller.SoundController;
 import model.QuestModel;
 import model.SerializationIDs;
 
-public class QuestView extends JFrame {
+public class QuestView extends JFrame{
 	private static final long serialVersionUID = SerializationIDs.questViewID;
-
-	// Model
-	QuestModel questModel;
-
-	// Label
-	JLabel questTitleLbl, questDescLbl, questImgLbl, questItemLbl;
-
-	// Buttons
-	JButton acceptQuestBtn, exitQuestBtn;
-
-	// Panel
-	JPanel buttonPnl, questBgPnl, questItemPnl, questTitlePnl, mainPnl;
-
-	// Text area
-	JTextArea questDescArea;
-
-	// Scroll
-	JScrollPane scrollPane;
-
-	// Background
-	String questBackgroundPath = "res/img/MenuImages/QuestDescBack.png";
-	String questItemBackground = "res/img/MenuImages/QuestItem_Placeholder.png";
-	String questTitleBackground = "res/img/MenuImages/QuestTitleBackground.png";
-
-	// Font
-	Font gameFont;
-	Font questDesc;
-	Font questTitle;
-
-	// Sounds
-	SoundController soundController;
+	
+	private BackGroundPanel titlePnl, locationPnl;
+	private JPanel rewardPnl, dialogPnl, buttonPnl;
+	private JLabel titleLbl, rewardsLbl, xpImgLbl, goldImgLbl, itemImgLbl, nameLbl, npcImgLbl,
+	xpCountLbl, goldCountLbl;
+	private JTextArea dialogTextArea;
+	private JButton acceptBtn, denyBtn;
+	
+	private QuestModel questModel;
+	
+	private Font titleFont;
+	
+	private SoundController soundController;
+	private SQLController sqlController;
 
 	public QuestView() {
-
-	    // Create example quest
+        
+     // Create example quest
 	    questModel = new QuestModel(
 	        1, // questID
-	        10, // reqLevel
+	        1, // reqLevel
 	        100, // rewardXP
-	        2, // itemID
+	        4, // itemID
 	        50, // rewardGold
 	        true, // isMainQuest
-	        "Die verlorene Klinge", // name
-	        "Finde die verlorene Klinge im dunklen Wald." // description
+	        "Eine lang erwartete Reise", // name
+	        "Besuche die Taverne im Dorf!" // description
 	    );
 	    
-	    // Create window
-        setTitle("Neue Quest!");
+	    
+		// Create Window
+        setTitle(questModel.getName());
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setUndecorated(true);
-
-		soundController = new SoundController();
-
-		// Create font
-		gameFont = new Font("Old English Text MT", Font.BOLD, 32);
-		questDesc = new Font("Old English Text MT", Font.BOLD, 32);
-		questTitle = new Font("Old English Text MT", Font.BOLD, 32);
-
-		// Create quest title label
-		questTitleLbl = new JLabel();
-		questTitleLbl.setText(questModel.getName());
-		questTitleLbl.setFont(questTitle);
-
-		// Create quest area with scroll
-		questDescArea = new JTextArea(questModel.getDescription());
-		questDescArea.setFont(questDesc);
-		questDescArea.setLineWrap(true);
-		questDescArea.setWrapStyleWord(true);
-		scrollPane = new JScrollPane(questDescArea);
-		scrollPane.setLocation(scrollPane.getX(), scrollPane.getY() + 100);
-		scrollPane.setBounds(scrollPane.getX(), scrollPane.getY() + 100, scrollPane.getWidth(), scrollPane.getHeight());
-
-		// Button panel
-		buttonPnl = new JPanel(new FlowLayout());
-
-		// Quest item panel
-		questItemPnl = new JPanel(new FlowLayout());
-		questItemPnl.setLayout(new FlowLayout(FlowLayout.CENTER));
-		questItemPnl.setPreferredSize(new Dimension(250, 500));
-
-		// Quest title panel
-		questItemLbl = new JLabel("Item: " + questModel.getItemID());
-		questItemPnl.add(questItemLbl);
+	    
+	    
+	    // Create Fonts
+	    titleFont = new Font("Old English Text MT", Font.BOLD, 32);
+	    Font textFont = new Font("Arial", Font.ITALIC, 24);
+        
+        // Controller
+        soundController = new SoundController();
+        sqlController = new SQLController();
+        
+        // Title
+        titlePnl = new BackGroundPanel(new ImageIcon("res/img/MenuImages/QuestTitleBackground.png").getImage());
+        titlePnl.setLayout(new BorderLayout());
+        titleLbl = new JLabel(questModel.getName());
+        titleLbl.setFont(titleFont);
+        titlePnl.add(titleLbl, BorderLayout.WEST);
 		
-		// Main panel
-		mainPnl = new JPanel(new BorderLayout());
-
-		// Create item background
-		questItemPnl = new BackGroundPanel(new ImageIcon(questItemBackground).getImage());
-		questItemPnl.setLayout(new FlowLayout(FlowLayout.LEFT));
-
-		// Create background panel
-		questBgPnl = new BackGroundPanel(new ImageIcon(questBackgroundPath).getImage());
-		questBgPnl.setLayout(new FlowLayout(FlowLayout.CENTER));
-
-		// Create quest title background
-		questTitlePnl = new BackGroundPanel(new ImageIcon(questTitleBackground).getImage());
-		questTitlePnl.setLayout(new FlowLayout(FlowLayout.CENTER));
-		
-		
-		// Accept quest button
-		questBgPnl.add(scrollPane);
-		questTitlePnl.add(questTitleLbl);
-
-
-		// Set scroll pane size
-		scrollPane.setPreferredSize(new Dimension(600, 340));
-
-		// Quest title label postition
-		questTitleLbl.setPreferredSize(new Dimension(1000, 65));
-
-		// Set panel background
-		questBgPnl.setBackground(new Color(190, 196, 168));
-		buttonPnl.setBackground(new Color(190, 196, 168));
-		questItemPnl.setBackground(new Color(190, 196, 168));
-		questTitlePnl.setBackground(new Color(190, 196, 168));
-
-		// Create button
-		acceptQuestBtn = new JButton("Mit freuden, mein Edler");// Worktitle
-		acceptQuestBtn.setFont(gameFont);
-		exitQuestBtn = new JButton("Oh nein, mein Edler");// Worktitle
-		exitQuestBtn.setFont(gameFont);
-
-		// Fill button
-		buttonPnl.add(acceptQuestBtn);
-		buttonPnl.add(exitQuestBtn);
-
-		// Fill panel with labels
-		questBgPnl.add(scrollPane);
-		questTitlePnl.add(questTitleLbl);
-		questItemPnl.add(questItemLbl);
-
-		// Set position for panels
-		mainPnl.add(questTitlePnl, BorderLayout.NORTH);
-		mainPnl.add(questBgPnl, BorderLayout.CENTER);
-		mainPnl.add(buttonPnl, BorderLayout.SOUTH);
-		mainPnl.add(questItemPnl, BorderLayout.WEST);
-
-		getContentPane().add(mainPnl);
-
-		// Give function to buttons
-		acceptQuestBtn.addActionListener(new ActionListener() {
-
+        
+        // Rewards
+        rewardPnl = new JPanel();
+        rewardPnl.setLayout(new BoxLayout(rewardPnl, BoxLayout.Y_AXIS));
+        rewardsLbl = new JLabel("Belohnungen");
+        rewardsLbl.setFont(titleFont);
+        xpImgLbl = createImageLabel("res/img/ItemModelImages/XP_Symbol.png");
+        xpCountLbl = new JLabel(questModel.getRewardXP() + "");
+        xpCountLbl.setFont(textFont);
+        goldImgLbl = createImageLabel("res/img/ItemModelImages/01_Gold.png");
+        goldCountLbl = new JLabel(questModel.getRewardGold() + "");
+        goldCountLbl.setFont(textFont);
+        itemImgLbl = createImageLabel("res/img/ItemModelImages/04_Weltkarte.png");
+        rewardPnl.add(rewardsLbl);
+        rewardPnl.add(xpImgLbl);
+        rewardPnl.add(xpCountLbl);
+        rewardPnl.add(goldImgLbl);
+        rewardPnl.add(goldCountLbl);
+        rewardPnl.add(itemImgLbl);
+        
+        // Background
+        locationPnl = new BackGroundPanel(new ImageIcon("res/img/Backgrounds/backgr_c_smalltown2.png").getImage());
+        nameLbl = new JLabel("Tavernenwirt");
+        nameLbl.setFont(titleFont);
+        locationPnl.add(nameLbl, BorderLayout.SOUTH);
+        
+        // Dialog
+        dialogPnl = new JPanel(new BorderLayout());
+        npcImgLbl = createImageLabel("res/img/CharacterPortraits/female_orc3.png");
+        dialogTextArea = new JTextArea();
+        dialogTextArea.setFont(textFont);
+        dialogTextArea.setLineWrap(true);
+        dialogTextArea.setEditable(false);
+        dialogTextArea.setBackground(new Color(245, 245, 220));
+        dialogTextArea.setText(questModel.getDescription());
+      
+        buttonPnl = new JPanel(new BorderLayout());
+        acceptBtn = new JButton("Annehmen");
+        denyBtn = new JButton("Ablehnen");
+        beautifyButton(acceptBtn);
+        beautifyButton(denyBtn);
+        buttonPnl.add(acceptBtn, BorderLayout.NORTH);
+        buttonPnl.add(denyBtn, BorderLayout.SOUTH);
+        
+        dialogPnl.add(npcImgLbl, BorderLayout.WEST);
+        dialogPnl.add(dialogTextArea, BorderLayout.CENTER);
+        dialogPnl.add(buttonPnl, BorderLayout.EAST);
+        
+        // add Everything
+        getContentPane().add(titlePnl, BorderLayout.NORTH);
+        getContentPane().add(locationPnl, BorderLayout.CENTER);
+        getContentPane().add(rewardPnl, BorderLayout.EAST);
+        getContentPane().add(dialogPnl, BorderLayout.SOUTH);
+        setLocationRelativeTo(null);
+        setVisible(true);
+        
+        // ActionListener
+        acceptBtn.addActionListener(new ActionListener() {
+			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				soundController.playButtonClickSound();
-				new MapView();
-				soundController.stopMusicLoop();
-				dispose();
+				
+				
 			}
 		});
-
-		exitQuestBtn.addActionListener(new ActionListener() {
-
+        
+        denyBtn.addActionListener(new ActionListener() {
+			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				soundController.playButtonClickSound();
-				new MapView();
-				soundController.stopMusicLoop();
 				dispose();
+				
 			}
 		});
-
-		setLocationRelativeTo(null);
-		setVisible(true);
-
-		// Play music in background after rendering
-		soundController.playMusicLoop("res/soundFX/ambientSounds/village_ambient.wav");
+        
 	}
+	
+	// Modify Buttons
+			public void beautifyButton(JButton button) {
+				button.setFocusPainted(false);
+				button.setBackground(new Color(10, 50, 100));
+				button.setForeground(Color.WHITE);
+				button.setFont(new Font("Old English Text MT", Font.BOLD, 36));
+
+				// Rounded Corners
+				Border border = BorderFactory.createLineBorder(new Color(255, 255, 255), 2);
+				Border roundedBorder = BorderFactory.createCompoundBorder(border,
+						BorderFactory.createEmptyBorder(10, 20, 10, 20));
+				button.setBorder(
+						BorderFactory.createCompoundBorder(roundedBorder, BorderFactory.createEmptyBorder(5, 15, 5, 15)));
+
+				// color change when MouseOver is happening
+				button.addMouseListener(new java.awt.event.MouseAdapter() {
+					public void mouseEntered(java.awt.event.MouseEvent evt) {
+						button.setBackground(new Color(100, 149, 237));
+					}
+
+					public void mouseExited(java.awt.event.MouseEvent evt) {
+						button.setBackground(new Color(10, 50, 100));
+					}
+				});
+			}
+			
+		    private JLabel createImageLabel(String path) {
+		        ImageIcon icon = new ImageIcon(path);
+		        Image img = icon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+		        return new JLabel(new ImageIcon(img));
+		    }
 }
