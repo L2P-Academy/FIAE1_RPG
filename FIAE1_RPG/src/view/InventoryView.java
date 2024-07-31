@@ -159,7 +159,7 @@ public class InventoryView extends JFrame{
 		southPanel.add(buttonPanel, BorderLayout.CENTER);
 		southPanel.add(closeInvBtnPan, BorderLayout.SOUTH);
     	
-		// fill the panels with contents
+		// fill the panels with contents 
 		backgroundPanel.add(goldPanel, BorderLayout.NORTH);
 		backgroundPanel.add(spacingPanelWest, BorderLayout.WEST);
 		backgroundPanel.add(tablePanel, BorderLayout.CENTER);
