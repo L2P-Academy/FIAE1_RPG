@@ -24,13 +24,14 @@ import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
 import controller.SoundController;
+import controller.CombatController;
 import model.SerializationIDs;
 
 public class CombatView extends JFrame{
 
 	private static final long serialVersionUID = SerializationIDs.combatViewID;
 	
-	private JPanel buttonPanel, heroPanel, backgroundPanel, textPanel, enemyPanel, topPanel, enemy1Panel, enemy2Panel;
+	private JPanel mainPanel, buttonPanel, heroPanel, backgroundPanel, textPanel, enemyPanel, topPanel, enemy1Panel, enemy2Panel;
 	private JLabel enemy1Label, enemy2Label, enemy2hpLabel, dialogueTopMessage, hero1Label;
 	private JButton continueBtn, clickBtn;
 	private SoundController soundController;
@@ -41,8 +42,22 @@ public class CombatView extends JFrame{
 	private Image resizedImage;
 	private ImageIcon enemy1Icon, enemy2Icon, player1Icon;
 	private JProgressBar enemy1hp, enemy2hp, player1hp;
-	private Timer timer;
 	
+	public CombatView(int battlemap) {
+		
+		// frame initialize
+		setTitle("Kampfübung");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
+		setUndecorated(true);
+		soundController = new SoundController();
+		
+	//// create main Panel
+		mainPanel = new JPanel();
+		getContentPane().add(mainPanel);
+		
+		
+	}
 	 
 	public CombatView(String battleLocation) {
 		
@@ -52,7 +67,6 @@ public class CombatView extends JFrame{
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setUndecorated(true);
 		soundController = new SoundController();
-		timer = new Timer();
 		
 		//// create main background Panel
 		battleBackgroundPath = "res/img/BattleBackgrounds/" + battleLocation;
@@ -125,7 +139,7 @@ public class CombatView extends JFrame{
 		enemy2Panel.add(enemy2Label);
 		enemy2Panel.add(enemy2hp);
 		
-				// add enemie labels to the enemyPanel
+				// add enemy labels to the enemyPanel
 		enemyPanel.add(enemy1Panel);
 		enemyPanel.add(Box.createRigidArea(new Dimension(50,0)));
 		enemyPanel.add(enemy2Panel);
