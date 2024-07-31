@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -57,14 +58,27 @@ public class JournalView extends JFrame {
 		buttonPnl = new JPanel(new FlowLayout());
 
 		// Example Data for the quest table
-		String[] headerData = { "Name", "Questgeber", "Aktiv seit" };
+		String[] headerData = { "Name", "Beschreibung","Level","Gold","XP","Questgeber", "Belohnung" };
+		Object[][] exampleData = {
+				{"Eine lang erwartete Reise","Besuche die Taverne im Dorf!","1","50","100","Tavernenwirt","Weltkarte"},
+		};
+		
+		//Creates a table model with example data	
+		DefaultTableModel tableModel = new DefaultTableModel(exampleData, headerData);
 
 		// create Table
-		questsTbl = new JTable();
+		questsTbl = new JTable(tableModel);
 		questsTbl.setOpaque(false);
 		questsTbl.setShowGrid(false);
 		questsTbl.setFont(new Font("Old English Text MT", Font.ITALIC, 32));
+		questsTbl.setRowHeight(42);
+		questsTbl.setForeground(Color.white);
 		((DefaultTableCellRenderer) questsTbl.getDefaultRenderer(Object.class)).setOpaque(false);
+		
+		//Inserts the table into a ScrollPane if the amount of data increases
+		JScrollPane scrollPane = new JScrollPane(questsTbl);
+		scrollPane.setOpaque(false);
+		scrollPane.getViewport().setOpaque(false);
 
 		// add Buttons
 		buttonPnl.add(detailsBtn);
@@ -73,13 +87,14 @@ public class JournalView extends JFrame {
 
 		backgroundPnl.add(buttonPnl, BorderLayout.SOUTH);
 		backgroundPnl.add(titleLbl, BorderLayout.NORTH);
-		backgroundPnl.add(questsTbl, BorderLayout.CENTER);
+		backgroundPnl.add(scrollPane, BorderLayout.CENTER);
 
-		// ActionListeners
+		//Add ActionListener to the details button
 		detailsBtn.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				new QuestView();
 
 			}
 		});
@@ -121,6 +136,10 @@ public class JournalView extends JFrame {
 				button.setBackground(new Color(10, 50, 100));
 			}
 		});
+	}
+		//Main-Methode für Tesstzwecke
+	public static void main (String[] args) {
+		new JournalView();
 	}
 
 }
