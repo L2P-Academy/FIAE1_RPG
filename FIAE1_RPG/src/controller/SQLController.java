@@ -28,6 +28,8 @@ public class SQLController {
 			e.printStackTrace();
 		}
 	}
+	
+	
 	/**
 	 * Getting Character Information within all Fields and Values from the Database. Using PreparedStatement and Resultset Class.
 	 * @param characterID ID from the Database
@@ -75,6 +77,28 @@ public class SQLController {
 		return character;
 	}
 	
+	
+	
+	/**
+	 * Delete specific Dataset from Table 
+	 * @param datasetKey primary key
+	 * @param tableName 
+	 * @param iDName
+	 */
+	public void deleteDatasetFromTable(int datasetKey, String tableName, String iDName) {
+		
+		try (Connection connection = DriverManager.getConnection(URL, USER, PW)) {
+			
+			String query = "DELETE FROM " + tableName + " WHERE " + iDName + " = " + datasetKey;
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
+			preparedStatement.executeUpdate();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
 //	public void setCharacterInformation(PlayerCharacterModel character) {
 //		
 //		try (Connection connection = DriverManager.getConnection(URL, USER, PW)) {
@@ -94,6 +118,8 @@ public class SQLController {
 //		}
 //		
 //	}
+	
+	
 	/**
 	 * Dynamic Method to insert any Data into any Table from the Database. Using Stringbuilder Class to build the query String
 	 * and PreparedStatement Class to execute the query.  
@@ -116,7 +142,7 @@ public class SQLController {
 			// cut of the last char from the strings, because it is a ","
 			columns.setLength(columns.length()-1);
 			wildcards.setLength(wildcards.length()-1);
-			//building the SQL query
+			// building the SQL query
 			String query = "INSERT INTO " + tableName + " (" + columns + ") VALUES (" + wildcards + ")";
 			// try to initialize the PreparedStatement with the query
 			try (PreparedStatement preparedStatement = connection.prepareStatement(query)){
@@ -137,6 +163,8 @@ public class SQLController {
 		}
 	
 	}
+	
+	
 	/**
 	 * Method to delete 1 Data set from the playercharacter table. Using PreparedStatement Class.
 	 * @param characterID 
@@ -160,12 +188,14 @@ public class SQLController {
 			e.printStackTrace();
 		}
 	}
+	
+	
 	/**
 	 * Method to check if a table has at least one Data Set
 	 * @param tableName
 	 * @return boolean 
 	 */
-	public boolean doesDataExist(String tableName) {
+	public boolean doesDataExistInTable(String tableName) {
 		
 		boolean dataExist = false;
 		
@@ -186,8 +216,14 @@ public class SQLController {
 		return dataExist;
 	}
 	
+	
+	/**
+	 * Select all Informations from the DB for the Equipment Table in CharacterView 
+	 * @return
+	 */
 	public Object[][] getEquipFromInventory(){
 		
+		int numberOfFields = 7;
 		List<Object[]> resultList = new ArrayList<>();
 		
 		try (Connection connection = DriverManager.getConnection(URL, USER, PW)) {
@@ -217,7 +253,7 @@ public class SQLController {
 				int defense = resultSet.getInt("Defense");
 				int reqLevel = resultSet.getInt("ReqLevel");
 				
-				Object[] row = new Object[7];
+				Object[] row = new Object[numberOfFields];
 				row[0] = name;
 				row[1] = slot;
 				row[2] = damage;
@@ -236,12 +272,35 @@ public class SQLController {
 			catch (Exception e) {
 			e.printStackTrace();
 		}
-		return convertListToObjectArray(resultList);
+		return convertListToObjectArray(resultList, numberOfFields);
 	}
 	
-	public Object[][] convertListToObjectArray(List<Object[]> list){
+	
+	/**
+	 * Update one specific value in a table 
+	 * @param dataSetKey primary key 
+	 * @param tableName 
+	 * @param fieldName
+	 * @param value
+	 * @param iDName
+	 */
+	public void updateSpecificValue(int dataSetKey, String tableName, String fieldName, String value, String iDName) {
 		
-		Object[][] dataArray = new Object[list.size()][7];
+		try (Connection connection = DriverManager.getConnection(URL, USER, PW)) {
+			
+			String query = "UPDATE " + tableName +" SET " + fieldName + " = " + value + " WHERE " 
+							+ tableName + "." + iDName + " = " + dataSetKey;
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
+			preparedStatement.executeUpdate();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public Object[][] convertListToObjectArray(List<Object[]> list, int fields){
+		
+		Object[][] dataArray = new Object[list.size()][fields];
 		
 		for(int i = 0; i < list.size(); i++ ) {
 			
@@ -249,5 +308,110 @@ public class SQLController {
 		}
 		
 		return dataArray;
+	}
+	
+	
+	/**
+	 * Count all existent datasets from a table
+	 * @param tableName
+	 * @return int 
+	 */
+	public int getNumberOfDatasets(String tableName) {
+		
+		int anzahl = 0;
+		
+		try (Connection connection = DriverManager.getConnection(URL, USER, PW)) {
+			String query = "SELECT COUNT(*) FROM " + tableName;
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			if(resultSet.next()) {
+				anzahl = resultSet.getInt(1);
+			}
+			
+			
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return anzahl;
+	}
+	
+	
+	/**
+	 * convert RaceID to the actually Race name
+	 * @param raceID
+	 * @return String race Name
+	 */
+	public String convertRaceIDToString(int raceID) {
+		String race ="";
+		
+		switch(raceID) {
+		
+			case 1:
+				race = "Mensch";
+				break;
+				
+			case 2:
+				race = "Elf";
+				break;
+				
+			case 3:
+				race = "Zwerg";
+				break;
+				
+			case 4:
+				race = "Halbling";
+				break;
+				
+			case 5:
+				race = "Ork";
+				break;
+				
+			case 6:
+				race = "Goblin";
+				break;
+			
+		}
+		return race;
+	}
+	
+	
+	/**
+	 * convert ClassID to the actually Class name
+	 * @param ClassID
+	 * @return String Class name
+	 */
+	 
+	
+	public String convertClassIDToString(int ClassID) {
+		String playerClass ="";
+		
+		switch(ClassID) {
+		
+			case 1:
+				playerClass = "Krieger";
+				break;
+				
+			case 2:
+				playerClass = "Schurke";
+				break;
+				
+			case 3:
+				playerClass = "Magier";
+				break;
+				
+			case 4:
+				playerClass = "Elementarist";
+				break;
+				
+			case 5:
+				playerClass = "Waldläufer";
+				break;
+				
+
+			
+		}
+		return playerClass;
 	}
 }
