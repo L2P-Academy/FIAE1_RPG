@@ -422,7 +422,7 @@ public class CombatView extends JFrame{
 			enemy1Lbl.setVerticalTextPosition(JLabel.TOP);
 			enemy1Lbl.setHorizontalTextPosition(JLabel.CENTER);
 			enemy1Lbl.setIconTextGap(-25);
-			
+			 
 			enemy1Hp = new JProgressBar(0,40);
 			enemy1Hp.setForeground(Color.green);
 			enemy1Hp.setBackground(Color.red);
