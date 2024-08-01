@@ -249,7 +249,7 @@ public class MapView extends JFrame {
 
 		
 		// Starting position for map character
-		mapCharacter = new MapCharacter(90, 20);
+		mapCharacter = new MapCharacter(200, 50);
 		
 		// set waypoints and character for mapAnimationPanel
 		mapPanel.setWayPoints(waypoints);

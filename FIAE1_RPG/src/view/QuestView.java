@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -16,6 +17,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
 import controller.SQLController;
@@ -51,7 +53,8 @@ public class QuestView extends JFrame{
 	        50, // rewardGold
 	        true, // isMainQuest
 	        "Eine lang erwartete Reise", // name
-	        "Besuche die Taverne im Dorf!" // description
+	        "Besuche die Taverne im nächsten Dorf! Ich reise selbst demnächst in die Taverne und habe dort "
+	        + "ein Geschenk für dich unter dem Tresen!" // description
 	    );
 	    
 	    
@@ -64,7 +67,7 @@ public class QuestView extends JFrame{
 	    
 	    // Create Fonts
 	    titleFont = new Font("Old English Text MT", Font.BOLD, 32);
-	    Font textFont = new Font("Arial", Font.ITALIC, 24);
+	    Font textFont = new Font("Arial", Font.ITALIC, 28);
         
         // Controller
         soundController = new SoundController();
@@ -73,7 +76,7 @@ public class QuestView extends JFrame{
         // Title
         titlePnl = new BackGroundPanel(new ImageIcon("res/img/MenuImages/QuestTitleBackground.png").getImage());
         titlePnl.setLayout(new BorderLayout());
-        titleLbl = new JLabel(questModel.getName());
+        titleLbl = new JLabel("         " + questModel.getName());
         titleLbl.setFont(titleFont);
         titlePnl.add(titleLbl, BorderLayout.WEST);
 		
@@ -133,6 +136,9 @@ public class QuestView extends JFrame{
         setLocationRelativeTo(null);
         setVisible(true);
         
+        // animate Quest text
+        animateText();
+        
         // ActionListener
         acceptBtn.addActionListener(new ActionListener() {
 			
@@ -185,4 +191,20 @@ public class QuestView extends JFrame{
 		        Image img = icon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
 		        return new JLabel(new ImageIcon(img));
 		    }
+		    
+			private void animateText() {
+				new Thread(() -> {
+					try {
+						for (int i = 0; i <= questModel.getDescription().length(); i++) {
+							final String currentText = questModel.getDescription().substring(0, i); // Aktuellen Text speichern
+							SwingUtilities.invokeLater(() -> {
+								dialogTextArea.setText(currentText);
+							});
+							TimeUnit.MILLISECONDS.sleep(50); // Anpassen der Geschwindigkeit
+						}
+					} catch (InterruptedException ex) {
+						ex.printStackTrace();
+					}
+				}).start();
+			}
 }
