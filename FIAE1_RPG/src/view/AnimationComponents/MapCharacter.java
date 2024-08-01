@@ -17,7 +17,7 @@ public class MapCharacter {
 		this.y = y;
 		this.targetX = x;
 		this.targetY = y;
-		this.characterImage = new ImageIcon("res/img/MapViewImages/icon_character2.png").getImage();
+		this.characterImage = new ImageIcon("res/img/MapViewImages/Map_Player.png").getImage();
 		}
 	
 	public void moveTo(int targetX, int targetY) {
