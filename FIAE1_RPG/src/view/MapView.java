@@ -209,43 +209,43 @@ public class MapView extends JFrame {
 		waypoints = new ArrayList<>();
 
 		// Start
-		waypoints.add(new Waypoint(1, 200, 50, "res/img/MapViewImages/00_platzhalter.png"));
+		waypoints.add(new Waypoint(1, 200, 50, "res/img/MapViewImages/01_Taverne.png"));
 		// Waldrand
-		waypoints.add(new Waypoint(2, 350, 100, "res/img/MapViewImages/00_platzhalter.png"));
+		waypoints.add(new Waypoint(2, 350, 100, "res/img/MapViewImages/02_Expedition.png"));
 		// Grabmal
-		waypoints.add(new Waypoint(3, 500, 100, "res/img/MapViewImages/00_platzhalter.png"));
+		waypoints.add(new Waypoint(3, 500, 100, "res/img/MapViewImages/03_Grabmahl.png"));
 		// Geisterwald
-		waypoints.add(new Waypoint(4, 350, 400, "res/img/MapViewImages/00_platzhalter.png"));
+		waypoints.add(new Waypoint(4, 350, 400, "res/img/MapViewImages/04_Geisterwald.png"));
 		// Hexensee
-		waypoints.add(new Waypoint(5, 400, 500, "res/img/MapViewImages/00_platzhalter.png"));
+		waypoints.add(new Waypoint(5, 400, 500, "res/img/MapViewImages/05_Kraeutersammler.png"));
 		// Trollbrücke
 		waypoints.add(new Waypoint(6, 170, 620, "res/img/MapViewImages/06_trollbruecke.png"));
 		// Banditenlager
-		waypoints.add(new Waypoint(7, 250, 750, "res/img/MapViewImages/00_platzhalter.png"));
+		waypoints.add(new Waypoint(7, 250, 750, "res/img/MapViewImages/07_Banditen.png"));
 		// Auenhain
-		waypoints.add(new Waypoint(8, 600, 850, "res/img/MapViewImages/00_platzhalter.png"));
+		waypoints.add(new Waypoint(8, 600, 850, "res/img/MapViewImages/08_Auenhain.png"));
 		// Schmied
-		waypoints.add(new Waypoint(9, 1000, 950, "res/img/MapViewImages/00_platzhalter.png"));
+		waypoints.add(new Waypoint(9, 1000, 950, "res/img/MapViewImages/09_Schmied.png"));
 		// Dorfbrücke
-		waypoints.add(new Waypoint(10, 950, 600, "res/img/MapViewImages/06_trollbruecke.png"));
+		waypoints.add(new Waypoint(10, 950, 600, "res/img/MapViewImages/10_Dorfbruecke.png"));
 		// Travincal
-		waypoints.add(new Waypoint(11, 650, 400, "res/img/MapViewImages/00_platzhalter.png"));
+		waypoints.add(new Waypoint(11, 650, 400, "res/img/MapViewImages/11_Travincal.png"));
 		// Geisterfriedhof
 		waypoints.add(new Waypoint(12, 150, 350, "res/img/MapViewImages/12_geisterfriedhof.png"));
 		// Tempel
-		waypoints.add(new Waypoint(13, 850, 250, "res/img/MapViewImages/00_platzhalter.png"));
+		waypoints.add(new Waypoint(13, 850, 250, "res/img/MapViewImages/13_Tempel.png"));
 		// Drachenhort
-		waypoints.add(new Waypoint(14, 700, 600, "res/img/MapViewImages/00_platzhalter.png"));
+		waypoints.add(new Waypoint(14, 700, 600, "res/img/MapViewImages/14_Drache.png"));
 		// Bauernhof
-		waypoints.add(new Waypoint(15, 1300, 500, "res/img/MapViewImages/00_platzhalter.png"));
+		waypoints.add(new Waypoint(15, 1300, 500, "res/img/MapViewImages/15_Farmhaeuser.png"));
 		// Hafen
-		waypoints.add(new Waypoint(16, 1500, 750, "res/img/MapViewImages/00_platzhalter.png"));
+		waypoints.add(new Waypoint(16, 1570, 750, "res/img/MapViewImages/16_Hafen.png"));
 		// Stadtmauer
-		waypoints.add(new Waypoint(17, 1700, 250, "res/img/MapViewImages/00_platzhalter.png"));
+		waypoints.add(new Waypoint(17, 1630, 250, "res/img/MapViewImages/17_Stadtmauer.png"));
 		// Hauptstadt TO BE NAMED
-		waypoints.add(new Waypoint(18, 1650, 100, "res/img/MapViewImages/00_platzhalter.png"));
+		waypoints.add(new Waypoint(18, 1520, 100, "res/img/MapViewImages/18_Stadt2.png"));
 		// Fährhafen
-		waypoints.add(new Waypoint(19, 1900, 100, "res/img/MapViewImages/00_platzhalter.png"));
+		waypoints.add(new Waypoint(19, 1870, 100, "res/img/MapViewImages/19_Faehrhafen.png"));
 
 		
 		// Starting position for map character
