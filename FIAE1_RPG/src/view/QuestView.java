@@ -74,8 +74,22 @@ public class QuestView extends JFrame {
 //						+ "Gebrannten vorbeibringen, sobald er hier vorbeikommt. Zuletzt haben ihn ein paar Jägerinnen"
 //						+ "am Rande des dunklen Forsts gesehen. Kannst du, wenn du das Lager findest, für mich nach "
 //						+ "Torben und seiner Gruppe sehen? Vielleicht haben sie sich verlaufen.");
+//		
+//		questModel = new QuestModel(3, // questID
+//				2, // reqLevel
+//				350, // rewardXP
+//				0, // itemID
+//				450, // rewardGold
+//				true, // isMainQuest
+//				// Torben
+//				"Der Fluch des Vergessenen Grabmals", // name
+//				"Danke noch mal für die Rettung in letzter Minute. Vielleicht kannst du den Bewohnern von Waldhain, einige "
+//						+ "Reisestunden südlich von hier ebenfalls zur Seite stehen? Auf unserer Expedition haben wir im Osten"
+//						+ "ein riesiges Grabmahl gefunden. Die Dorfbewohner behaupten, dort verschwänden immer wieder Personen. "
+//						+ "Zuletzt soll es den Sohn des Müllers erwischt haben. Wenn du Zeit findest, solltest du dort mal"
+//						+ "vorbeischauen und herausfinden, ob an der Geschichte etwas dran ist. Der Müller hat sogar eine Belohnung"
+//						+ "ausgeschrieben!");
 
-		
 		// Create Window
 		setTitle(questModel.getName());
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
