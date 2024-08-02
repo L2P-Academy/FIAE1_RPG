@@ -45,12 +45,12 @@ public class CombatView extends JFrame{
 	private String enemyPath = "res/img/EnemyPortraits/";
 	private String battlemapImg = "";
 	
-	private JPanel backgroundPnl, topPnl, btnPnl, dialoguePnl, enemiesPnl, enemy1Pnl, enemy2Pnl, heroPnl; 
-	private JLabel dialogueTopMsg, heroLbl, enemy1Lbl, enemy2Lbl;
+	private JPanel backgroundPnl, topPnl, btnPnl, dialoguePnl, enemiesPnl, enemyPnl, heroPnl; 
+	private JLabel dialogueTopMsg, heroLbl, enemyLbl;
 	private JTextArea dialogueText;
-	private JButton continueBtn, clickBtn;
-	private JProgressBar enemy1Hp, enemy2Hp, heroHp;
-	private ImageIcon enemy1Icon, enemy2Icon, heroIcon;
+	//private JButton continueBtn, clickBtn;
+	private JProgressBar enemyHp, heroHp;
+	private ImageIcon enemyIcon, heroIcon;
 	private Image resizedImg;
 	private Font defaultFont = new Font("Calisto MT", Font.PLAIN, 26);
 	
@@ -117,22 +117,23 @@ public class CombatView extends JFrame{
         updateDialogue("Start");
 				
 		// prepare Buttons
-		continueBtn = new JButton("Weiter");
-		beautifyButtons(continueBtn);
-		clickBtn = new JButton("Click");
-		beautifyButtons(clickBtn);		
-		
-		// Continue Btn function
-		continueBtn.addActionListener(new ActionListener() {
-			
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				soundController.stopMusicLoop();
-            	//soundController.playMusicLoop("res/soundFX/music/Map_Music.wav");
-            	dispose();
-			}
-		});
+        //updateBtn("Start");
+		//continueBtn = new JButton("Weiter");
+		//beautifyButtons(continueBtn);
+		//clickBtn = new JButton("Click");
+//		//beautifyButtons(clickBtn);		
+//		
+//		// Continue Btn function
+//		continueBtn.addActionListener(new ActionListener() {
+//			
+//
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				soundController.stopMusicLoop();
+//            	//soundController.playMusicLoop("res/soundFX/music/Map_Music.wav");
+//            	dispose();
+//			}
+//		});
 		
 		// Click Button function
 //		clickBtn.addActionListener(new ActionListener() {
@@ -161,8 +162,7 @@ public class CombatView extends JFrame{
 		// add buttons to the btnPnl
 		btnPnl = new JPanel();
 		btnPnl.setLayout(new BoxLayout(btnPnl, BoxLayout.Y_AXIS));
-		btnPnl.add(continueBtn);
-		btnPnl.add(clickBtn);
+        updateBtn("Zurück");
 
 		// filling dialoguePanel (bottom Panel)
 		dialoguePnl.add(dialogueText, BorderLayout.CENTER);
@@ -213,68 +213,68 @@ public class CombatView extends JFrame{
 		switch (amountOfEnemies) {
 		case 1:
 			System.out.println("Amount: " + amountOfEnemies + "(Add Monster 1)");
-			enemy1Pnl = new JPanel();
-			enemy1Pnl.setLayout(new BoxLayout(enemy1Pnl, BoxLayout.Y_AXIS));
-			enemy1Pnl.setOpaque(false);
-			enemy1Pnl.setMaximumSize(new Dimension(200,300));
+			enemyPnl = new JPanel();
+			enemyPnl.setLayout(new BoxLayout(enemyPnl, BoxLayout.Y_AXIS));
+			enemyPnl.setOpaque(false);
+			enemyPnl.setMaximumSize(new Dimension(200,300));
 			
-			enemy1Lbl = new JLabel();
+			enemyLbl = new JLabel();
 			
 			resizedImg = new ImageIcon(enemyPath+"Wolf.png").getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
-			enemy1Icon = new ImageIcon(resizedImg);
-			enemy1Lbl.setIcon(enemy1Icon);
-			enemy1Lbl.setPreferredSize(new Dimension(200,200));
-			enemy1Lbl.setText("Wolf");
-			enemy1Lbl.setFont(defaultFont);
-			enemy1Lbl.setForeground(Color.white);
-			enemy1Lbl.setVerticalTextPosition(JLabel.TOP);
-			enemy1Lbl.setHorizontalTextPosition(JLabel.CENTER);
-			enemy1Lbl.setIconTextGap(-25);
+			enemyIcon = new ImageIcon(resizedImg);
+			enemyLbl.setIcon(enemyIcon);
+			enemyLbl.setPreferredSize(new Dimension(200,200));
+			enemyLbl.setText("Wolf");
+			enemyLbl.setFont(defaultFont);
+			enemyLbl.setForeground(Color.white);
+			enemyLbl.setVerticalTextPosition(JLabel.TOP);
+			enemyLbl.setHorizontalTextPosition(JLabel.CENTER);
+			enemyLbl.setIconTextGap(-25);
 			 
-			enemy1Hp = new JProgressBar(0,40);
-			enemy1Hp.setForeground(Color.green);
-			enemy1Hp.setBackground(Color.red);
-			enemy1Hp.setValue(40);
-
-			enemy1Pnl.add(enemy1Lbl);
-			enemy1Pnl.add(enemy1Hp);
-
-			enemy1Pnl.setAlignmentY(Component.BOTTOM_ALIGNMENT); // Bottom Alignment for ground creatures and default for flying creatures
+			enemyHp = new JProgressBar(0,40);
+			enemyHp.setForeground(Color.green);
+			enemyHp.setBackground(Color.red);
+			enemyHp.setValue(40);
 			
-			enemiesPnl.add(enemy1Pnl);
+			enemyPnl.add(enemyLbl);
+			enemyPnl.add(enemyHp);
+
+			enemyPnl.setAlignmentY(Component.BOTTOM_ALIGNMENT); // Bottom Alignment for ground creatures and default for flying creatures
+			
+			enemiesPnl.add(enemyPnl);
 			break;
 		case 2:
 			System.out.println("Amount: " + amountOfEnemies + "(Add Monster 1)");
-			enemy2Pnl = new JPanel();
-			enemy2Pnl.setLayout(new BoxLayout(enemy2Pnl, BoxLayout.Y_AXIS));
-			enemy2Pnl.setOpaque(false);
-			enemy2Pnl.setMaximumSize(new Dimension(200,300));
+			enemyPnl = new JPanel();
+			enemyPnl.setLayout(new BoxLayout(enemyPnl, BoxLayout.Y_AXIS));
+			enemyPnl.setOpaque(false);
+			enemyPnl.setMaximumSize(new Dimension(200,300));
 			
-			enemy2Lbl = new JLabel();
+			enemyLbl = new JLabel();
 			
 			resizedImg = new ImageIcon(enemyPath+"Wolf.png").getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
-			enemy2Icon = new ImageIcon(resizedImg);
-			enemy2Lbl.setIcon(enemy1Icon);
-			enemy2Lbl.setPreferredSize(new Dimension(200,200));
-			enemy2Lbl.setText("Wolf");
-			enemy2Lbl.setFont(defaultFont);
-			enemy2Lbl.setForeground(Color.white);
-			enemy2Lbl.setVerticalTextPosition(JLabel.TOP);
-			enemy2Lbl.setHorizontalTextPosition(JLabel.CENTER);
-			enemy2Lbl.setIconTextGap(-25);
+			enemyIcon = new ImageIcon(resizedImg);
+			enemyLbl.setIcon(enemyIcon);
+			enemyLbl.setPreferredSize(new Dimension(200,200));
+			enemyLbl.setText("Wolf 2");
+			enemyLbl.setFont(defaultFont);
+			enemyLbl.setForeground(Color.white);
+			enemyLbl.setVerticalTextPosition(JLabel.TOP);
+			enemyLbl.setHorizontalTextPosition(JLabel.CENTER);
+			enemyLbl.setIconTextGap(-25);
 			
-			enemy2Hp = new JProgressBar(0,40);
-			enemy2Hp.setForeground(Color.green);
-			enemy2Hp.setBackground(Color.red);
-			enemy2Hp.setValue(40);
+			enemyHp = new JProgressBar(0,40);
+			enemyHp.setForeground(Color.green);
+			enemyHp.setBackground(Color.red);
+			enemyHp.setValue(30);
 
-			enemy2Pnl.add(enemy2Lbl);
-			enemy2Pnl.add(enemy2Hp);
+			enemyPnl.add(enemyLbl);
+			enemyPnl.add(enemyHp);
 
-			enemy2Pnl.setAlignmentY(Component.BOTTOM_ALIGNMENT); // Bottom Alignment for ground creatures and default for flying creatures
+			enemyPnl.setAlignmentY(Component.BOTTOM_ALIGNMENT); // Bottom Alignment for ground creatures and default for flying creatures
 
 			enemiesPnl.add(Box.createRigidArea(new Dimension(50,0)));
-			enemiesPnl.add(enemy2Pnl);
+			enemiesPnl.add(enemyPnl);
 			break;
 		default:
 		}
@@ -309,16 +309,73 @@ public class CombatView extends JFrame{
 	
 	private void updateDialogue(String dialogue) {
 		switch (dialogue) {
-		case "Start":
-	        dialogueText.setText("Christoph Bauch steh mir bei... Ein Wolf!");
+		case "Haupt":
+	        dialogueText.setText("Lord Christoph stehe mir bei... Möge der Bessere gewinnen!\nKampf: Zum direkten Kampf wechseln.\nInventar: Öffnet das Inventar.\nFlüchten: Die Flucht ergreifen.");
+	        break;
+		case "Kampf":
+	        dialogueText.setText("Angreifen: Direkter Angriff gegen einen Gegner.\nFähigkeit: Magie oder eine Fähigkeit einsetzen.\nZurück: Vorherige Auswahl wiederbringen.");
 	        break;
 		default:
 			dialogueText.setText("");
 		}
 		
 	}
-}
+	
+	private class ButtonClickListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JButton source = (JButton) e.getSource();
+            String buttonText = source.getText();
 
+            // Update the panel based on button text
+            updateBtn(buttonText);
+        }
+	}
+	
+	private void updateBtn(String word) {
+		switch (word) {
+		case "Zurück":
+			btnPnl.removeAll();		
+			JButton btnAction = new JButton("Kampf");
+			JButton btnInventory = new JButton("Inventar");
+			JButton btnEscape = new JButton("Flüchten");
+			btnAction.addActionListener(new ButtonClickListener());
+			btnInventory.addActionListener(new ButtonClickListener());
+			btnEscape.addActionListener(new ButtonClickListener());
+			beautifyButtons(btnAction);
+			beautifyButtons(btnInventory);
+			beautifyButtons(btnEscape);
+			btnPnl.add(btnAction);
+			btnPnl.add(btnInventory);
+			btnPnl.add(btnEscape);
+			updateDialogue("Haupt");
+			break;
+		case "Kampf":
+			btnPnl.removeAll();
+			JButton btnAttack = new JButton("Angreifen");
+			JButton btnAbility = new JButton("Fähigkeiten");
+			JButton btnBack = new JButton("Zurück");
+			btnAttack.addActionListener(new ButtonClickListener());
+			btnAbility.addActionListener(new ButtonClickListener());
+			btnBack.addActionListener(new ButtonClickListener());
+			beautifyButtons(btnAttack);
+			beautifyButtons(btnAbility);
+			beautifyButtons(btnBack);
+			btnPnl.add(btnAttack);
+			btnPnl.add(btnAbility);
+			btnPnl.add(btnBack);
+			updateDialogue("Kampf");
+			break;
+		default:
+			
+			
+		}
+		// Refresh the panel
+		btnPnl.revalidate();
+		btnPnl.repaint();
+
+	}
+}
 
 //public CombatView(String battleLocation) {
 //	
