@@ -53,7 +53,7 @@ public class QuestView extends JFrame {
 				// Kara
 				"Eine lang erwartete Reise", // name
 				"Hey, hey du da! Bist du neu in der Gegend? - Ah, du bist auf dem Weg in die große Stadt. "
-						+ "Ich glaube, dann habe was für dich. Schau mal in der Taverne vorbei und sag dem Wirt,"
+						+ "Ich glaube, dann habe ich was für dich. Schau mal in der Taverne vorbei und sag dem Wirt,"
 						+ "Kara schickt dich. Viel Erfolg auf deiner Reise und lad mich mal auf ein Bier ein, wenn"
 						+ "wir uns in der Stadt wiedersehen!");
 
