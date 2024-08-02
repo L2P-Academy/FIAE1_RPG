@@ -52,6 +52,8 @@ public class QuestView extends JFrame{
 	        4, // itemID
 	        50, // rewardGold
 	        true, // isMainQuest
+	        true, // isActive
+	        false, // isCompleted
 	        "Eine lang erwartete Reise", // name
 	        "Besuche die Taverne im nächsten Dorf! Ich reise selbst demnächst in die Taverne und habe dort "
 	        + "ein Geschenk für dich unter dem Tresen!" // description
