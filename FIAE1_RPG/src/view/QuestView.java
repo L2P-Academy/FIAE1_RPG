@@ -53,8 +53,12 @@ public class QuestView extends JFrame{
 	        50, // rewardGold
 	        true, // isMainQuest
 	        "Eine lang erwartete Reise", // name
-	        "Besuche die Taverne im nächsten Dorf! Ich reise selbst demnächst in die Taverne und habe dort "
-	        + "ein Geschenk für dich unter dem Tresen!" // description
+	        "Hey, hey du da! Bist du neu in der Gegend? - Ah, du bist auf dem Weg in die große Stadt. "
+	        + "Ich glaube, dann habe was für dich. Schau mal in der Taverne vorbei und sag dem Wirt,"
+	        + "Kara schickt dich. Viel Erfolg auf deiner Reise und lad mich mal auf ein Bier ein, wenn"
+	        + "wir uns in der Stadt wiedersehen!"
+//	        "Besuche die Taverne im nächsten Dorf! Ich reise selbst demnächst in die Taverne und habe dort "
+//	        + "ein Geschenk für dich unter dem Tresen!" // description
 	    );
 	    
 	    
