@@ -10,7 +10,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.sql.PreparedStatement;
 
+import model.NpcModel;
+import model.NpcModel.NpcCategory;
 import model.PlayerCharacterModel;
+import model.QuestModel;
 
 public class SQLController {
 
@@ -32,7 +35,7 @@ public class SQLController {
 	
 	/**
 	 * Getting Character Information within all Fields and Values from the Database. Using PreparedStatement and Resultset Class.
-	 * @param characterID ID from the Database
+	 * @param Integer characterID ID from the Database
 	 * @return PlayerCaracterModel
 	 */
 	public PlayerCharacterModel getCharacterInformation(int characterID) {
@@ -81,9 +84,9 @@ public class SQLController {
 	
 	/**
 	 * Delete specific Dataset from Table 
-	 * @param datasetKey primary key
-	 * @param tableName 
-	 * @param iDName
+	 * @param Integer datasetKey primary key
+	 * @param String tableName 
+	 * @param String iDName
 	 */
 	public void deleteDatasetFromTable(int datasetKey, String tableName, String iDName) {
 		
@@ -122,9 +125,10 @@ public class SQLController {
 	
 	/**
 	 * Dynamic Method to insert any Data into any Table from the Database. Using Stringbuilder Class to build the query String
-	 * and PreparedStatement Class to execute the query.  
-	 * @param tableName Name of the target Table 
-	 * @param columnValueMap Map of fieldnames and values
+	 * and PreparedStatement Class to execute the query. 
+	 * @param String tableName 
+	 * @param <k> column
+	 * @param <v> value
 	 */
 	public void insertIntoTable(String tableName, Map<String, String> columnValueMap) {
 		
@@ -167,7 +171,7 @@ public class SQLController {
 	
 	/**
 	 * Method to delete 1 Data set from the playercharacter table. Using PreparedStatement Class.
-	 * @param characterID 
+	 * @param Integer characterID 
 	 */
 	public void deleteCharacter(int characterID) {
 		
@@ -192,7 +196,7 @@ public class SQLController {
 	
 	/**
 	 * Method to check if a table has at least one Data Set
-	 * @param tableName
+	 * @param String tableName
 	 * @return boolean 
 	 */
 	public boolean doesDataExistInTable(String tableName) {
@@ -219,7 +223,7 @@ public class SQLController {
 	
 	/**
 	 * Select all Informations from the DB for the Equipment Table in CharacterView 
-	 * @return
+	 * @return Object[][]
 	 */
 	public Object[][] getEquipFromInventory(){
 		
@@ -275,21 +279,174 @@ public class SQLController {
 		return convertListToObjectArray(resultList, numberOfFields);
 	}
 	
+	/**
+	 * Specific Method for getting all Items from the Inventory within the fields(DB) InventoryID, Quantity, Value and Name. 
+	 * Used by the InventoryView 
+	 * 
+	 * @return Object[][] 
+	 */
+	public Object[][] getItemsFromInventory(){
+		
+		int numberOfFields = 4;
+		List<Object[]> resultList = new ArrayList<>();
+		
+		try(Connection connection = DriverManager.getConnection(URL, USER, PW)) {
+			
+			String query = "SELECT i.InventoryID, i.Quantity, it.Name, it.Value "
+					+ "From inventory i "
+					+ "JOIN item it ON i.ItemID = it.ItemID "
+					+ "ORDER BY i.InventoryID ASC";
+			
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			
+			//Loop to turn all Datasets from the Result List to the Object List
+			while(resultSet.next()) {
+				int inventoryID = resultSet.getInt("InventoryID");
+				int quantity = resultSet.getInt("Quantity");
+				int value = resultSet.getInt("Value");
+				String name = resultSet.getString("Name");
+				
+				Object[] row = new Object[numberOfFields];
+				row[0] = inventoryID;
+				row[1] = quantity;
+				row[2] = value;
+				row[3] = name;
+				
+				resultList.add(row);
+				
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return convertListToObjectArray(resultList, numberOfFields);
+		
+	}
+	
+	
+	/**
+	 * Getting active Quest within all Fields. Used by QuestView and JournalView
+	 * @return QuestModel 
+	 */
+	public QuestModel getActivQuest() {
+		
+		QuestModel activeQuest = null;
+		try(Connection connection = DriverManager.getConnection(URL, USER, PW)) {
+			 
+			String query = "SELECT * FROM quest WHERE IsActiv = 1";
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			
+			while(resultSet.next()) {
+				
+				int questID = resultSet.getInt("QuestID");
+				int reqLevel = resultSet.getInt("ReqLevel");
+				int rewardXP = resultSet.getInt("RewardXP");
+				int rewardGold = resultSet.getInt("RewardGold");
+				boolean isMainQuest = resultSet.getBoolean("IsMainQuest");
+				boolean isActiv = resultSet.getBoolean("IsActiv");
+				boolean completed = resultSet.getBoolean("IsCompleted");
+				int item = resultSet.getInt("ItemID");
+				String name = resultSet.getString("Name");
+				String description = resultSet.getString("Description");
+				
+				activeQuest = new QuestModel(questID, reqLevel, rewardXP, item, rewardGold, 
+						isMainQuest, isActiv, completed, name, description);
+				
+				
+			}
+				
+				
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return activeQuest;
+	}
+	
+	
+	/**
+	 * get NPC within all Fields. 
+	 * @param Integer NpcID
+	 * @return NpcModel
+	 */	
+	public NpcModel getNpcModelFromID(int NpcID) {
+		
+		NpcModel npc = null;
+		
+		try(Connection connection = DriverManager.getConnection(URL, USER, PW)) {
+			
+			String query = "SELECT * FROM npc WHERE NpcID = " + NpcID;
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			
+			while(resultSet.next()) {
+				
+				int iD = resultSet.getInt("NpcID");
+				int questID = resultSet.getInt("QuestID");
+				int hP = resultSet.getInt("HP");
+				int killXP = resultSet.getInt("KillXP");
+				int level = resultSet.getInt("Level");
+				int itemID = resultSet.getInt("ItemID");
+				int locationID = resultSet.getInt("LocationID");
+				String name = resultSet.getString("Name");
+				String category = resultSet.getString("Category");
+				// TODO Warum braucht man hier ein ENUM?
+				npc = new NpcModel(NpcID, questID, hP, killXP, level, itemID, null, name);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return npc;
+	}
+	
+	
+	/**
+	 * Convert ItemID to specific Item Name. For every View with Quests
+	 * @param Integer itemID
+	 * @return String itemName 
+	 */
+	
+	public String getItemNameFromItemID(int itemID) {
+		
+		String itemName = null;
+		
+		try(Connection connection = DriverManager.getConnection(URL, USER, PW)) {
+			
+			String query = "SELECT Item.Name FROM item WHERE ItemID = " + itemID;
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			if(resultSet.next()) {
+				itemName = resultSet.getString("Name");
+			}
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return itemName;
+	}
 	
 	/**
 	 * Update one specific value in a table 
-	 * @param dataSetKey primary key 
-	 * @param tableName 
-	 * @param fieldName
-	 * @param value
-	 * @param iDName
+	 * @param Integer datasetKey primary key 
+	 * @param String tableName 
+	 * @param String fieldName
+	 * @param String value
+	 * @param String iDName
 	 */
-	public void updateSpecificValue(int dataSetKey, String tableName, String fieldName, String value, String iDName) {
+	public void updateSpecificValue(int datasetKey, String tableName, String fieldName, String value, String iDName) {
 		
 		try (Connection connection = DriverManager.getConnection(URL, USER, PW)) {
 			
 			String query = "UPDATE " + tableName +" SET " + fieldName + " = " + value + " WHERE " 
-							+ tableName + "." + iDName + " = " + dataSetKey;
+							+ tableName + "." + iDName + " = " + datasetKey;
 			PreparedStatement preparedStatement = connection.prepareStatement(query);
 			preparedStatement.executeUpdate();
 		}
@@ -340,7 +497,7 @@ public class SQLController {
 	
 	/**
 	 * convert RaceID to the actually Race name
-	 * @param raceID
+	 * @param Integer raceID
 	 * @return String race Name
 	 */
 	public String convertRaceIDToString(int raceID) {
@@ -379,7 +536,7 @@ public class SQLController {
 	
 	/**
 	 * convert ClassID to the actually Class name
-	 * @param ClassID
+	 * @param Integer ClassID
 	 * @return String Class name
 	 */
 	 
@@ -415,3 +572,4 @@ public class SQLController {
 		return playerClass;
 	}
 }
+

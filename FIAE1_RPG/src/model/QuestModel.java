@@ -7,12 +7,14 @@ public class QuestModel {
 	private int itemID;
 	private int rewardGold;
 	private boolean isMainQuest;
+	private boolean isActive;
+	private boolean isCompleted;
 	private String name;
 	private String description;
 
 	// Constructor
-	public QuestModel(int questID, int reqLevel, int rewardXP, int itemID, int rewardGold, boolean isMainQuest,
-			String name, String description) {
+	public QuestModel(int questID, int reqLevel, int rewardXP, int itemID, int rewardGold, boolean isMainQuest, boolean isActive,
+			boolean isCompleted, String name, String description) {
 		super();
 		this.questID = questID;
 		this.reqLevel = reqLevel;
@@ -20,6 +22,8 @@ public class QuestModel {
 		this.itemID = itemID;
 		this.rewardGold = rewardGold;
 		this.isMainQuest = isMainQuest;
+		this.isActive = isActive;
+		this.isCompleted = isCompleted;
 		this.name = name;
 		this.description = description;
 	}
@@ -79,6 +83,22 @@ public class QuestModel {
 
 	public void setMainQuest(boolean isMainQuest) {
 		this.isMainQuest = isMainQuest;
+	}
+
+	public boolean isActive() {
+		return isActive;
+	}
+
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
+	}
+
+	public boolean isCompleted() {
+		return isCompleted;
+	}
+
+	public void setCompleted(boolean completed) {
+		this.isCompleted = completed;
 	}
 
 	public int getItemID() {

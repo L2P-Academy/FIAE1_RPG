@@ -16,15 +16,15 @@ public class IntroView extends JFrame {
 	private SoundController soundController;
 	private JButton nextBtn;
 	private JTextArea scrollingTextArea;
-	private String introText = "Willkommen, Abenteurer!\n" 
-	        + "\n"
-	        + "An dieser Stelle wird sich Sam über die Woche noch\n"
-	        + "eine neue Story ausdenken, die ein bisschen besser\n"
-	        + "zum aktuellen Stand des Spiels passt und vor allem\n" 
-	        + "keine eingetragenen Wortmarken beinhaltet *hust*.\n"
-	        + "\n"
-	        + "Aber es bleibt dabei:\n" 
-	        + "Die Reise beginnt je- ... gleich. Gleich!";
+	private String introText = "Heute ist der Tag, an dem du dein Abenteuer beginnst!\n"
+	+ "\n"
+	+ "Du hast deine gesamte Kindheit im beschaulichen kleinen Eichenhain verbracht, in den blühenden Wiesen gespielt, im Wald die höchsten Bäume erklommen und mit deinem selbstgebauten Holzschwert gegen Schattenmonster gekämpft. Nach dem Tod eurer Eltern hast du mit deinem Bruder Rida den Hof geführt, jeden Morgen frisches Brot gebacken, die Ziegen gemolken und das Feld bestellt. \n"
+	+ "\n"
+	+ "Doch nach dem letzten Winter ist kaum noch etwas von der Idylle übrig. Die nordische Kälte hat die Frühjahrsernte vernichtet, die Sommerernte wurde von Überflutungen weggeschwemmt und nun steht bereits der nächste Spätherbst ins Haus. Das einst laute, fröhliche Dorf steht nahezu leer, selbst die Händler machen sich kaum noch auf den Weg in diesen Teil des Königreiches. Nur die alte Margarete harrt noch aus und häkelt warme Söckchen für die Kinder, die bestimmt eines Tages wieder hier spielen werden. Nichts erinnert noch an den Ort, an dem du dein ganzes Leben verbringen wolltest.\n"
+	+ "\n"
+	+ "Eines Morgens schlägst du die Augen auf, schaust dich in deinem spärlich eingerichteten, staubigen Zimmer um und weißt, du musst hier raus. Du wartest auf Rida, der spät vom Holz fällen heim kommt, um ihm deinen Entschluss mitzuteilen: ein Neuanfang in der großen Stadt! \n"
+	+ "\n"
+	+ "Doch die Stadt ist weit entfernt und du hast viele Geschichten über Geister, Drachen und Zauberer gehört. Bist du für diese gefährliche, lange aber aufregende Reise bereit? ";
 
 //    		"In einer Welt, in der Magie und Abenteuer allgegenwärtig sind, "
 //    		+ "ruht das Schicksal auf den Schultern eines mutigen Helden. "
@@ -63,7 +63,7 @@ public class IntroView extends JFrame {
 		scrollingTextArea.setBackground(new Color(245, 245, 220));
 		scrollingTextArea.setText(introText);
 
-		nextBtn = new JButton("Weiter");
+		nextBtn = new JButton("Auf geht's!");
 		nextBtn.setFont(new Font("Old English Text MT", Font.PLAIN, 28));
 
 		nextBtn.addActionListener(new ActionListener() {
@@ -96,7 +96,7 @@ public class IntroView extends JFrame {
 					SwingUtilities.invokeLater(() -> {
 						scrollingTextArea.setText(currentText);
 					});
-					TimeUnit.MILLISECONDS.sleep(50); // Anpassen der Geschwindigkeit
+					TimeUnit.MILLISECONDS.sleep(60); // Anpassen der Geschwindigkeit
 				}
 			} catch (InterruptedException ex) {
 				ex.printStackTrace();
