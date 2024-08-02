@@ -5,12 +5,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -25,8 +22,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
-
 import controller.SoundController;
 import model.PlayerCharacterModel;
 import model.SerializationIDs;
@@ -35,10 +30,10 @@ public class CharacterCreationView extends JFrame{
 	private static final long serialVersionUID = SerializationIDs.characterCreationViewID;
 	
 	// Set Indexes
-	private int raceIndex = 0;
-	private int genderIndex = 1;
-	private int shapeIndex = 0;
-	private int classIndex = 0;
+	private int raceIndex = 	0;
+	private int genderIndex =	0;
+	private int shapeIndex = 	0;
+	private int classIndex = 	0;
 	
 	private JTextField charNameTxtField;
 	
@@ -56,16 +51,26 @@ public class CharacterCreationView extends JFrame{
 	private SoundController soundController;
 	private ArrayList<String> raceList, genderList, classList, shapeList;
 	
-	
-	
 	// Image Paths
 	private final String[][] imagePaths = {
-			{"res/img/CharacterPortraits/New_Race_Gender/new_human_male.png","res/img/CharacterPortraits/New_Race_Gender/new_human_female.png","res/img/CharacterPortraits/New_Race_Gender/new_human_divers.png"},
-			{"res/img/CharacterPortraits/New_Race_Gender/new_elf_male.png", "res/img/CharacterPortraits/New_Race_Gender/new_elf_female.png", "res/img/CharacterPortraits/New_Race_Gender/new_elf_divers.png"},
-			{"res/img/CharacterPortraits/New_Race_Gender/new_dwarf_male.png", "res/img/CharacterPortraits/New_Race_Gender/new_dwarf_female.png", "res/img/CharacterPortraits/New_Race_Gender/new_dwarf_divers.png"},
-			{"res/img/CharacterPortraits/New_Race_Gender/new_halfling_male.png", "res/img/CharacterPortraits/New_Race_Gender/new_halfling_female.png", "res/img/CharacterPortraits/New_Race_Gender/new_halfling_divers.png"},
-			{"res/img/CharacterPortraits/New_Race_Gender/new_orc_male.png", "res/img/CharacterPortraits/New_Race_Gender/new_orc_female.png", "res/img/CharacterPortraits/New_Race_Gender/new_orc_divers.png"},
-			{"res/img/CharacterPortraits/New_Race_Gender/new_goblin_male.png", "res/img/CharacterPortraits/New_Race_Gender/new_goblin_female.png","res/img/CharacterPortraits/New_Race_Gender/new_goblin_divers.png"}
+			{"res/img/CharacterPortraits/New_Race_Gender/new_human_male.png",
+				"res/img/CharacterPortraits/New_Race_Gender/new_human_female.png",
+				"res/img/CharacterPortraits/New_Race_Gender/new_human_divers.png"},
+			{"res/img/CharacterPortraits/New_Race_Gender/new_elf_male.png",
+				"res/img/CharacterPortraits/New_Race_Gender/new_elf_female.png", 
+				"res/img/CharacterPortraits/New_Race_Gender/new_elf_divers.png"},
+			{"res/img/CharacterPortraits/New_Race_Gender/new_dwarf_male.png", 
+				"res/img/CharacterPortraits/New_Race_Gender/new_dwarf_female.png", 
+				"res/img/CharacterPortraits/New_Race_Gender/new_dwarf_divers.png"},
+			{"res/img/CharacterPortraits/New_Race_Gender/new_halfling_male.png", 
+				"res/img/CharacterPortraits/New_Race_Gender/new_halfling_female.png", 
+				"res/img/CharacterPortraits/New_Race_Gender/new_halfling_divers.png"},
+			{"res/img/CharacterPortraits/New_Race_Gender/new_orc_male.png", 
+				"res/img/CharacterPortraits/New_Race_Gender/new_orc_female.png", 
+				"res/img/CharacterPortraits/New_Race_Gender/new_orc_divers.png"},
+			{"res/img/CharacterPortraits/New_Race_Gender/new_goblin_male.png", 
+				"res/img/CharacterPortraits/New_Race_Gender/new_goblin_female.png",
+				"res/img/CharacterPortraits/New_Race_Gender/new_goblin_divers.png"}
 	};
 	
 	private String backgroundImgPath = "res/img/Backgrounds/backgr_ccv_charactercreation1.jpeg";
@@ -109,9 +114,6 @@ public class CharacterCreationView extends JFrame{
 		raceList.add("Ork");
 		raceList.add("Goblin");
 	
-		//raceList.add("Troll");
-		//raceList.add("Untot");
-		
 		// create Race Panel and Components
 		racePanel = new JPanel();
 		raceBtnPanel = new JPanel();
@@ -120,36 +122,12 @@ public class CharacterCreationView extends JFrame{
 		raceLblPanel = new JPanel();
 		raceLbl = new JLabel("Rasse");
 		pickRaceLbl = new JLabel("Mensch");
-		pickRaceLbl.setFont(gameFontSmall);
-		raceLbl.setFont(gameFontSmall);
-		raceLbl.setForeground(new Color(160, 255, 255));
-		pickRaceLbl.setForeground(new Color(160, 255, 255));
 		rightRaceBtn = new JButton(">");
 		leftRaceBtn = new JButton("<");		
 		// add components to RacePanel
 		fillSidePanel(raceBtnPanel, pickRacePanel, racePanel,
 				pickRaceLblPanel, raceLblPanel, leftRaceBtn, rightRaceBtn, 
 				raceLbl, pickRaceLbl);
-		
-		// ActionListeners for Race swapping
-		rightRaceBtn.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				raceIndex = getNextEntry(pickRaceLbl, raceList, raceIndex);
-				chooseImgPath(raceIndex, genderIndex);
-			}
-		});
-		
-		leftRaceBtn.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				raceIndex = getPreviousEntry(pickRaceLbl, raceList, raceIndex);
-				chooseImgPath(raceIndex, genderIndex);
-			}
-			
-		});
 		
 		// create ArrayList for Genders
 		genderList = new ArrayList<>();
@@ -163,19 +141,34 @@ public class CharacterCreationView extends JFrame{
 		genderLbl = new JLabel("Geschlecht");
 		genderLblPanel = new JPanel();
 		pickGenderPanel = new JPanel();
-		pickGenderLbl = new JLabel("weiblich");
+		pickGenderLbl = new JLabel("männlich");
 		pickGenderLblPanel = new JPanel();
-		genderLbl.setForeground(new Color(160, 255, 255));
-		pickGenderLbl.setForeground(new Color(160, 255, 255));
-		pickGenderLbl.setFont(gameFontSmall);
-		genderLbl.setFont(gameFontSmall);
-		
 		rightGenderBtn = new JButton(">");
 		leftGenderBtn = new JButton("<");
 		// add components to GenderPanel
 		fillSidePanel(genderBtnPanel, pickGenderPanel, genderPanel,
-				pickGenderLblPanel, genderLblPanel, leftGenderBtn, rightGenderBtn, 
-				genderLbl, pickGenderLbl);
+				pickGenderLblPanel, genderLblPanel, leftGenderBtn, 
+				rightGenderBtn,	genderLbl, pickGenderLbl);
+		
+		// ActionListeners for Race swapping
+		rightRaceBtn.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						raceIndex = getNextEntry(pickRaceLbl, raceList, raceIndex);
+						chooseImgPath(raceIndex, genderIndex);
+					}
+				});
+				
+		leftRaceBtn.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						raceIndex = getPreviousEntry(pickRaceLbl, raceList, raceIndex);
+						chooseImgPath(raceIndex, genderIndex);
+					}
+					
+				});
 		
 		// ActionListeners for Gender swapping
 		rightGenderBtn.addActionListener(new ActionListener() {
@@ -191,6 +184,7 @@ public class CharacterCreationView extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				soundController.playButtonClickSound();
 				genderIndex = getPreviousEntry(pickGenderLbl, genderList, genderIndex);
 				chooseImgPath(raceIndex, genderIndex);
 			}
@@ -210,20 +204,13 @@ public class CharacterCreationView extends JFrame{
 		pickClassPanel = new JPanel();
 		pickClassLblPanel = new JPanel();
 		classBtnPanel = new JPanel();
-		
 		pickClassLbl = new JLabel("Krieger");
-		pickClassLbl.setFont(gameFontSmall);
-		pickClassLbl.setForeground(new Color(160, 255, 255));
-		classLbl = new JLabel("Spielerklasse");
-		classLbl.setFont(gameFontSmall);
-		classLbl.setForeground(new Color(160, 255, 255));
-		
+		classLbl = new JLabel("Klasse");
 		leftClassBtn = new JButton("<");
 		rightClassBtn = new JButton(">");
 		
 		fillSidePanel(classBtnPanel, pickClassPanel, classPanel,
-				pickClassLblPanel, classLblPanel, 
-				leftClassBtn, rightClassBtn, 
+				pickClassLblPanel, classLblPanel, leftClassBtn, rightClassBtn, 
 				classLbl, pickClassLbl);
 		
 		// create ShapePanel and Components
@@ -233,19 +220,15 @@ public class CharacterCreationView extends JFrame{
 		shapeLblPanel = new JPanel();
 		shapeBtnPanel = new JPanel();
 		rightShapeBtn = new JButton(">");
+		rightShapeBtn.setEnabled(false);
 		leftShapeBtn = new JButton("<");
-		
+		leftShapeBtn.setEnabled(false);
 		pickShapeLbl = new JLabel("Schlank");
-		pickShapeLbl.setForeground(new Color(160, 255, 255));
-		pickShapeLbl.setFont(gameFontSmall);
-		
 		shapeLbl = new JLabel("Körperform");
-		shapeLbl.setForeground(new Color(160, 255, 255));
-		shapeLbl.setFont(gameFontSmall);
 		
 		fillSidePanel(shapeBtnPanel, pickShapePanel, shapePanel,
-					pickShapeLblPanel, shapeLblPanel, leftShapeBtn, rightShapeBtn, 
-					shapeLbl, pickShapeLbl);
+				pickShapeLblPanel, shapeLblPanel, leftShapeBtn, rightShapeBtn, 
+				shapeLbl, pickShapeLbl);
 		
 		// choose Imgpath for Img in centerPanel depending on race-/ genderIndex
 		chooseImgPath(raceIndex, genderIndex);
@@ -266,7 +249,6 @@ public class CharacterCreationView extends JFrame{
 			}
 		});
 		
-		
 		rightClassBtn.addActionListener(new ActionListener() {
 			
 			@Override
@@ -282,7 +264,6 @@ public class CharacterCreationView extends JFrame{
 				classIndex = getPreviousEntry(pickClassLbl, classList, classIndex);				
 			}
 		});
-		
 		
 		// Create Label and TextFields
 		charNameTxtField = new JTextField();
@@ -346,7 +327,7 @@ public class CharacterCreationView extends JFrame{
 							"Bitte gib mindestens 3 Buchstaben ein!");
 				} else {
 					
-					createCharacter(raceIndex, charNameTxtField.getText());
+					createCharacter(raceIndex, classIndex, charNameTxtField.getText());
 					soundController.playButtonClickSound();
 					
 					// TODO Auto-generated method stub
@@ -448,14 +429,15 @@ public class CharacterCreationView extends JFrame{
 			 }
 		 }
 		 
-		 private PlayerCharacterModel createCharacter(int raceID, String playerName) {
+		 private PlayerCharacterModel createCharacter(int raceID, int classID, String playerName) {
 			// TODO Auto-generated method stub
 
-			 PlayerCharacterModel character = new PlayerCharacterModel(0, raceID, 2, 100, 
-					 100, 40, 100, 75, 100, 1, playerName);
+			 PlayerCharacterModel character = new PlayerCharacterModel(0, raceID, 
+					 			classID, 100, 100, 40, 100, 75, 100, 1, playerName);
 			 
 					 System.out.println("Hallo, " + playerName);
 					 System.out.println("Rasse: " + this.raceList.get(raceID));
+					 System.out.println("Klasse: " + this.raceList.get(classID));
 			
 					 return character;
 		}
@@ -473,13 +455,18 @@ public class CharacterCreationView extends JFrame{
 			sidePanel.setOpaque(false);
 			sidePanel.setPreferredSize(new Dimension(225,100));
 			sidePanel.setBorder(BorderFactory.createEmptyBorder(0, 25, 0, 25));
-			
 		 }
 		 // place Elements on Sidepanel
-		 private void fillSidePanel(JPanel btnPanel, JPanel pickPanel, JPanel attributePanel,
-				 					JPanel pickLblPanel, JPanel attributeLblPanel, 
-				 					JButton leftButton, JButton rightButton, 
-				 					JLabel attributeLbl, JLabel pickLbl) {
+		 private void fillSidePanel(JPanel btnPanel, JPanel pickPanel, 
+				 JPanel attributePanel, JPanel pickLblPanel, 
+				 JPanel attributeLblPanel, JButton leftButton, 
+				 JButton rightButton, JLabel attributeLbl, JLabel pickLbl) {
+			 
+			 attributeLbl.setFont(gameFontSmall);
+			 attributeLbl.setForeground(new Color(160, 255, 255));
+			 
+			 pickLbl.setFont(gameFontSmall);
+			 pickLbl.setForeground(new Color(160, 255, 255));
 			 // create buttonPanel and place left- / rightButton 
 			 btnPanel.setLayout(new FlowLayout());
 			 btnPanel.setOpaque(false);
@@ -503,6 +490,5 @@ public class CharacterCreationView extends JFrame{
 			 attributePanel.setOpaque(false);
 			 attributePanel.add(attributeLblPanel, BorderLayout.NORTH);
 			 attributePanel.add(pickPanel, BorderLayout.CENTER);
-			 //attributePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 50));
 		 }
 }
