@@ -287,7 +287,7 @@ public class SQLController {
 	 */
 	public Object[][] getItemsFromInventory(){
 		
-		int numberOfFields = 4;
+		int numberOfFields = 5;
 		List<Object[]> resultList = new ArrayList<>();
 		
 		try(Connection connection = DriverManager.getConnection(URL, USER, PW)) {
@@ -305,13 +305,15 @@ public class SQLController {
 				int inventoryID = resultSet.getInt("InventoryID");
 				int quantity = resultSet.getInt("Quantity");
 				int value = resultSet.getInt("Value");
+				int totalValue = quantity * value;
 				String name = resultSet.getString("Name");
 				
 				Object[] row = new Object[numberOfFields];
 				row[0] = inventoryID;
-				row[1] = quantity;
-				row[2] = value;
-				row[3] = name;
+				row[1] = name;
+				row[2] = quantity;
+				row[3] = value;
+				row[4] = totalValue;
 				
 				resultList.add(row);
 				
@@ -326,26 +328,23 @@ public class SQLController {
 	}
 	
 	
-	public String getItemDescription (int itemID) {
-		
-		String description = null;
-		
-		try(Connection connection = DriverManager.getConnection(URL, USER, PW)) {
-			
-			String query = "SELECT Description FROM item WHERE ItemID = " + itemID;
-			PreparedStatement preparedStatment = connection.prepareStatement(query);
-			ResultSet resultSet = preparedStatment.executeQuery();
-			
-			while(resultSet.next()) {
-				description = resultSet.getString("Description");
-			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		
-		return description;
+	public String getItemDescription(String itemName) {
+	    String description = null;
+
+	    try (Connection connection = DriverManager.getConnection(URL, USER, PW)) {
+	        String query = "SELECT Description FROM item WHERE Name = ?";
+	        PreparedStatement preparedStatement = connection.prepareStatement(query);
+	        preparedStatement.setString(1, itemName);
+	        ResultSet resultSet = preparedStatement.executeQuery();
+
+	        if (resultSet.next()) {
+	            description = resultSet.getString("Description");
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return description;
 	}
 	
 	
