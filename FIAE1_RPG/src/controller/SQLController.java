@@ -326,6 +326,29 @@ public class SQLController {
 	}
 	
 	
+	public String getItemDescription (int itemID) {
+		
+		String description = null;
+		
+		try(Connection connection = DriverManager.getConnection(URL, USER, PW)) {
+			
+			String query = "SELECT Description FROM item WHERE ItemID = " + itemID;
+			PreparedStatement preparedStatment = connection.prepareStatement(query);
+			ResultSet resultSet = preparedStatment.executeQuery();
+			
+			while(resultSet.next()) {
+				description = resultSet.getString("Description");
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+		return description;
+	}
+	
+	
 	/**
 	 * Getting active Quest within all Fields. Used by QuestView and JournalView
 	 * @return QuestModel 
