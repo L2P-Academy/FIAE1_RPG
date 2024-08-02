@@ -3,14 +3,15 @@ package model; // v0.2
 public class AbilityModel <AbilityElement extends Enum<AbilityElement>>{
 	
 	private int abilityID, damage, level;
-	private String name;
 	private boolean isAOE;
+	private String name;
 	private AbilityElement abilityElement;
 	
 	public enum AbilityElement {
 		Fire, Water, Earth, Light, Darkness, Neutral, Holy
 	}
 	
+	// Constructor
 	public AbilityModel(int abilityID, int damage, int level, String name, boolean isAOE,
 			model.AbilityModel.AbilityElement abilityElement) {
 		super();
@@ -22,6 +23,7 @@ public class AbilityModel <AbilityElement extends Enum<AbilityElement>>{
 		this.abilityElement = abilityElement;
 	}
 
+	// Getter & Setter
 	public int getAbilityID() {
 		return abilityID;
 	}

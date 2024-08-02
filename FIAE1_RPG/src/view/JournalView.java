@@ -41,10 +41,10 @@ public class JournalView extends JFrame {
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setUndecorated(true);
 
-		// GameFont Creation
+		// Game font
 		gameFont = new Font("Old English Text MT", Font.BOLD, 64);
 
-		// Labels and Buttons creation
+		// Labels and buttons
 		detailsBtn = new JButton("Quest-Details");
 		beautifyButton(detailsBtn);
 		backBtn = new JButton("Zurück");
@@ -52,7 +52,7 @@ public class JournalView extends JFrame {
 		titleLbl = new JLabel("Aktive Quests");
 		titleLbl.setFont(gameFont);
 
-		// Panel creation
+		// Panel
 		backgroundPnl = new BackGroundPanel(new ImageIcon(backgroundImgPath).getImage());
 		backgroundPnl.setLayout(new BorderLayout());
 		buttonPnl = new JPanel(new FlowLayout());
@@ -63,10 +63,10 @@ public class JournalView extends JFrame {
 				{"Eine lang erwartete Reise","Besuche die Taverne im Dorf!","1","50","100","Tavernenwirt","Weltkarte"},
 		};
 		
-		//Creates a table model with example data	
+		// Creates a table model with example data	
 		DefaultTableModel tableModel = new DefaultTableModel(exampleData, headerData);
 
-		// create Table
+		// Create table
 		questsTbl = new JTable(tableModel);
 		questsTbl.setOpaque(false);
 		questsTbl.setShowGrid(false);
@@ -75,12 +75,12 @@ public class JournalView extends JFrame {
 		questsTbl.setForeground(Color.white);
 		((DefaultTableCellRenderer) questsTbl.getDefaultRenderer(Object.class)).setOpaque(false);
 		
-		//Inserts the table into a ScrollPane if the amount of data increases
+		//Inserts the table into a scroll pane if the amount of data increases
 		JScrollPane scrollPane = new JScrollPane(questsTbl);
 		scrollPane.setOpaque(false);
 		scrollPane.getViewport().setOpaque(false);
 
-		// add Buttons
+		// Add buttons
 		buttonPnl.add(detailsBtn);
 		buttonPnl.add(backBtn);
 		buttonPnl.setOpaque(false);
@@ -89,7 +89,7 @@ public class JournalView extends JFrame {
 		backgroundPnl.add(titleLbl, BorderLayout.NORTH);
 		backgroundPnl.add(scrollPane, BorderLayout.CENTER);
 
-		//Add ActionListener to the details button
+		// Add ActionListener to the details button
 		detailsBtn.addActionListener(new ActionListener() {
 
 			@Override
@@ -112,21 +112,21 @@ public class JournalView extends JFrame {
 		setVisible(true);
 	}
 
-	// Modify Buttons
+	// Modify buttons
 	private void beautifyButton(JButton button) {
 		button.setFocusPainted(false);
 		button.setBackground(new Color(10, 50, 100));
 		button.setForeground(Color.WHITE);
 		button.setFont(new Font("Old English Text MT", Font.BOLD, 36));
 
-		// Rounded Corners
+		// Rounded corners
 		Border border = BorderFactory.createLineBorder(new Color(255, 255, 255), 2);
 		Border roundedBorder = BorderFactory.createCompoundBorder(border,
 				BorderFactory.createEmptyBorder(10, 20, 10, 20));
 		button.setBorder(
 				BorderFactory.createCompoundBorder(roundedBorder, BorderFactory.createEmptyBorder(5, 15, 5, 15)));
 
-		// color change when MouseOver is happening
+		// Color change on mouseover
 		button.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseEntered(java.awt.event.MouseEvent evt) {
 				button.setBackground(new Color(100, 149, 237));
@@ -137,7 +137,7 @@ public class JournalView extends JFrame {
 			}
 		});
 	}
-		//Main-Methode für Tesstzwecke
+		// Main method for testing
 	public static void main (String[] args) {
 		new JournalView();
 	}

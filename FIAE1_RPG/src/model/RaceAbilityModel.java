@@ -2,28 +2,28 @@ package model;
 
 public class RaceAbilityModel {
 	private int raceAbililtyID;
-	private String name;
 	private int damage;
-	private boolean isAOE;
 	private int requiredLevel;
+	private boolean isAOE;
+	private String name;
 	private Element element;
 	
 	public enum Element {
 		FIRE, WATER, EARTH, LIGHT, DARKNESS, NEUTRAL, HOLY
 	}
 	
+	// Constructor
 	public RaceAbilityModel(int raceAbililtyID, String name, int damage, 
 			boolean isAOE, int requiredLevel, Element element) {
 		this.raceAbililtyID = raceAbililtyID;
-		this.name = name;
 		this.damage = damage;
-		this.isAOE = isAOE;
 		this.requiredLevel = requiredLevel;
+		this.isAOE = isAOE;
+		this.name = name;
 		this.element = element;
 	}
 	
-	// Getter und Setter
-
+	// Getter & Setter
 	public int getRaceAbililtyID() {
 		return raceAbililtyID;
 	}
