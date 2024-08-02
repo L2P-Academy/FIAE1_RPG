@@ -2,14 +2,13 @@ package model;
 
 
 public class BossModel {
+	private int abilityID1, abilityID2, abilityID3, abilityID4, hp, questID, elementalResistance, armour, itemID, level;
 	private String name;
-	private int abilityID1, abilityID2, abilityID3, abilityID4,
-	hp, questID, elementalResistance, armour, itemID, level;
 	
-	public BossModel(String name, int abilityID1, int abilityID2, int abilityID3, int abilityID4, int hp, int questID,
-			int elementalResistance, int armour, int itemID, int level) {
+	// Constructor
+	public BossModel(int abilityID1, int abilityID2, int abilityID3, int abilityID4, int hp, int questID,
+			int elementalResistance, int armour, int itemID, int level, String name) {
 		super();
-		this.name = name;
 		this.abilityID1 = abilityID1;
 		this.abilityID2 = abilityID2;
 		this.abilityID3 = abilityID3;
@@ -20,8 +19,10 @@ public class BossModel {
 		this.armour = armour;
 		this.itemID = itemID;
 		this.level = level;
+		this.name = name;
 	}
 	
+	// Getter & Setter
 	public String getName() {
 		return name;
 	}

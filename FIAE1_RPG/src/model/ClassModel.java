@@ -1,21 +1,22 @@
 package model;
 
 public class ClassModel {
-	private int classID;
-	private String name;
 	private int abilityID1;
 	private int abilityID2;
 	private int abilityID3;
+	private int classID;
+	private String name;
 	
-	public ClassModel(int classID, String name, int abilityID1, int abilityID2, int abilityID3) {
-		this.classID = classID;
-		this.name = name;
+	// Constructor
+	public ClassModel(int abilityID1, int abilityID2, int abilityID3, int classID, String name) {
 		this.abilityID1 = abilityID1;
 		this.abilityID2	= abilityID2;
 		this.abilityID3 = abilityID3;
+		this.classID = classID;
+		this.name = name;
 	}
 	
-	// Getter, Setter
+	// Getter & Setter
 
 	public int getClassID() {
 		return classID;

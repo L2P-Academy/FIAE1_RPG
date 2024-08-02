@@ -2,17 +2,17 @@ package model;
 
 public class RaceModel {
 	private int raceID;
-	private String name;
 	private int racialAbilityID;
+	private String name;
 	
-	public RaceModel(int raceID, String name, int racialAbilityID) {
+	// Constructor
+	public RaceModel(int raceID, int racialAbilityID, String name) {
 		this.raceID = raceID;
-		this.name = name;
 		this.racialAbilityID = racialAbilityID;
+		this.name = name;
 	}
 	
-	// Getter, Setter
-
+	// Getter & Setter
 	public int getRaceID() {
 		return raceID;
 	}
