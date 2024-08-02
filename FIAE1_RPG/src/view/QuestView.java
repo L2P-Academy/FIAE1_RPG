@@ -17,6 +17,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
@@ -87,10 +88,10 @@ public class QuestView extends JFrame {
 		xpImgLbl = createImageLabel("res/img/MenuImages/Experience_Points.png");
 		xpCountLbl = new JLabel(questModel.getRewardXP() + "");
 		xpCountLbl.setFont(textFont);
-		goldImgLbl = createImageLabel("res/img/ItemModelImages/01_Gold.png");
+		goldImgLbl = createImageLabel("res/img/ItemModelImages/Goldmünze.png");
 		goldCountLbl = new JLabel(questModel.getRewardGold() + "");
 		goldCountLbl.setFont(textFont);
-		itemImgLbl = createImageLabel("res/img/ItemModelImages/04_Weltkarte.png");
+		itemImgLbl = createImageLabel("res/img/ItemModelImages/Weltkarte.png");
 		rewardPnl.add(rewardsLbl);
 		rewardPnl.add(xpImgLbl);
 		rewardPnl.add(xpCountLbl);
