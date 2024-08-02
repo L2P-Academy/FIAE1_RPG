@@ -46,7 +46,7 @@ public class InventoryView extends JFrame{
     JPanel closeInvBtnPan, equipBtnPan, unequipBtnPan;
     
     //Images
-	String introImgPath = "res/img/MenuImages/InventoryBackground.png";
+	String introImgPath = "res/img/MenuImages/InventoryBackgroundSuggestion1.png";
 	
 	//Font
 	Font gameFont;
@@ -86,12 +86,12 @@ public class InventoryView extends JFrame{
     	// create south Panel
     	southPanel = new JPanel(new BorderLayout());
     	southPanel.setOpaque(false);
-    	southPanel.setPreferredSize(new Dimension(1200, 220));
+    	southPanel.setPreferredSize(new Dimension(1000, 220));
 
     	// create gold Panel and Label
 		goldBalanceLabel = new JLabel(Integer.toString(goldBalance), SwingConstants.CENTER);
 		goldBalanceLabel.setFont(gameFont);
-		goldBalanceLabel.setForeground(new Color(245, 245, 220));
+		goldBalanceLabel.setForeground(new Color(245, 245, 180));
 
     	goldPanel = new JPanel(new BorderLayout());
     	goldPanel.setOpaque(false);
@@ -121,7 +121,7 @@ public class InventoryView extends JFrame{
     	// create button Panel
     	buttonPanel = new JPanel(new FlowLayout());
     	buttonPanel.setOpaque(false);
-    	buttonPanel.setPreferredSize(new Dimension(1200, 100));
+    	buttonPanel.setPreferredSize(new Dimension(1000, 100));
 
 		// create close buttons
 		closeInvBtn = new JButton("Schließen");
@@ -199,7 +199,7 @@ public class InventoryView extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 		        goldBalance -= 1;
 		        goldBalanceLabel.setText(Integer.toString(goldBalance));
-//				inventoryController.unequipItem("");//Fehlt komlette struktur
+//				inventoryController.unequipItem("");//Fehlt komplette struktur
 				
 			}
 		});
