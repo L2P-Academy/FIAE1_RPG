@@ -55,17 +55,17 @@ public class QuestView extends JFrame {
 				false, // isCompleted
 				"Eine lang erwartete Reise", // name
 				"Hey, hey du da! Bist du neu in der Gegend? " + "Ah, du bist auf dem Weg in die große Stadt. "
-						+ "Ich glaube, dann habe was für dich. Schau mal in der Taverne vorbei und sag dem Wirt, "
-						+ "Kara schickt dich. Viel Erfolg auf deiner Reise und lad mich mal auf ein Bier ein, wenn "
+						+ "Ich glaube, dann habe ich was für dich. Schau mal in der Taverne vorbei und sag dem Wirt, "
+						+ "Kara schickt dich. Viel Erfolg auf deiner Reise! Wir sollten gemeinsam ein Bier genießen, wenn "
 						+ "wir uns in der Stadt wiedersehen! ");
 
-		// Create Window
+		// Create window
 		setTitle(questModel.getName());
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setUndecorated(true);
 
-		// Create Fonts
+		// Create fonts
 		titleFont = new Font("Old English Text MT", Font.BOLD, 32);
 		Font textFont = new Font("Arial", Font.ITALIC, 28);
 
@@ -127,7 +127,7 @@ public class QuestView extends JFrame {
 		dialogPnl.add(dialogTextArea, BorderLayout.CENTER);
 		dialogPnl.add(buttonPnl, BorderLayout.EAST);
 
-		// add Everything
+		// Add everything
 		getContentPane().add(titlePnl, BorderLayout.NORTH);
 		getContentPane().add(locationPnl, BorderLayout.CENTER);
 		getContentPane().add(rewardPnl, BorderLayout.EAST);
@@ -135,7 +135,7 @@ public class QuestView extends JFrame {
 		setLocationRelativeTo(null);
 		setVisible(true);
 
-		// animate Quest text
+		// Animate quest text
 		animateText();
 
 		// ActionListener
@@ -158,21 +158,21 @@ public class QuestView extends JFrame {
 
 	}
 
-	// Modify Buttons
+	// Modify buttons
 	public void beautifyButton(JButton button) {
 		button.setFocusPainted(false);
 		button.setBackground(new Color(10, 50, 100));
 		button.setForeground(Color.WHITE);
 		button.setFont(new Font("Old English Text MT", Font.BOLD, 36));
 
-		// Rounded Corners
+		// Rounded corners
 		Border border = BorderFactory.createLineBorder(new Color(255, 255, 255), 2);
 		Border roundedBorder = BorderFactory.createCompoundBorder(border,
 				BorderFactory.createEmptyBorder(10, 20, 10, 20));
 		button.setBorder(
 				BorderFactory.createCompoundBorder(roundedBorder, BorderFactory.createEmptyBorder(5, 15, 5, 15)));
 
-		// color change when MouseOver is happening
+		// Color change on mouseover
 		button.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseEntered(java.awt.event.MouseEvent evt) {
 				button.setBackground(new Color(100, 149, 237));
