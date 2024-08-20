@@ -11,6 +11,8 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -22,6 +24,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
+
+import controller.SQLController;
 import controller.SoundController;
 import model.PlayerCharacterModel;
 import model.SerializationIDs;
@@ -29,11 +33,9 @@ public class CharacterCreationView extends JFrame{
 
 	private static final long serialVersionUID = SerializationIDs.characterCreationViewID;
 	
-	// Set Indexes
-	private int raceIndex = 	0;
-	private int genderIndex =	0;
-	private int shapeIndex = 	0;
-	private int classIndex = 	0;
+	private int raceIndex = 0;
+	private int genderIndex = 0;
+	private int classIndex = 0;
 	
 	private JTextField charNameTxtField;
 	
@@ -49,7 +51,10 @@ public class CharacterCreationView extends JFrame{
 	
 	private Font gameFont, gameFontSmall;
 	private SoundController soundController;
+	private SQLController sqlController;
 	private ArrayList<String> raceList, genderList, classList, shapeList;
+	
+	private PlayerCharacterModel playerCharacterModel;
 	
 	// Image Paths
 	private final String[][] imagePaths = {
@@ -82,6 +87,7 @@ public class CharacterCreationView extends JFrame{
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setUndecorated(true);
 		soundController = new SoundController();
+		sqlController = new SQLController();
 		
 		//  Set Fontvalues
 		gameFont = new Font("Old English Text MT", Font.BOLD, 64);
@@ -233,22 +239,6 @@ public class CharacterCreationView extends JFrame{
 		// choose Imgpath for Img in centerPanel depending on race-/ genderIndex
 		chooseImgPath(raceIndex, genderIndex);
 		
-		rightShapeBtn.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				shapeIndex = getNextEntry(pickShapeLbl, shapeList, shapeIndex);				
-			}
-		});
-		
-		leftShapeBtn.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				shapeIndex = getPreviousEntry(pickShapeLbl, shapeList, shapeIndex);				
-			}
-		});
-		
 		rightClassBtn.addActionListener(new ActionListener() {
 			
 			@Override
@@ -326,12 +316,24 @@ public class CharacterCreationView extends JFrame{
 					JOptionPane.showMessageDialog(rootPane, 
 							"Bitte gib mindestens 3 Buchstaben ein!");
 				} else {
+					//TODO: Dynamic constructor information not retrieved yet: ID, RaceID, ClassID, Gender
+					playerCharacterModel = new PlayerCharacterModel(1, charNameTxtField.getText(), 3, 2, "m", 1, 0, 100, 1, 100, 100, 100, 100);
 					
-					createCharacter(raceIndex, classIndex, charNameTxtField.getText());
+					Map<String, String> playerMap = new HashMap<>();
+					playerMap.put("Name", playerCharacterModel.getName());
+					playerMap.put("RaceID", playerCharacterModel.getRaceID() + "");
+					playerMap.put("ClassID", playerCharacterModel.getClassID() + "");
+					playerMap.put("Gender", playerCharacterModel.getGender());
+					playerMap.put("CurrentLocation", playerCharacterModel.getCurrentLocation() + "");
+					playerMap.put("CurrentXP", playerCharacterModel.getCurrentXP() + "");
+					playerMap.put("MaxXP", playerCharacterModel.getMaxXP() + "");
+					playerMap.put("Level", playerCharacterModel.getLevel() + "");
+					playerMap.put("CurrentHP", playerCharacterModel.getCurrentHP() + "");
+					playerMap.put("MaxHP", playerCharacterModel.getMaxHP() + "");
+					playerMap.put("CurrentMana", playerCharacterModel.getCurrentMana() + "");
+					playerMap.put("MaxMana", playerCharacterModel.getMaxMana() + "");
+					sqlController.insertIntoTable("playercharacter", playerMap);
 					soundController.playButtonClickSound();
-					
-					// TODO Auto-generated method stub
-					// Close Window if finishbtn is clicked
 					new IntroView();
 					dispose();
 				} 
@@ -429,18 +431,6 @@ public class CharacterCreationView extends JFrame{
 			 }
 		 }
 		 
-		 private PlayerCharacterModel createCharacter(int raceID, int classID, String playerName) {
-			// TODO Auto-generated method stub
-
-			 PlayerCharacterModel character = new PlayerCharacterModel(0, raceID, 
-					 			classID, 100, 100, 40, 100, 75, 100, 1, playerName);
-			 
-					 System.out.println("Hallo, " + playerName);
-					 System.out.println("Rasse: " + this.raceList.get(raceID));
-					 System.out.println("Klasse: " + this.raceList.get(classID));
-			
-					 return character;
-		}
 		 // Method to check if quantity of signs in textfield is at least 3
 		 private boolean checkTextField(String playerName) { 
 			 if (playerName.length() < 3) {

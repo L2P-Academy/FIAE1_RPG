@@ -8,12 +8,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.sound.sampled.Clip;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -28,7 +32,6 @@ import model.PlayerCharacterModel;
 import model.SerializationIDs;
 
 public class SavegameView extends JFrame {
-	
 
 	private static final long serialVersionUID = SerializationIDs.saveGameViewID;
 	private JButton saveBtn, loadBtn, deleteBtn, backBtn, closeGameBtn;
@@ -38,21 +41,22 @@ public class SavegameView extends JFrame {
 	private Font gameFont;
 	private DefaultTableModel tableModel;
 	private SoundController soundController;
-	public Clip musicClip;
-	SQLController sqlController = new SQLController();
-	PlayerCharacterModel playerCharacter;
+	private Clip musicClip;
+	private SQLController sqlController;
+	private PlayerCharacterModel playerCharacter;
 
 	public SavegameView() {
 
-		setTitle("Savegames");
+		setTitle("Spielstände");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setUndecorated(true);
-		
+
 		// create Controllers
+		sqlController = new SQLController();
 		soundController = new SoundController();
 //		this.musicClip = soundController.getMusicClip();
-		
+
 		// create Panels
 		buttonPnl = new JPanel(new FlowLayout());
 		listPnl = new JPanel(new BorderLayout());
@@ -99,10 +103,13 @@ public class SavegameView extends JFrame {
 		buttonPnl.add(deleteBtn);
 		buttonPnl.add(backBtn);
 		buttonPnl.add(closeGameBtn);
+		
+		// Deactivate SaveBtn when Map is closed
+		saveBtn.setEnabled(MapView.isMapViewOpen());
 
 		// add ActionListeners to Buttons
 		loadBtn.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				soundController.playButtonClickSound();
@@ -112,8 +119,7 @@ public class SavegameView extends JFrame {
 				dispose();
 			}
 		});
-		
-		
+
 		backBtn.addActionListener(new ActionListener() {
 
 			@Override
@@ -131,28 +137,57 @@ public class SavegameView extends JFrame {
 				System.exit(0);
 			}
 		});
-		
+
 		deleteBtn.addActionListener(new ActionListener() {
-			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int selectedRow = saveTbl.getSelectedRow() + 1;
-				sqlController.deleteDatasetFromTable(selectedRow, "playercharacter", "CharacterID");
+				int selectedRow = saveTbl.getSelectedRow();
+
+				if (selectedRow >= 0) { // Überprüfen, ob eine Zeile ausgewählt ist
+					String characterName = (String) tableModel.getValueAt(selectedRow, 1);																							
+
+					// Bestätigungsdialog anzeigen
+					int confirm = JOptionPane.showConfirmDialog(SavegameView.this,
+							"Möchten Sie den Spielstand von " + characterName + " wirklich löschen?",
+							"Spielstand löschen", JOptionPane.YES_NO_OPTION);
+
+					if (confirm == JOptionPane.YES_OPTION) {
+						int characterID = (int) tableModel.getValueAt(selectedRow, 0);
+																						
+						sqlController.deleteDatasetFromTable(characterID, "playercharacter", "CharacterID");
+
+						// Zeile aus dem TableModel entfernen
+						tableModel.removeRow(selectedRow);
+
+						// Tabelle aktualisieren
+						saveTbl.revalidate();
+						saveTbl.repaint();
+
+						JOptionPane.showMessageDialog(SavegameView.this,
+								"Der Spielstand von " + characterName + " wurde gelöscht.");
+					}
+				} else {
+					// Keine Zeile ausgewählt
+					JOptionPane.showMessageDialog(SavegameView.this,
+							"Bitte wählen Sie einen Spielstand aus, den Sie löschen möchten.", "Keine Auswahl",
+							JOptionPane.WARNING_MESSAGE);
+				}
 			}
 		});
-		//TODO : playermap edit
+
+		// TODO : playermap edit
 		saveBtn.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Map<String, String> playerMap = new HashMap<>();
 				sqlController.insertIntoTable("playercharacter", playerMap);
-					
+
 			}
 		});
 		// Load all Character information
 		loadCharacterInformation();
-		
+
 		// add Label to Panel
 		listPnl.add(titleLbl, BorderLayout.NORTH);
 		listPnl.add(scrollPane, BorderLayout.CENTER);
@@ -167,22 +202,41 @@ public class SavegameView extends JFrame {
 		setVisible(true);
 	}
 
+	// loads all Characters into a List of CharacterModels
 	private void loadCharacterInformation() {
-		
-		int numberOfDatasets = sqlController.getNumberOfDatasets("playercharacter");
-		// create model for data transfer	
-		for (int i = 1; i <= numberOfDatasets; i++) {
-	
-		PlayerCharacterModel characterModel = sqlController.getCharacterInformation(i);
-		
-		// add character data to table
-		tableModel.addRow(new Object[] { characterModel.getCharacterID(), characterModel.getName(), 
-				sqlController.convertRaceIDToString(characterModel.getRaceID()), 
-				sqlController.convertClassIDToString(characterModel.getClassID()),
-				characterModel.getCurrentHP(), characterModel.getCurrentMana(), characterModel.getCurrentXP(),
-				characterModel.getLevel() });
+		List<PlayerCharacterModel> characters = sqlController.getAllCharacters();
+		for (PlayerCharacterModel characterModel : characters) {
+			tableModel.addRow(new Object[] { characterModel.getCharacterID(), characterModel.getName(),
+					sqlController.convertRaceIDToString(characterModel.getRaceID()),
+					sqlController.convertClassIDToString(characterModel.getClassID()), characterModel.getCurrentHP(),
+					characterModel.getCurrentMana(), characterModel.getCurrentXP(), characterModel.getLevel()
+
+			});
 		}
 	}
+
+//	private void loadCharacterInformation() {
+//		// TODO: check for Gaps between IDs, get all existing entries 
+//		int numberOfDatasets = sqlController.getNumberOfDatasets("playercharacter");
+//		// create model for data transfer
+//		// TODO: check if Datasets exist
+////		if (numberOfDatasets == 0) {
+////			JDialog noDatasetsDialog = new JDialog();
+////			noDatasetsDialog.setSize(400, 200);
+////			noDatasetsDialog.setLocationRelativeTo(null);
+////		}
+//		for (int i = 1; i <= numberOfDatasets; i++) {
+//		PlayerCharacterModel characterModel = sqlController.getCharacterInformation(i);
+//		if (characterModel != null) {
+//			// add character data to table
+//			tableModel.addRow(new Object[] { characterModel.getCharacterID(), characterModel.getName(), 
+//					sqlController.convertRaceIDToString(characterModel.getRaceID()), 
+//					sqlController.convertClassIDToString(characterModel.getClassID()),
+//					characterModel.getCurrentHP(), characterModel.getCurrentMana(), characterModel.getCurrentXP(),
+//					characterModel.getLevel() });
+//			}
+//		}
+//	}
 
 //Modify Buttons
 	public void beautifyButton(JButton button) {

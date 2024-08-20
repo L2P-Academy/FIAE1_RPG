@@ -21,10 +21,10 @@ public class CreditView extends JFrame {
 
 	private static final long serialVersionUID = SerializationIDs.creditViewID;
 
-	JButton backBtn;
-	JPanel buttonPnl, listPnl, mainPnl;
-	JLabel titleLbl, creditLbl;
-	Font gameFont;
+	private JButton backBtn;
+	private JPanel buttonPnl, listPnl, mainPnl;
+	private JLabel titleLbl, creditLbl;
+	private Font gameFont;
 
 	public CreditView() {
 

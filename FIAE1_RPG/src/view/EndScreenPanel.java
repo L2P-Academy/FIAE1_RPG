@@ -14,10 +14,10 @@ import javax.swing.Timer;
 
 public class EndScreenPanel extends JPanel implements ActionListener{
 	
-	Font gameFont = new Font("Calisto MT", Font.PLAIN, 32);
-	Timer creditTimer = new Timer(5, this);
-	String text;
-	int textY = 600;
+	private Font gameFont = new Font("Calisto MT", Font.PLAIN, 32);
+	private Timer creditTimer = new Timer(5, this);
+	private String text;
+	private int textY = 600;
 	
 	public EndScreenPanel() {
 		setBackground(Color.BLACK);
