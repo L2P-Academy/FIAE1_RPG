@@ -11,6 +11,14 @@ public class SoundController {
 	public Clip buttonClip, ambientClip, musicClip, fxClip;
 	private File filepath;
 
+	public File getFilepath() {
+		return filepath;
+	}
+
+	public void setFilepath(File filepath) {
+		this.filepath = filepath;
+	}
+
 	public SoundController() {
 
 	}

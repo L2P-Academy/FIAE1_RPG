@@ -3,23 +3,43 @@ package model;
 public class PlayerCharacterModel {
 
 	private int characterID, raceID, classID, currentHP, maxHP, 
-	currentMana, maxMana, currentXP, maxXP, level;
+	currentMana, maxMana, currentXP, maxXP, level, currentLocation;
+	private String gender;
 	private String name;
 
-	public PlayerCharacterModel(int characterID, int raceID, int classID, int currentHP, int maxHP, int currentMana,
-			int maxMana, int currentXP, int maxXP, int level, String name) {
+	public PlayerCharacterModel(int characterID,  String name, int raceID, 
+			int classID, String gender, int currentLocation, int currentXP, 
+			int maxXP, int level, int currentHP, int maxHP, int currentMana, int maxMana) {
 		super();
 		this.characterID = characterID;
+		this.name = name;
 		this.raceID = raceID;
 		this.classID = classID;
+		this.gender = gender;
+		this.currentLocation = currentLocation;
+		this.currentXP = currentXP;
+		this.maxXP = maxXP;
+		this.level = level;
 		this.currentHP = currentHP;
 		this.maxHP = maxHP;
 		this.currentMana = currentMana;
 		this.maxMana = maxMana;
-		this.currentXP = currentXP;
-		this.maxXP = maxXP;
-		this.level = level;
-		this.name = name;
+	}
+
+	public int getCurrentLocation() {
+		return currentLocation;
+	}
+
+	public void setCurrentLocation(int currentLocation) {
+		this.currentLocation = currentLocation;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
 	}
 
 	public int getCharacterID() {

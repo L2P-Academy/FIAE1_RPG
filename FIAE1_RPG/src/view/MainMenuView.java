@@ -27,6 +27,7 @@ public class MainMenuView extends JFrame {
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setUndecorated(true);
 		soundController = new SoundController();
+		soundController.playMusicLoop("res/soundFX/music/mainMenu_music.wav");
 
 		// create background Panel
 		backgroundPanel = new BackGroundPanel(new ImageIcon(introImgPath).getImage());
@@ -99,9 +100,6 @@ public class MainMenuView extends JFrame {
 		getContentPane().add(backgroundPanel);
 		setLocationRelativeTo(null);
 		setVisible(true);
-
-		// play Music in background after rendering
-		soundController.playMusicLoop("res/soundFX/music/mainMenu_music.wav");
 
 	}
 

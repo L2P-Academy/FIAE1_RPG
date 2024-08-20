@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,25 +29,27 @@ import view.AnimationComponents.Waypoint;
 
 public class MapView extends JFrame {
 
+	private static boolean isMapViewOpen = false;
 	private static final long serialVersionUID = SerializationIDs.mapViewID;
-	JPanel buttonPanel, mainPanel;
-	JLabel mapTitleLbl;
-	JButton characterBtn, inventoryBtn, questsBtn, settingsBtn, saveBtn, creditsBtn;
-	String mapImagePath = "res/img/MapViewImages/Map_Start_Suggestion.png";
-	String buttonPanelBackgroundPath = "res/img/MapViewImages/ButtonPanelBackground6.png";
+	private JPanel buttonPanel, mainPanel;
+	private JLabel mapTitleLbl;
+	private JButton characterBtn, inventoryBtn, questsBtn, settingsBtn, saveBtn, creditsBtn;
+	private String mapImagePath = "res/img/MapViewImages/Map_Start_Suggestion.png";
+	private String buttonPanelBackgroundPath = "res/img/MapViewImages/ButtonPanelBackground6.png";
 
 	////////////////////////// TestButtons////////////////////////////
-	JButton savegameBtn, combatViewBtn, journalViewBtn;
+	private JButton savegameBtn, combatViewBtn, journalViewBtn;
 
-	SoundController soundController;
+	private SoundController soundController;
 
-	Font gameFont;
-	List<Waypoint> waypoints;
-	MapCharacter mapCharacter;
-	MapAnimationPanel mapPanel;
+	private Font gameFont;
+	private List<Waypoint> waypoints;
+	private MapCharacter mapCharacter;
+	private MapAnimationPanel mapPanel;
 
 	public MapView() {
 
+		isMapViewOpen = true;
 		setTitle("Weltkarte");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -186,6 +190,14 @@ public class MapView extends JFrame {
 				new CreditView();				
 			}
 		});
+		
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				isMapViewOpen = false;
+				super.windowClosing(e);
+			}
+		});
 
 		// Add buttons to buttonPanel
 		
@@ -284,6 +296,10 @@ public class MapView extends JFrame {
 			}
 		});
 		timer.start();
+	}
+	
+	public static boolean isMapViewOpen() {
+		return isMapViewOpen;
 	}
 
 }

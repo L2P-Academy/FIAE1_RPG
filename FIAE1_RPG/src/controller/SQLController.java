@@ -3,6 +3,7 @@ package controller;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Map;
@@ -32,6 +33,37 @@ public class SQLController {
 		}
 	}
 	
+	public List<PlayerCharacterModel> getAllCharacters() {
+		List<PlayerCharacterModel> characters = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(URL, USER, PW)) {
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery("SELECT * FROM playercharacter");
+			
+			while (resultSet.next()) {
+				PlayerCharacterModel playerCharacterModel = new PlayerCharacterModel(
+						resultSet.getInt("CharacterID"),
+						resultSet.getString("Name"),
+						resultSet.getInt("RaceID"),
+						resultSet.getInt("ClassID"),
+						resultSet.getString("Gender"),
+						resultSet.getInt("CurrentLocation"),
+						resultSet.getInt("CurrentXP"),
+						resultSet.getInt("MaxXP"),
+						resultSet.getInt("Level"),
+						resultSet.getInt("CurrentHP"),
+						resultSet.getInt("MaxHP"),
+						resultSet.getInt("CurrentMana"),
+						resultSet.getInt("MaxMana")
+					);
+				characters.add(playerCharacterModel);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return characters;
+	}
+	
 	
 	/**
 	 * Getting Character Information within all Fields and Values from the Database. Using PreparedStatement and Resultset Class.
@@ -57,6 +89,8 @@ public class SQLController {
 				String name = resultSet.getString("Name");
 				int raceID = resultSet.getInt("RaceID");
 				int classID = resultSet.getInt("ClassID");
+				String gender = resultSet.getString("Gender");
+				int currentLocation = resultSet.getInt("CurrentLocation");
 				int currentHP = resultSet.getInt("currentHP");
 				int maxHP = resultSet.getInt("MaxHP");
 				int currentMana = resultSet.getInt("CurrentMana");
@@ -65,7 +99,7 @@ public class SQLController {
 				int maxXP = resultSet.getInt("MaxXP");
 				int level = resultSet.getInt("Level");
 				
-				character = new PlayerCharacterModel(characterID, raceID, classID, currentHP, maxHP, currentMana, maxMana, currentXP, maxXP, level, name);
+				character = new PlayerCharacterModel(characterID, name, raceID, classID, gender, currentLocation, currentXP, maxXP, level, currentHP, maxHP, currentMana, maxMana);
 						
 				System.out.println("Charakterinformationen geladen");
 			}
