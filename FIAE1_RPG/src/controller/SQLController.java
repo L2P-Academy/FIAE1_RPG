@@ -363,7 +363,7 @@ public class SQLController {
 	
 	
 	/**
-	 * Change IsEquiped field in the Database from 0 to 1 
+	 * Change IsEquiped field in the Database to 1 
 	 * @param String itemName
 	 */
 	
@@ -385,6 +385,29 @@ public class SQLController {
 		}
 	}
 	
+	/**
+	 * Change IsEquiped field in the Database to 0 
+	 * @param String itemName
+	 */
+	public void itemUnEquipped (String itemName) {
+		
+		try(Connection connection = DriverManager.getConnection(URL, USER, PW)) {
+			
+			String query = "UPDATE inventory i "
+					+ "JOIN item it ON i.ItemID = it.ItemID "
+					+ "SET i.IsEquiped = 0 "
+					+ "WHERE it.Name = \"" + itemName +"\"";
+			
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
+			preparedStatement.executeUpdate();
+			
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
 	public void useItem (String itemName) {
 		
 		try(Connection connection = DriverManager.getConnection(URL, USER, PW)) {
@@ -402,11 +425,10 @@ public class SQLController {
 	}
 	
 	/**
-	 * 
+	 * Get the Description from the Item
 	 * @param itemName
 	 * @return
 	 */
-	
 	public String getItemDescription(String itemName) {
 	    String description = null;
 
