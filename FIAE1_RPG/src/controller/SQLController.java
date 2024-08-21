@@ -512,6 +512,9 @@ public class SQLController {
 				query = "UPDATE journal "
 						+ "SET isActive = 1 "
 						+ "WHERE QuestID = " + questID;
+				
+				preparedStatement = connection.prepareStatement(query);
+				preparedStatement.executeUpdate();
 			}
 			 
 			
