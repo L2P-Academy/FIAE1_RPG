@@ -275,7 +275,7 @@ public class SQLController {
 			String query = "SELECT i.InventoryID, i.ItemID, i.Quantity, it.Name, it.Slot, it.Damage, it.Defense, it.ReqLevel"
 					+ " FROM inventory i"
 					+ " JOIN item it ON i.ItemID = it.ItemID"
-					+ "	WHERE it.Slot != 'None' ORDER BY it.Name ASC";
+					+ "	WHERE it.Slot != 'None' ORDER BY it.Slot ASC";
 					
 					
 			
@@ -363,7 +363,7 @@ public class SQLController {
 	
 	
 	/**
-	 * Change IsEquiped field in the Database from 0 to 1 
+	 * Change IsEquiped field in the Database to 1 
 	 * @param String itemName
 	 */
 	
@@ -385,6 +385,29 @@ public class SQLController {
 		}
 	}
 	
+	/**
+	 * Change IsEquiped field in the Database to 0 
+	 * @param String itemName
+	 */
+	public void itemUnEquipped (String itemName) {
+		
+		try(Connection connection = DriverManager.getConnection(URL, USER, PW)) {
+			
+			String query = "UPDATE inventory i "
+					+ "JOIN item it ON i.ItemID = it.ItemID "
+					+ "SET i.IsEquiped = 0 "
+					+ "WHERE it.Name = \"" + itemName +"\"";
+			
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
+			preparedStatement.executeUpdate();
+			
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
 	public void useItem (String itemName) {
 		
 		try(Connection connection = DriverManager.getConnection(URL, USER, PW)) {
@@ -402,11 +425,10 @@ public class SQLController {
 	}
 	
 	/**
-	 * 
+	 * Get the Description from the Item
 	 * @param itemName
 	 * @return
 	 */
-	
 	public String getItemDescription(String itemName) {
 	    String description = null;
 
@@ -469,6 +491,37 @@ public class SQLController {
 		return activeQuest;
 	}
 	
+	/**
+	 * Method for turnin and accept the following Quest
+	 * @param Integer questID
+	 */
+	public void changeNewQuest(int questID) {
+		
+		try(Connection connection = DriverManager.getConnection(URL, USER, PW)) {
+			
+			String query = "UPDATE journal "
+					+ "SET isActive = 0, IsCompleted = 1 "
+					+ "WHERE QuestID = " + questID;
+			
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
+			preparedStatement.executeUpdate();
+			
+			if(questID > 12) {
+				
+				questID++;
+				query = "UPDATE journal "
+						+ "SET isActive = 1 "
+						+ "WHERE QuestID = " + questID;
+				
+				preparedStatement = connection.prepareStatement(query);
+				preparedStatement.executeUpdate();
+			}
+			 
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
 	/**
 	 * get NPC within all Fields. 
