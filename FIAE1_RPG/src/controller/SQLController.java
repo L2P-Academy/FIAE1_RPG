@@ -275,7 +275,7 @@ public class SQLController {
 			String query = "SELECT i.InventoryID, i.ItemID, i.Quantity, it.Name, it.Slot, it.Damage, it.Defense, it.ReqLevel"
 					+ " FROM inventory i"
 					+ " JOIN item it ON i.ItemID = it.ItemID"
-					+ "	WHERE it.Slot != 'None' ORDER BY it.Name ASC";
+					+ "	WHERE it.Slot != 'None' ORDER BY it.Slot ASC";
 					
 					
 			
