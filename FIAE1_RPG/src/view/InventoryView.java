@@ -30,6 +30,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
+import controller.CharacterController;
 import controller.SQLController;
 import controller.SoundController;
 import model.SerializationIDs;
@@ -46,11 +47,13 @@ public class InventoryView extends JFrame {
 
     private SQLController sqlController;
     private SoundController soundController;
+    public CharacterController characterController;
 
     String imgPath = "res/img/MenuImages/InventoryBackgroundSuggestion1.png";
 
-    public InventoryView() {
+    public InventoryView(CharacterController characterController) {
 
+    	this.characterController = characterController;
         sqlController = new SQLController();
         soundController = new SoundController();
 
@@ -170,7 +173,7 @@ public class InventoryView extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				soundController.playButtonClickSound();
-				new CharacterView();
+				new CharacterView(characterController);
 			}
 		});
         
