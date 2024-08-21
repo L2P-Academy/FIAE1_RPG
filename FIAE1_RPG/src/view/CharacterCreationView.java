@@ -25,6 +25,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
+import controller.CharacterController;
 import controller.SQLController;
 import controller.SoundController;
 import model.PlayerCharacterModel;
@@ -47,14 +48,15 @@ public class CharacterCreationView extends JFrame{
 		classLbl, pickClassLbl, shapeLbl, pickShapeLbl;
 	
 	private JButton finishBtn, rightRaceBtn, leftRaceBtn, rightGenderBtn, leftGenderBtn,
-		rightClassBtn, leftClassBtn, rightShapeBtn, leftShapeBtn; // in UML eintragen
+		rightClassBtn, leftClassBtn, rightShapeBtn, leftShapeBtn;
 	
 	private Font gameFont, gameFontSmall;
 	private SoundController soundController;
 	private SQLController sqlController;
-	private ArrayList<String> raceList, genderList, classList, shapeList;
+	public CharacterController characterController;
+	private ArrayList<String> raceList, genderList, classList;
 	
-	private PlayerCharacterModel playerCharacterModel;
+	private PlayerCharacterModel characterModel;
 	
 	// Image Paths
 	private final String[][] imagePaths = {
@@ -80,7 +82,11 @@ public class CharacterCreationView extends JFrame{
 	
 	private String backgroundImgPath = "res/img/Backgrounds/backgr_ccv_charactercreation1.jpeg";
 		
-	public CharacterCreationView() {
+	public CharacterCreationView(CharacterController characterController) {
+		
+		// initialize
+		this.characterController = characterController;
+		characterModel = characterController.getCharacter();
 			
 		setTitle("Charaktererstellung");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -316,25 +322,89 @@ public class CharacterCreationView extends JFrame{
 					JOptionPane.showMessageDialog(rootPane, 
 							"Bitte gib mindestens 3 Buchstaben ein!");
 				} else {
-					//TODO: Dynamic constructor information not retrieved yet: ID, RaceID, ClassID, Gender
-					playerCharacterModel = new PlayerCharacterModel(1, charNameTxtField.getText(), 3, 2, "m", 1, 0, 100, 1, 100, 100, 100, 100);
+					//TODO: Dynamic constructor information not retrieved yet: RaceID, ClassID, Gender
+					int raceID = 0, classID = 0;
+					String gender = "";
+					
+					// Set RaceID based on the selected race
+					switch (pickRaceLbl.getText()) {
+					case "Mensch": 
+						raceID = 1;
+						break;
+					case "Elf":
+						raceID = 2;
+						break;
+					case "Zwerg":
+						raceID = 3;
+						break;
+					case "Halbling":
+						raceID = 4;
+						break;
+					case "Ork":
+						raceID = 5;
+						break;
+					case "Goblin":
+						raceID = 6;
+						break;
+					default:
+						break;
+					}
+					
+					// Set ClassID based on the selected class
+					switch (pickClassLbl.getText()) {
+					case "Krieger": 
+						classID = 1;
+						break;
+					case "Schurke":
+						classID = 2;
+						break;
+					case "Magier":
+						classID = 3;
+						break;
+					case "Elementarist":
+						classID = 4;
+						break;
+					case "Waldläufer":
+						classID = 5;
+						break;
+					default:
+						break;
+					}
+					switch (pickGenderLbl.getText()) {
+					case "männlich": 
+						gender = "m";
+						break;
+					case "weiblich":
+						gender = "w";
+						break;
+					case "divers":
+						gender = "d";
+						break;
+					default:
+						break;
+					}
+					
+					characterModel = new PlayerCharacterModel(1, charNameTxtField.getText(),
+							raceID, classID, gender, 1, 0, 100, 1, 100, 100, 100, 100);					
 					
 					Map<String, String> playerMap = new HashMap<>();
-					playerMap.put("Name", playerCharacterModel.getName());
-					playerMap.put("RaceID", playerCharacterModel.getRaceID() + "");
-					playerMap.put("ClassID", playerCharacterModel.getClassID() + "");
-					playerMap.put("Gender", playerCharacterModel.getGender());
-					playerMap.put("CurrentLocation", playerCharacterModel.getCurrentLocation() + "");
-					playerMap.put("CurrentXP", playerCharacterModel.getCurrentXP() + "");
-					playerMap.put("MaxXP", playerCharacterModel.getMaxXP() + "");
-					playerMap.put("Level", playerCharacterModel.getLevel() + "");
-					playerMap.put("CurrentHP", playerCharacterModel.getCurrentHP() + "");
-					playerMap.put("MaxHP", playerCharacterModel.getMaxHP() + "");
-					playerMap.put("CurrentMana", playerCharacterModel.getCurrentMana() + "");
-					playerMap.put("MaxMana", playerCharacterModel.getMaxMana() + "");
+					playerMap.put("Name", characterModel.getName());
+					playerMap.put("RaceID", characterModel.getRaceID() + "");
+					playerMap.put("ClassID", characterModel.getClassID() + "");
+					playerMap.put("Gender", characterModel.getGender());
+					playerMap.put("CurrentLocation", characterModel.getCurrentLocation() + "");
+					playerMap.put("CurrentXP", characterModel.getCurrentXP() + "");
+					playerMap.put("MaxXP", characterModel.getMaxXP() + "");
+					playerMap.put("Level", characterModel.getLevel() + "");
+					playerMap.put("CurrentHP", characterModel.getCurrentHP() + "");
+					playerMap.put("MaxHP", characterModel.getMaxHP() + "");
+					playerMap.put("CurrentMana", characterModel.getCurrentMana() + "");
+					playerMap.put("MaxMana", characterModel.getMaxMana() + "");
+					
 					sqlController.insertIntoTable("playercharacter", playerMap);
 					soundController.playButtonClickSound();
-					new IntroView();
+					characterController.setCharacter(characterModel);
+					new IntroView(characterController);
 					dispose();
 				} 
 			}

@@ -5,7 +5,9 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
+import controller.CharacterController;
 import controller.SoundController;
+import model.PlayerCharacterModel;
 import model.SerializationIDs;
 
 public class MainMenuView extends JFrame {
@@ -18,10 +20,15 @@ public class MainMenuView extends JFrame {
 	private String introImgPath = "res/img/MenuImages/Intro_Picture_Suggestion.png";
 	private Font gameFont;
 	private SoundController soundController;
+	private PlayerCharacterModel characterModel;
+	private CharacterController characterController;
 
-	public MainMenuView() {
+	public MainMenuView(CharacterController characterController) {
 
 		// initialize
+		this.characterController = characterController;
+		characterModel = characterController.getCharacter();
+		
 		setTitle("Dungeons & Legends");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -66,7 +73,7 @@ public class MainMenuView extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				soundController.playButtonClickSound();
 				soundController.stopMusicLoop();
-				new CharacterCreationView();
+				new CharacterCreationView(characterController);
 				dispose();
 			}
 		});
@@ -77,10 +84,7 @@ public class MainMenuView extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				soundController.stopMusicLoop();
 				soundController.playButtonClickSound();
-				//TODO: musicClip throws NPE on LoadingScreen
-//				SavegameView savegameView = 
-				new SavegameView();
-//				savegameView.musicClip = soundController.getMusicClip();
+				new SavegameView(characterController);
 
 			}
 		});

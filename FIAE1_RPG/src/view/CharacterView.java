@@ -25,6 +25,7 @@ import javax.swing.plaf.basic.BasicProgressBarUI;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
+import controller.CharacterController;
 import controller.SQLController;
 import model.SerializationIDs;
 
@@ -40,8 +41,10 @@ public class CharacterView extends JFrame{
 	private JScrollPane scrollPane;
 	private JProgressBar hpBar, manaBar, xpBar;
 	private SQLController sqlController;
+	public CharacterController characterController;
 	
-	public CharacterView() {
+	public CharacterView(CharacterController characterController) {
+		this.characterController = characterController;
 		setTitle("Charakterübersicht");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);

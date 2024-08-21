@@ -2,7 +2,9 @@ package view;
 
 import javax.swing.*;
 
+import controller.CharacterController;
 import controller.SoundController;
+import model.PlayerCharacterModel;
 import model.SerializationIDs;
 
 import java.awt.*;
@@ -12,6 +14,8 @@ import java.util.concurrent.TimeUnit;
 
 public class IntroView extends JFrame {
 
+	private PlayerCharacterModel characterModel;
+	public CharacterController characterController;
 	private static final long serialVersionUID = SerializationIDs.introViewID;
 	private SoundController soundController;
 	private JButton nextBtn;
@@ -45,7 +49,10 @@ public class IntroView extends JFrame {
 //    		+ "\n"
 //    		+ "Die Reise beginnt jetzt...";
 
-	public IntroView() {
+	public IntroView(CharacterController characterController) {
+		this.characterController = characterController;
+		characterModel = characterController.getCharacter();
+		
 		setTitle("Intro");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -72,7 +79,7 @@ public class IntroView extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				soundController.stopMusicLoop();
 				soundController.playButtonClickSound();
-				new MapView();
+				new MapView(characterController);
 				dispose();
 			}
 		});

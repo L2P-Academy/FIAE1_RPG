@@ -21,7 +21,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import controller.CharacterController;
 import controller.SoundController;
+import model.PlayerCharacterModel;
 import model.SerializationIDs;
 import view.AnimationComponents.MapAnimationPanel;
 import view.AnimationComponents.MapCharacter;
@@ -41,14 +43,18 @@ public class MapView extends JFrame {
 	private JButton savegameBtn, combatViewBtn, journalViewBtn;
 
 	private SoundController soundController;
+	private CharacterController characterController;
 
 	private Font gameFont;
 	private List<Waypoint> waypoints;
 	private MapCharacter mapCharacter;
 	private MapAnimationPanel mapPanel;
+	private PlayerCharacterModel characterModel;
 
-	public MapView() {
+	public MapView(CharacterController characterController) {
 
+		this.characterController = characterController;
+		characterModel = characterController.getCharacter(); 
 		isMapViewOpen = true;
 		setTitle("Weltkarte");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -142,13 +148,13 @@ public class MapView extends JFrame {
 		savegameBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new SavegameView();
+				new SavegameView(characterController);
 			}
 		});
 		combatViewBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				soundController.stopMusicLoop();
-				new CombatView(1, 1, 1);
+				new CombatView(characterController, 1, 1, 1);
 			}
 		});
 		
@@ -157,7 +163,7 @@ public class MapView extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				soundController.playFxSound("res/soundFX/fxEffects/cloth-inventory.wav");
-				new InventoryView();
+				new InventoryView(characterController);
 			}
 		});
 
@@ -165,7 +171,7 @@ public class MapView extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				soundController.playButtonClickSound();
-				new CharacterView();
+				new CharacterView(characterController);
 			}
 		});
 

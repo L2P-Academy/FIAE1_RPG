@@ -26,6 +26,7 @@ import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
+import controller.CharacterController;
 import controller.SQLController;
 import controller.SoundController;
 import model.PlayerCharacterModel;
@@ -43,9 +44,15 @@ public class SavegameView extends JFrame {
 	private SoundController soundController;
 	private Clip musicClip;
 	private SQLController sqlController;
-	private PlayerCharacterModel playerCharacter;
+	public PlayerCharacterModel playerCharacter;
+	public CharacterController characterController;
+	public PlayerCharacterModel characterModel;
 
-	public SavegameView() {
+	public SavegameView(CharacterController characterController) {
+		
+		// initialize
+		this.characterController = characterController;
+		characterModel = characterController.getCharacter();
 
 		setTitle("Spielstände");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -112,11 +119,18 @@ public class SavegameView extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				soundController.playButtonClickSound();
-				int selectedRow = saveTbl.getSelectedRow() + 1;
-				playerCharacter = sqlController.getCharacterInformation(selectedRow);
-				new MapView();
-				dispose();
+				int selectedRow = saveTbl.getSelectedRow();
+				if (selectedRow >= 0) {
+					soundController.playButtonClickSound();
+					int selectedID = (int) saveTbl.getValueAt(saveTbl.getSelectedRow(), 0);
+					characterController.setCharacter((sqlController.getCharacterInformation(selectedID)));
+					new MapView(characterController);
+					dispose();
+				} else  {
+					JOptionPane.showMessageDialog(SavegameView.this,
+							"Bitte wählen Sie einen Spielstand aus, den Sie laden möchten.", "Keine Auswahl!",
+							JOptionPane.WARNING_MESSAGE);					
+				}				
 			}
 		});
 
