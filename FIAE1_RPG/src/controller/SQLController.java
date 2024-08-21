@@ -362,6 +362,51 @@ public class SQLController {
 	}
 	
 	
+	/**
+	 * Change IsEquiped field in the Database from 0 to 1 
+	 * @param String itemName
+	 */
+	
+	public void itemEquipped (String itemName) {
+		
+		try(Connection connection = DriverManager.getConnection(URL, USER, PW)) {
+			
+			String query = "UPDATE inventory i "
+					+ "JOIN item it ON i.ItemID = it.ItemID "
+					+ "SET i.IsEquiped = 1 "
+					+ "WHERE it.Name = \"" + itemName +"\"";
+			
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
+			preparedStatement.executeUpdate();
+			
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void useItem (String itemName) {
+		
+		try(Connection connection = DriverManager.getConnection(URL, USER, PW)) {
+			
+			String query = "UPDATE inventory i "
+					+ "JOIN item it ON it.ItemID = i.ItemID"
+					+ "SET i.Quantity = i.Quantity-1 "
+					+ "WHERE it.Name = \"" + itemName +"\"";
+			PreparedStatement preparedStatemant = connection.prepareStatement(query);
+			preparedStatemant.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 
+	 * @param itemName
+	 * @return
+	 */
+	
 	public String getItemDescription(String itemName) {
 	    String description = null;
 
@@ -386,7 +431,7 @@ public class SQLController {
 	 * Getting active Quest within all Fields. Used by QuestView and JournalView
 	 * @return QuestModel 
 	 */
-	public QuestModel getActivQuest() {
+	public QuestModel getActiveQuest() {
 		
 		QuestModel activeQuest = null;
 		try(Connection connection = DriverManager.getConnection(URL, USER, PW)) {
@@ -628,4 +673,5 @@ public class SQLController {
 		return playerClass;
 	}
 }
+
 
