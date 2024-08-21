@@ -491,6 +491,34 @@ public class SQLController {
 		return activeQuest;
 	}
 	
+	/**
+	 * Method for turnin and accept the following Quest
+	 * @param Integer questID
+	 */
+	public void changeNewQuest(int questID) {
+		
+		try(Connection connection = DriverManager.getConnection(URL, USER, PW)) {
+			
+			String query = "UPDATE journal "
+					+ "SET isActive = 0, IsCompleted = 1 "
+					+ "WHERE QuestID = " + questID;
+			
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
+			preparedStatement.executeUpdate();
+			
+			if(questID > 12) {
+				
+				questID++;
+				query = "UPDATE journal "
+						+ "SET isActive = 1 "
+						+ "WHERE QuestID = " + questID;
+			}
+			 
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
 	/**
 	 * get NPC within all Fields. 
