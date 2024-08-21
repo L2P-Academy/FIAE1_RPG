@@ -436,7 +436,7 @@ public class SQLController {
 		QuestModel activeQuest = null;
 		try(Connection connection = DriverManager.getConnection(URL, USER, PW)) {
 			 
-			String query = "SELECT * FROM quest WHERE IsActiv = 1";
+			String query = "SELECT * FROM quest WHERE IsActive = 1";
 			PreparedStatement preparedStatement = connection.prepareStatement(query);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			
@@ -447,14 +447,15 @@ public class SQLController {
 				int rewardXP = resultSet.getInt("RewardXP");
 				int rewardGold = resultSet.getInt("RewardGold");
 				boolean isMainQuest = resultSet.getBoolean("IsMainQuest");
-				boolean isActiv = resultSet.getBoolean("IsActiv");
+				boolean isActive = resultSet.getBoolean("IsActive");
 				boolean completed = resultSet.getBoolean("IsCompleted");
 				int item = resultSet.getInt("ItemID");
 				String name = resultSet.getString("Name");
 				String description = resultSet.getString("Description");
 				
 				activeQuest = new QuestModel(questID, reqLevel, rewardXP, item, rewardGold, 
-						isMainQuest, isActiv, completed, name, description);
+						isMainQuest, isActive, completed, name, description);
+				
 				
 				
 			}
