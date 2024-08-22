@@ -2,260 +2,286 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 
+import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import model.SerializationIDs;
-
+import controller.SQLController;
 import controller.SoundController;
-
-
+import model.SerializationIDs;
 
 public class SettingsView extends JFrame{
 	
-	// unique id for serialization purposes
 	private static final long serialVersionUID = SerializationIDs.settingsViewID;
 	
-	// Background Image for the frame
-	private ImageIcon backgroundImage = new ImageIcon("res/img/Backgrounds/settings_background.jpg");
+	private BackGroundPanel settingsBgrPnl;
+	private JPanel titlePnl, buttonPnl, settingsPnl;
+	private JLabel titleLbl, resolutionLbl, volumeLbl, fullscreenLbl;
+	private JButton quitBtn, backBtn, submitBtn, fullscreenBtn, windowBtn;
+	private JSlider volumeSlider;
 	
-	//GameFont
-	private Font gameFont;
+	private Font settingsFont, titleFont;
 	
-	private String settingsFilePath = "settings.txt";
-	File settingsFile = new File(settingsFilePath);
+	private SoundController soundController;
 	
-	SoundController soundController = new SoundController();
+	private SQLController sqlController;
 	
-	private int globalVolume = 50;
-	
-
-	
-	
-	// Constructor
 	public SettingsView() {
 		
-		
-		//set the default window properties
-		setTitle("Einstellungen");
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setExtendedState(JFrame.MAXIMIZED_BOTH);
-		setUndecorated(true);
-		
-		
-		//create the background panel and add it to the main frame
-		BackGroundPanel backgroundPanel = new BackGroundPanel(backgroundImage.getImage());
-		backgroundPanel.setLayout(new BorderLayout());
-		add(backgroundPanel);
-		
-		//VolumeSlider
-        JSlider volumeSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, globalVolume);
-        volumeSlider.setFont(gameFont);
-        volumeSlider.setPreferredSize(new Dimension(200, 30));
-		volumeSlider.setFont(gameFont);
-		volumeSlider.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				int volume = volumeSlider.getValue();
-				
-				float gain = (float) (volume - 50) / 50;
-				float dB = (float) (Math.log(Math.max(gain,  0.0001)) / Math.log(10.0) * 20.0);
-				
-				if (soundController.musicClip != null) {
-					try {
-						FloatControl gainControl = (FloatControl) soundController.musicClip.getControl(FloatControl.Type.MASTER_GAIN);
-						gainControl.setValue(dB);
-					} catch (IllegalArgumentException ex) {
-						ex.printStackTrace();
-					}
-				}
-			}
-		});
-		
-		
-		//Back-Button
-		JButton backButton = new JButton("Zurück");
-		backButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e){
-			dispose(); //Closes the Window
-			}
-		});
-		
-		
-		//Fullscreen Button
-		JButton fullscreenButton = new JButton("Vollbild");
-		fullscreenButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (isUndecorated()) { 				//wenn Vollbild aktiv
-					dispose();						//Schließe Vollbildfenster
-					setUndecorated(false);			//Deaktiviere Vollbild
-					setSize(400,300);				//Setze Fenstergröße
-					setLocationRelativeTo(null);	//Zentriere das Fenster
-					setVisible(true);				//Erzeuge neues Vollbildfenster
-				} else {
-					dispose();
-					setUndecorated(true);
-					setExtendedState(JFrame.MAXIMIZED_BOTH);	//Fenster Maximieren
-					setVisible(true);							//Zeige Fenster wieder an
-				}
-			}
-		});
-		
-		
-		//Exit Button + Save Settings
-		JButton exitButton = new JButton("Beenden");
-		exitButton.addActionListener(new ActionListener() {
-		    @Override
-		    public void actionPerformed(ActionEvent e) {
-		        try (FileWriter writer = new FileWriter(settingsFile)) {
-		            writer.write("vollbild:" + isUndecorated() + "\n");
-		            writer.write("lautstaerke:" + volumeSlider.getValue() + "\n");
-		            writer.flush();
-		        } catch (IOException ex) {
-		            ex.printStackTrace();
-		        }
-
-		        System.exit(0);
-		    }
-		});
-
-		// Einstellungen laden
-		try (BufferedReader reader = new BufferedReader(new FileReader(settingsFile))) {
-		    String line;
-		    while ((line = reader.readLine()) != null) {
-		        String[] parts = line.split(":");
-		        if (parts.length == 2) {
-		            String settingName = parts[0];
-		            String settingValue = parts[1];
-
-		            if (settingName.equals("vollbild")) {
-		                boolean isFullscreen = Boolean.parseBoolean(settingValue);
-		                setUndecorated(isFullscreen);
-		                setExtendedState(isFullscreen ? JFrame.MAXIMIZED_BOTH : JFrame.NORMAL);
-		            } else if (settingName.equals("lautstaerke")) {
-		                int volume = Integer.parseInt(settingValue);
-		                volumeSlider.setValue(volume);
-
-		                float gain = (float) (volume - 50) / 50;
-		                float dB = (float) (Math.log(Math.max(gain, 0.0001)) / Math.log(10.0) * 20.0);
-
-		                if (soundController.musicClip != null) {
-		                    try {
-		                        FloatControl gainControl = (FloatControl) soundController.musicClip.getControl(FloatControl.Type.MASTER_GAIN);
-		                        gainControl.setValue(dB);
-		                    } catch (IllegalArgumentException ex) {
-		                        ex.printStackTrace();
-		                    }
-		                }
-		            } 
-		        }
-		    } 
-
-		    if (!isUndecorated()) {
-		        setSize(800, 600); 
-		        setLocationRelativeTo(null);
-		    }
-
-		} catch (IOException e) {
-		    e.printStackTrace();
+	// Create Window
+	setTitle("Einstellungen");
+	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	setExtendedState(JFrame.MAXIMIZED_BOTH);
+	setUndecorated(true);
+	
+	
+	// SQLController
+	sqlController = new SQLController();
+	
+	// Sound controller
+	soundController = new SoundController();
+	soundController.playMusicLoop("res/soundFX/music/Map_Music.wav");
+	
+	// Create Fonts
+	settingsFont = new Font ("Old English Text MT", Font.BOLD, 32);
+	titleFont = new Font ("Old English Text MT", Font.BOLD, 48);
+	
+	// Title Panel
+	titlePnl = new JPanel(new FlowLayout());
+	titleLbl = new JLabel("Einstellungen");
+	titleLbl.setFont(titleFont);
+	titlePnl.add(titleLbl, BorderLayout.CENTER);
+	titlePnl.setOpaque(false);
+	
+	//Buttons Panel
+	buttonPnl = new JPanel(new FlowLayout());
+	backBtn = new JButton("Zurück");
+	quitBtn = new JButton("Spiel Beenden");
+	submitBtn = new JButton("Einstellung Übernehmen");
+	beautifyButton(backBtn);
+	beautifyButton(quitBtn);
+	beautifyButton(submitBtn);
+	buttonPnl.add(backBtn, BorderLayout.WEST);
+	buttonPnl.add(quitBtn, BorderLayout.CENTER);
+	buttonPnl.add(submitBtn, BorderLayout.EAST);
+	buttonPnl.setOpaque(false);
+	
+	// SettingsPanel
+	settingsPnl =  new JPanel();
+	settingsPnl.setLayout(new BoxLayout(settingsPnl, BoxLayout.Y_AXIS));
+	
+	// Resolution Settings
+	String comboBoxListe[] = {"1280x720", "1920x1080", "2560x1440"};
+	JComboBox resolution = new JComboBox(comboBoxListe);
+	resolution.setMaximumSize(new Dimension(200, resolution.getPreferredSize().height));
+    resolution.setAlignmentX(Component.CENTER_ALIGNMENT);
+	resolutionLbl = new JLabel("Auflösung");
+	resolutionLbl.setFont(settingsFont);
+    resolutionLbl.setAlignmentX(Component.CENTER_ALIGNMENT);
+    
+    
+	// Volume Settings
+	JSlider volumeSlider = new JSlider(0, 100);
+    volumeSlider.setFont(settingsFont);
+    volumeSlider.setMaximumSize(new Dimension(200, 30));
+    volumeSlider.setAlignmentX(Component.CENTER_ALIGNMENT);
+    volumeLbl = new JLabel("Lautstärke");
+    volumeLbl.setFont(settingsFont);
+    volumeLbl.setAlignmentX(Component.CENTER_ALIGNMENT);
+    
+    // Fullscreen Button
+    fullscreenBtn = new JButton("Vollbild");
+    beautifyButton(fullscreenBtn);
+    fullscreenBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+    fullscreenLbl = new JLabel("Vollbild / Fenstermodus");
+    fullscreenLbl.setFont(settingsFont);
+    fullscreenLbl.setAlignmentX(Component.CENTER_ALIGNMENT);
+    
+    // Window Button
+    windowBtn = new JButton("Fenstermodus");
+    beautifyButton(windowBtn);
+    windowBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+    
+	
+	// Add everything to SettingsPanel
+    settingsPnl.add(new JLabel(" "));
+    settingsPnl.add(new JLabel(" "));
+    settingsPnl.add(new JLabel(" "));
+    settingsPnl.add(resolutionLbl);
+    settingsPnl.add(new JLabel(" "));
+	settingsPnl.add(resolution);
+	settingsPnl.add(new JLabel(" "));
+	settingsPnl.add(new JLabel(" "));
+	settingsPnl.add(volumeLbl);
+	settingsPnl.add(new JLabel(" "));
+	settingsPnl.add(volumeSlider);
+	settingsPnl.add(new JLabel(" "));
+	settingsPnl.add(new JLabel(" "));
+	settingsPnl.add(fullscreenLbl);
+	settingsPnl.add(new JLabel(" "));
+	settingsPnl.add(fullscreenBtn);
+	settingsPnl.add(new JLabel(" "));
+	settingsPnl.add(windowBtn);
+	settingsPnl.setOpaque(false);
+	
+	
+	// Add everything to BackgroundPanel
+	settingsBgrPnl = new BackGroundPanel(new ImageIcon("res/img/Backgrounds/settings_background.jpg").getImage());
+	settingsBgrPnl.setLayout(new BorderLayout());
+	settingsBgrPnl.add(buttonPnl, BorderLayout.SOUTH);
+	settingsBgrPnl.add(titlePnl, BorderLayout.NORTH);
+	settingsBgrPnl.add(settingsPnl, BorderLayout.CENTER);
+	
+	
+	// add Everything to Window
+	getContentPane().add(settingsBgrPnl, BorderLayout.CENTER);
+	setLocationRelativeTo(null);
+	setVisible(true);
+	
+	
+	// Action Listener
+	backBtn.addActionListener(new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			soundController.playButtonClickSound();
+			soundController.stopMusicLoop();
+			dispose();
 		}
-
-
-		//Make Font
-		gameFont = new Font("Old English Text MT", Font.BOLD, 32);
-		
-		//Make Buttons Beautiful Again
-		beautifyButton(backButton);
-		beautifyButton(fullscreenButton);
-		beautifyButton(exitButton);
-		
-		//Set Font
-		backButton.setFont(gameFont);
-		fullscreenButton.setFont(gameFont);
-		exitButton.setFont(gameFont);
-		
-		//add buttons to the background panel
-		backgroundPanel.setLayout(new GridBagLayout());
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		gbc.gridwidth = 2;
-		gbc.weightx = 1.0;
-		gbc.weighty = 0.0;
-		gbc.anchor = GridBagConstraints.CENTER;
-		
-		backgroundPanel.add(backButton, gbc);
-		
-		gbc.gridy = 1;
-		backgroundPanel.add(fullscreenButton, gbc);
-		
-		gbc.gridy = 2;
-		backgroundPanel.add(exitButton, gbc);
-		
-		gbc.gridy = 3;
-		gbc.gridwidth = 1;
-		gbc.weightx = 1.0;
-		backgroundPanel.add(volumeSlider, gbc);
-		
-		//Check for Settings File
-		if (!settingsFile.exists()) {
-			try {
-				settingsFile.createNewFile();
-			} catch (Exception e) {
-                e.printStackTrace();
+	});
+	
+	quitBtn.addActionListener(new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			soundController.playButtonClickSound();
+			soundController.stopMusicLoop();
+			System.exit(0);
+		}
+	});
+	
+	submitBtn.addActionListener(new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			soundController.playButtonClickSound();
+			
+		}
+	});
+	
+	
+	// ActionListener for
+	// Resolution Settings
+	
+	
+	// Volume Settings
+	volumeSlider.addChangeListener(new ChangeListener() {
+	    @Override
+	    public void stateChanged(ChangeEvent e) {
+	        int volume = volumeSlider.getValue();
+	        adjustVolume(soundController.getButtonClip(), volume);
+	        adjustVolume(soundController.getAmbientClip(), volume);
+	        adjustVolume(soundController.getMusicClip(), volume);
+	        adjustVolume(soundController.getFxClip(), volume);
+	    }
+	});
+	
+	// Fullscreen Settings
+	fullscreenBtn.addActionListener(new ActionListener() {
+		@Override
+        public void actionPerformed(ActionEvent e) {
+            soundController.playButtonClickSound();
+               setExtendedState(JFrame.MAXIMIZED_BOTH);
+               setUndecorated(true);
+            }  
+	});
+	
+	windowBtn.addActionListener(new ActionListener() {
+		@Override
+        public void actionPerformed(ActionEvent e) {
+            soundController.playButtonClickSound(); 				
+				dispose();						
+				setUndecorated(false);			
+				setSize(1280, 720);				
+				setLocationRelativeTo(null);	
+				setVisible(true);
             }
-		}
-		
-		//set the frame to appear
-		setLocationRelativeTo(null);
-		setVisible(true);
-		
-	 }
-
-	// Modify Buttons
-	public void beautifyButton(JButton button) {
-		button.setFocusPainted(false);
-		button.setBackground(new Color(10, 50, 100));
-		button.setForeground(Color.WHITE);
-		button.setFont(new Font("Old English Text MT", Font.BOLD, 36));
-
-		// Rounded Corners
-		Border border = BorderFactory.createLineBorder(new Color(255, 255, 255), 2);
-		Border roundedBorder = BorderFactory.createCompoundBorder(border,
-				BorderFactory.createEmptyBorder(10, 20, 10, 20));
-		button.setBorder(
-				BorderFactory.createCompoundBorder(roundedBorder, BorderFactory.createEmptyBorder(5, 15, 5, 15)));
-
-		// color change when MouseOver is happening
-		button.addMouseListener(new java.awt.event.MouseAdapter() {
-			public void mouseEntered(java.awt.event.MouseEvent evt) {
-				button.setBackground(new Color(100, 149, 237));
-			}
-
-			public void mouseExited(java.awt.event.MouseEvent evt) {
-				button.setBackground(new Color(10, 50, 100));
-			}
-		});
-	}
+	});
+	
+	// Submit Button
+	submitBtn.addActionListener(new ActionListener() {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+	        soundController.playButtonClickSound();
+	        String selectedResolution = (String) resolution.getSelectedItem();
+	        switch (selectedResolution) {
+	            case "1280x720":
+	                setSize(1280, 720);
+	                break;
+	            case "1920x1080":
+	                setSize(1920, 1080);
+	                break;
+	            case "2560x1440":
+	                setSize(2560, 1440);
+	                break;
+	        }
+	        setLocationRelativeTo(null);
+	    }
+	});
+	
 }
+
+	// Adjust Volume
+	private void adjustVolume(Clip clip, int volume) {
+	    if (clip != null && clip.isOpen()) {
+	        FloatControl volumeControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+	        float range = volumeControl.getMaximum() - volumeControl.getMinimum();
+	        float gain = (range * volume / 100.0f) + volumeControl.getMinimum();
+	        volumeControl.setValue(gain);
+	    }
+	}
+	        
+	
+	// Modify Buttons
+		public void beautifyButton(JButton button) {
+			button.setFocusPainted(false);
+			button.setBackground(new Color(10, 50, 100));
+			button.setForeground(Color.WHITE);
+			button.setFont(new Font("Old English Text MT", Font.BOLD, 36));
+
+			// Rounded Corners
+			Border border = BorderFactory.createLineBorder(new Color(255, 255, 255), 2);
+			Border roundedBorder = BorderFactory.createCompoundBorder(border,
+					BorderFactory.createEmptyBorder(10, 20, 10, 20));
+			button.setBorder(
+					BorderFactory.createCompoundBorder(roundedBorder, BorderFactory.createEmptyBorder(5, 15, 5, 15)));
+
+			// color change when MouseOver is happening
+			button.addMouseListener(new java.awt.event.MouseAdapter() {
+				public void mouseEntered(java.awt.event.MouseEvent evt) {
+					button.setBackground(new Color(100, 149, 237));
+				}
+
+				public void mouseExited(java.awt.event.MouseEvent evt) {
+					button.setBackground(new Color(10, 50, 100));
+				}
+			});
+		}
+	}
+		
