@@ -179,7 +179,7 @@ public class MapView extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				soundController.playFxSound("res/soundFX/fxEffects/turn_page.wav");
-				new JournalView();
+				new JournalView(characterController);
 			}
 		});
 
