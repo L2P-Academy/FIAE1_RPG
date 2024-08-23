@@ -21,8 +21,10 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
+import controller.CharacterController;
 import controller.SQLController;
 import controller.SoundController;
+import model.PlayerCharacterModel;
 import model.QuestModel;
 import model.SerializationIDs;
 
@@ -33,34 +35,23 @@ public class QuestView extends JFrame {
 	private JPanel rewardPnl, dialogPnl, buttonPnl;
 	private JLabel titleLbl, rewardsLbl, xpImgLbl, goldImgLbl, itemImgLbl, nameLbl, npcImgLbl, xpCountLbl, goldCountLbl;
 	private JTextArea dialogTextArea;
-	private JButton acceptBtn, denyBtn;
+	private JButton acceptBtn, finishBtn;
 
 	private QuestModel questModel;
+	private PlayerCharacterModel characterModel;
 
 	private Font titleFont;
 
 	private SoundController soundController;
 	private SQLController sqlController;
+	private CharacterController characterController;
 
-	public QuestView() {
-
-		// Create example quest
-		questModel = new QuestModel(1, // questID
-				1, // reqLevel
-				100, // rewardXP
-				4, // itemID
-				50, // rewardGold
-				true, // isMainQuest
-				true, // isActive
-				false, // isCompleted
-				"Eine lang erwartete Reise", // name
-				"Hey, hey du da! Bist du neu in der Gegend? " + "Ah, du bist auf dem Weg in die große Stadt. "
-						+ "Ich glaube, dann habe ich was für dich. Schau mal in der Taverne vorbei und sag dem Wirt, "
-						+ "Kara schickt dich. Viel Erfolg auf deiner Reise! Wir sollten gemeinsam ein Bier genießen, wenn "
-						+ "wir uns in der Stadt wiedersehen! ");
+	public QuestView(CharacterController characterController) {
+		// initialize
+		this.characterController = characterController;
+		characterModel = characterController.getCharacter();
 
 		// Create window
-		setTitle(questModel.getName());
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setUndecorated(true);
@@ -72,6 +63,12 @@ public class QuestView extends JFrame {
 		// Controller
 		soundController = new SoundController();
 		sqlController = new SQLController();
+		
+		// Create quest
+		questModel = sqlController.getActiveQuest();
+		if (questModel == null) {
+			questModel = sqlController.acceptQuest(1);
+		}
 
 		// Title
 		titlePnl = new BackGroundPanel(new ImageIcon("res/img/MenuImages/QuestTitleBackground.png").getImage());
@@ -117,11 +114,11 @@ public class QuestView extends JFrame {
 
 		buttonPnl = new JPanel(new BorderLayout());
 		acceptBtn = new JButton("Annehmen");
-		denyBtn = new JButton("Ablehnen");
+		finishBtn = new JButton("Abgeben");
 		beautifyButton(acceptBtn);
-		beautifyButton(denyBtn);
+		beautifyButton(finishBtn);
 		buttonPnl.add(acceptBtn, BorderLayout.NORTH);
-		buttonPnl.add(denyBtn, BorderLayout.SOUTH);
+		buttonPnl.add(finishBtn, BorderLayout.SOUTH);
 
 		dialogPnl.add(npcImgLbl, BorderLayout.WEST);
 		dialogPnl.add(dialogTextArea, BorderLayout.CENTER);
@@ -137,21 +134,25 @@ public class QuestView extends JFrame {
 
 		// Animate quest text
 		animateText();
-
-		// ActionListener
+		
+		// ActionListener for accept and finish button
 		acceptBtn.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
+				if (questModel == null) {
+					sqlController.acceptQuest(1);
+				}
+				
+				new MapView(characterController);
+				dispose();
 			}
 		});
 
-		denyBtn.addActionListener(new ActionListener() {
+		finishBtn.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				dispose();
 
 			}
 		});

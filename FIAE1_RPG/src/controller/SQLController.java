@@ -32,41 +32,33 @@ public class SQLController {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public List<PlayerCharacterModel> getAllCharacters() {
 		List<PlayerCharacterModel> characters = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(URL, USER, PW)) {
 			Statement statement = connection.createStatement();
 			ResultSet resultSet = statement.executeQuery("SELECT * FROM playercharacter");
-			
+
 			while (resultSet.next()) {
-				PlayerCharacterModel playerCharacterModel = new PlayerCharacterModel(
-						resultSet.getInt("CharacterID"),
-						resultSet.getString("Name"),
-						resultSet.getInt("RaceID"),
-						resultSet.getInt("ClassID"),
-						resultSet.getString("Gender"),
-						resultSet.getInt("CurrentLocation"),
-						resultSet.getInt("CurrentXP"),
-						resultSet.getInt("MaxXP"),
-						resultSet.getInt("Level"),
-						resultSet.getInt("CurrentHP"),
-						resultSet.getInt("MaxHP"),
-						resultSet.getInt("CurrentMana"),
-						resultSet.getInt("MaxMana")
-					);
+				PlayerCharacterModel playerCharacterModel = new PlayerCharacterModel(resultSet.getInt("CharacterID"),
+						resultSet.getString("Name"), resultSet.getInt("RaceID"), resultSet.getInt("ClassID"),
+						resultSet.getString("Gender"), resultSet.getInt("CurrentLocation"),
+						resultSet.getInt("CurrentXP"), resultSet.getInt("MaxXP"), resultSet.getInt("Level"),
+						resultSet.getInt("CurrentHP"), resultSet.getInt("MaxHP"), resultSet.getInt("CurrentMana"),
+						resultSet.getInt("MaxMana"));
 				characters.add(playerCharacterModel);
 			}
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return characters;
 	}
-	
-	
+
 	/**
-	 * Getting Character Information within all Fields and Values from the Database. Using PreparedStatement and Resultset Class.
+	 * Getting Character Information within all Fields and Values from the Database.
+	 * Using PreparedStatement and Resultset Class.
+	 * 
 	 * @param Integer characterID ID from the Database
 	 * @return PlayerCaracterModel
 	 */
@@ -75,17 +67,17 @@ public class SQLController {
 		try (Connection connection = DriverManager.getConnection(URL, USER, PW)) {
 
 			// SQL-Statement Object
-			//Statement statement = connection.createStatement();
+			// Statement statement = connection.createStatement();
 
 			// query Character information from database -> Load Game
 			// TODO: add dynamic character selection!
 			String query = "SELECT * FROM playercharacter WHERE CharacterID = " + characterID;
 			PreparedStatement preparedStatement = connection.prepareStatement(query);
 //			preparedStatement.setInt(1, characterID);
-			
+
 			ResultSet resultSet = preparedStatement.executeQuery();
 
-			while(resultSet.next()) {
+			while (resultSet.next()) {
 				String name = resultSet.getString("Name");
 				int raceID = resultSet.getInt("RaceID");
 				int classID = resultSet.getInt("ClassID");
@@ -98,14 +90,15 @@ public class SQLController {
 				int currentXP = resultSet.getInt("CurrentXP");
 				int maxXP = resultSet.getInt("MaxXP");
 				int level = resultSet.getInt("Level");
-				
-				character = new PlayerCharacterModel(characterID, name, raceID, classID, gender, currentLocation, currentXP, maxXP, level, currentHP, maxHP, currentMana, maxMana);
-						
+
+				character = new PlayerCharacterModel(characterID, name, raceID, classID, gender, currentLocation,
+						currentXP, maxXP, level, currentHP, maxHP, currentMana, maxMana);
+
 				System.out.println("Charakterinformationen geladen");
 			}
 
 			resultSet.close();
-			//statement.close();
+			// statement.close();
 
 		} catch (Exception e) {
 			System.out.println("Fehler beim Laden des Charakters!");
@@ -113,29 +106,26 @@ public class SQLController {
 		}
 		return character;
 	}
-	
-	
-	
+
 	/**
-	 * Delete specific Dataset from Table 
+	 * Delete specific Dataset from Table
+	 * 
 	 * @param Integer datasetKey primary key
-	 * @param String tableName 
-	 * @param String iDName
+	 * @param String  tableName
+	 * @param String  iDName
 	 */
 	public void deleteDatasetFromTable(int datasetKey, String tableName, String iDName) {
-		
+
 		try (Connection connection = DriverManager.getConnection(URL, USER, PW)) {
-			
+
 			String query = "DELETE FROM " + tableName + " WHERE " + iDName + " = " + datasetKey;
 			PreparedStatement preparedStatement = connection.prepareStatement(query);
 			preparedStatement.executeUpdate();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
-	
+
 //	public void setCharacterInformation(PlayerCharacterModel character) {
 //		
 //		try (Connection connection = DriverManager.getConnection(URL, USER, PW)) {
@@ -155,142 +145,140 @@ public class SQLController {
 //		}
 //		
 //	}
-	
-	
+
 	/**
-	 * Dynamic Method to insert any Data into any Table from the Database. Using Stringbuilder Class to build the query String
-	 * and PreparedStatement Class to execute the query. 
-	 * @param String tableName 
-	 * @param <k> column
-	 * @param <v> value
+	 * Dynamic Method to insert any Data into any Table from the Database. Using
+	 * Stringbuilder Class to build the query String and PreparedStatement Class to
+	 * execute the query.
+	 * 
+	 * @param String tableName
+	 * @param <k>    column
+	 * @param <v>    value
 	 */
 	public void insertIntoTable(String tableName, Map<String, String> columnValueMap) {
-		
+
 		try (Connection connection = DriverManager.getConnection(URL, USER, PW)) {
-			
+
 			StringBuilder columns = new StringBuilder();
 			StringBuilder wildcards = new StringBuilder();
-			// building columns String from all column values and wildcards String ? for every singel value
-			// for loop ends with the last key, in this case the last column name. So ever column name will added
-			// to the columns String + "," . Also the wildcards String gets "?," for each loop pass
-			for (String column: columnValueMap.keySet()) {
+			// building columns String from all column values and wildcards String ? for
+			// every singel value
+			// for loop ends with the last key, in this case the last column name. So ever
+			// column name will added
+			// to the columns String + "," . Also the wildcards String gets "?," for each
+			// loop pass
+			for (String column : columnValueMap.keySet()) {
 				columns.append(column).append(",");
-				wildcards.append("?,");		
+				wildcards.append("?,");
 			}
 			// cut of the last char from the strings, because it is a ","
-			columns.setLength(columns.length()-1);
-			wildcards.setLength(wildcards.length()-1);
+			columns.setLength(columns.length() - 1);
+			wildcards.setLength(wildcards.length() - 1);
 			// building the SQL query
 			String query = "INSERT INTO " + tableName + " (" + columns + ") VALUES (" + wildcards + ")";
 			// try to initialize the PreparedStatement with the query
-			try (PreparedStatement preparedStatement = connection.prepareStatement(query)){
-				
-				//Change Wildcards "?" with the exact column values from the table 
+			try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+				// Change Wildcards "?" with the exact column values from the table
 				int index = 1;
 				for (String value : columnValueMap.values()) {
 					preparedStatement.setString(index++, value);
 				}
-				
+
 				preparedStatement.executeUpdate();
-				System.out.println("Daten wurden in die Tabelle " + tableName + " hinzugefügt! (SQLController.java: 195)");
-			} 
-		} 
-		catch (Exception e) {
+				System.out.println(
+						"Daten wurden in die Tabelle " + tableName + " hinzugefügt! (SQLController.java: 195)");
+			}
+		} catch (Exception e) {
 			System.out.println("Fehler bei der Datenübertragung in die Tabelle " + tableName + " !");
 			e.printStackTrace();
 		}
-	
+
 	}
-	
-	
+
 	/**
-	 * Method to delete 1 Data set from the playercharacter table. Using PreparedStatement Class.
-	 * @param Integer characterID 
+	 * Method to delete 1 Data set from the playercharacter table. Using
+	 * PreparedStatement Class.
+	 * 
+	 * @param Integer characterID
 	 */
 	public void deleteCharacter(int characterID) {
-		
-		try(Connection connection = DriverManager.getConnection(URL, USER, PW)) {
-			
-			if(characterID != 0){
+
+		try (Connection connection = DriverManager.getConnection(URL, USER, PW)) {
+
+			if (characterID != 0) {
 				String query = "DELETE FROM playercharacter WHERE playercharacter.CharacterID = " + characterID;
 				PreparedStatement preparedStatement = connection.prepareStatement(query);
 				preparedStatement.executeUpdate();
 				System.out.println("Charakter gelöscht!");
-			} 
-			else {
+			} else {
 				System.out.println("Ungültige CharacterID.");
 			}
-		
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
-	
+
 	/**
 	 * Method to check if a table has at least one Data Set
+	 * 
 	 * @param String tableName
-	 * @return boolean 
+	 * @return boolean
 	 */
 	public boolean doesDataExistInTable(String tableName) {
-		
+
 		boolean dataExist = false;
-		
+
 		try (Connection connection = DriverManager.getConnection(URL, USER, PW)) {
-			
+
 			String query = "SELECT COUNT(*) FROM " + tableName;
 			PreparedStatement preparedStatment = connection.prepareStatement(query);
 			ResultSet result = preparedStatment.executeQuery();
 			int Quantity = result.getInt(0);
-			if(Quantity > 0) {
+			if (Quantity > 0) {
 				dataExist = true;
 			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return dataExist;
 	}
-	
-	
+
 	/**
-	 * Select all Informations from the DB for the Equipment Table in CharacterView 
+	 * Select all Informations from the DB for the Equipment Table in CharacterView
+	 * 
 	 * @return Object[][]
 	 */
-	public Object[][] getEquipFromInventory(){
-		
+	public Object[][] getEquipFromInventory() {
+
 		int numberOfFields = 7;
 		List<Object[]> resultList = new ArrayList<>();
-		
+
 		try (Connection connection = DriverManager.getConnection(URL, USER, PW)) {
-			
-		
+
 //			String query = "SELECT inventory.InventoryID, inventory.Quantity, inventory.IsEquiped"
 //					+ ", item.Name, item.Slot, item.Damage, item.Defense "
 //					+ "FROM inventory, item "
 //					+ "WHERE item.ItemID = inventory.ItemID" ;
-			
+
 			String query = "SELECT i.InventoryID, i.ItemID, i.Quantity, it.Name, it.Slot, it.Damage, it.Defense, it.ReqLevel"
-					+ " FROM inventory i"
-					+ " JOIN item it ON i.ItemID = it.ItemID"
+					+ " FROM inventory i" + " JOIN item it ON i.ItemID = it.ItemID"
 					+ "	WHERE it.Slot != 'None' ORDER BY it.Slot ASC";
-					
-					
-			
+
 			PreparedStatement preparedStatement = connection.prepareStatement(query);
 			ResultSet resultSet = preparedStatement.executeQuery();
-			
-			while(resultSet.next()) {
+
+			while (resultSet.next()) {
 				String name = resultSet.getString("Name");
-				String slot = resultSet.getString("Slot");				
+				String slot = resultSet.getString("Slot");
 				int inventoryID = resultSet.getInt("InventoryID");
 				int quantity = resultSet.getInt("Quantity");
 				int damage = resultSet.getInt("Damage");
 				int defense = resultSet.getInt("Defense");
 				int reqLevel = resultSet.getInt("ReqLevel");
-				
+
 				Object[] row = new Object[numberOfFields];
 				row[0] = name;
 				row[1] = slot;
@@ -299,247 +287,255 @@ public class SQLController {
 				row[4] = reqLevel;
 				row[5] = inventoryID;
 				row[6] = quantity;
-				
+
 				resultList.add(row);
-				
+
 			}
-			
-			
-			
-		} 
-			catch (Exception e) {
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return convertListToObjectArray(resultList, numberOfFields);
 	}
-	
+
 	/**
-	 * Specific Method for getting all Items from the Inventory within the fields(DB) InventoryID, Quantity, Value and Name. 
-	 * Used by the InventoryView 
+	 * Specific Method for getting all Items from the Inventory within the
+	 * fields(DB) InventoryID, Quantity, Value and Name. Used by the InventoryView
 	 * 
-	 * @return Object[][] 
+	 * @return Object[][]
 	 */
-	public Object[][] getItemsFromInventory(){
-		
+	public Object[][] getItemsFromInventory() {
+
 		int numberOfFields = 5;
 		List<Object[]> resultList = new ArrayList<>();
-		
-		try(Connection connection = DriverManager.getConnection(URL, USER, PW)) {
-			
-			String query = "SELECT i.InventoryID, i.Quantity, it.Name, it.Value "
-					+ "From inventory i "
-					+ "JOIN item it ON i.ItemID = it.ItemID "
-					+ "ORDER BY i.InventoryID ASC";
-			
+
+		try (Connection connection = DriverManager.getConnection(URL, USER, PW)) {
+
+			String query = "SELECT i.InventoryID, i.Quantity, it.Name, it.Value " + "From inventory i "
+					+ "JOIN item it ON i.ItemID = it.ItemID " + "ORDER BY i.InventoryID ASC";
+
 			PreparedStatement preparedStatement = connection.prepareStatement(query);
 			ResultSet resultSet = preparedStatement.executeQuery();
-			
-			//Loop to turn all Datasets from the Result List to the Object List
-			while(resultSet.next()) {
+
+			// Loop to turn all Datasets from the Result List to the Object List
+			while (resultSet.next()) {
 				int inventoryID = resultSet.getInt("InventoryID");
 				int quantity = resultSet.getInt("Quantity");
 				int value = resultSet.getInt("Value");
 				int totalValue = quantity * value;
 				String name = resultSet.getString("Name");
-				
+
 				Object[] row = new Object[numberOfFields];
 				row[0] = inventoryID;
 				row[1] = name;
 				row[2] = quantity;
 				row[3] = value;
 				row[4] = totalValue;
-				
+
 				resultList.add(row);
-				
+
 			}
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return convertListToObjectArray(resultList, numberOfFields);
-		
+
 	}
-	
-	
+
 	/**
-	 * Change IsEquiped field in the Database to 1 
+	 * Change IsEquiped field in the Database to 1
+	 * 
 	 * @param String itemName
 	 */
-	
-	public void itemEquipped (String itemName) {
-		
-		try(Connection connection = DriverManager.getConnection(URL, USER, PW)) {
-			
-			String query = "UPDATE inventory i "
-					+ "JOIN item it ON i.ItemID = it.ItemID "
-					+ "SET i.IsEquiped = 1 "
-					+ "WHERE it.Name = \"" + itemName +"\"";
-			
+
+	public void itemEquipped(String itemName) {
+
+		try (Connection connection = DriverManager.getConnection(URL, USER, PW)) {
+
+			String query = "UPDATE inventory i " + "JOIN item it ON i.ItemID = it.ItemID " + "SET i.IsEquiped = 1 "
+					+ "WHERE it.Name = \"" + itemName + "\"";
+
 			PreparedStatement preparedStatement = connection.prepareStatement(query);
 			preparedStatement.executeUpdate();
-			
-		
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
-	 * Change IsEquiped field in the Database to 0 
+	 * Change IsEquiped field in the Database to 0
+	 * 
 	 * @param String itemName
 	 */
-	public void itemUnEquipped (String itemName) {
-		
-		try(Connection connection = DriverManager.getConnection(URL, USER, PW)) {
-			
-			String query = "UPDATE inventory i "
-					+ "JOIN item it ON i.ItemID = it.ItemID "
-					+ "SET i.IsEquiped = 0 "
-					+ "WHERE it.Name = \"" + itemName +"\"";
-			
+	public void itemUnEquipped(String itemName) {
+
+		try (Connection connection = DriverManager.getConnection(URL, USER, PW)) {
+
+			String query = "UPDATE inventory i " + "JOIN item it ON i.ItemID = it.ItemID " + "SET i.IsEquiped = 0 "
+					+ "WHERE it.Name = \"" + itemName + "\"";
+
 			PreparedStatement preparedStatement = connection.prepareStatement(query);
 			preparedStatement.executeUpdate();
-			
-		
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
-	
-	public void useItem (String itemName) {
-		
-		try(Connection connection = DriverManager.getConnection(URL, USER, PW)) {
-			
-			String query = "UPDATE inventory i "
-					+ "JOIN item it ON it.ItemID = i.ItemID"
-					+ "SET i.Quantity = i.Quantity-1 "
-					+ "WHERE it.Name = \"" + itemName +"\"";
+
+	public void useItem(String itemName) {
+
+		try (Connection connection = DriverManager.getConnection(URL, USER, PW)) {
+
+			String query = "UPDATE inventory i " + "JOIN item it ON it.ItemID = i.ItemID"
+					+ "SET i.Quantity = i.Quantity-1 " + "WHERE it.Name = \"" + itemName + "\"";
 			PreparedStatement preparedStatemant = connection.prepareStatement(query);
 			preparedStatemant.executeUpdate();
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Get the Description from the Item
+	 * 
 	 * @param itemName
 	 * @return
 	 */
 	public String getItemDescription(String itemName) {
-	    String description = null;
+		String description = null;
 
-	    try (Connection connection = DriverManager.getConnection(URL, USER, PW)) {
-	        String query = "SELECT Description FROM item WHERE Name = ?";
-	        PreparedStatement preparedStatement = connection.prepareStatement(query);
-	        preparedStatement.setString(1, itemName);
-	        ResultSet resultSet = preparedStatement.executeQuery();
+		try (Connection connection = DriverManager.getConnection(URL, USER, PW)) {
+			String query = "SELECT Description FROM item WHERE Name = ?";
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
+			preparedStatement.setString(1, itemName);
+			ResultSet resultSet = preparedStatement.executeQuery();
 
-	        if (resultSet.next()) {
-	            description = resultSet.getString("Description");
-	        }
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
+			if (resultSet.next()) {
+				description = resultSet.getString("Description");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-	    return description;
+		return description;
 	}
-	
-	
+
 	/**
 	 * Getting active Quest within all Fields. Used by QuestView and JournalView
-	 * @return QuestModel 
+	 * 
+	 * @return QuestModel
 	 */
 	public QuestModel getActiveQuest() {
 		
-		QuestModel activeQuest = null;
-		try(Connection connection = DriverManager.getConnection(URL, USER, PW)) {
-			 
-			String query = "SELECT * FROM quest WHERE IsActive = 1";
+		QuestModel activeQuest;
+
+		try (Connection connection = DriverManager.getConnection(URL, USER, PW)) {
+
+			String query = "SELECT * FROM quest q JOIN journal j ON q.QuestID = j.QuestID WHERE j.IsActive = 1";
 			PreparedStatement preparedStatement = connection.prepareStatement(query);
 			ResultSet resultSet = preparedStatement.executeQuery();
-			
-			while(resultSet.next()) {
-				
+
+			while (resultSet.next()) {
+
 				int questID = resultSet.getInt("QuestID");
 				int reqLevel = resultSet.getInt("ReqLevel");
 				int rewardXP = resultSet.getInt("RewardXP");
 				int rewardGold = resultSet.getInt("RewardGold");
-				boolean isMainQuest = resultSet.getBoolean("IsMainQuest");
-				boolean isActive = resultSet.getBoolean("IsActive");
-				boolean completed = resultSet.getBoolean("IsCompleted");
 				int item = resultSet.getInt("ItemID");
 				String name = resultSet.getString("Name");
 				String description = resultSet.getString("Description");
-				
-				activeQuest = new QuestModel(questID, reqLevel, rewardXP, item, rewardGold, 
-						isMainQuest, isActive, completed, name, description);
-				
-				
-				
+
+				activeQuest = new QuestModel(questID, reqLevel, rewardXP, item, rewardGold, name, description);
+				return activeQuest;
 			}
-				
-				
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+		return null;
+	}
+
+	public QuestModel acceptQuest(int questID) {
+
+		QuestModel activeQuest = null;
+		try (Connection connection = DriverManager.getConnection(URL, USER, PW)) {
+
+			String query = "SELECT * FROM quest WHERE QuestID = " + questID;
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+
+				int ID = resultSet.getInt("QuestID");
+				int reqLevel = resultSet.getInt("ReqLevel");
+				int rewardXP = resultSet.getInt("RewardXP");
+				int rewardGold = resultSet.getInt("RewardGold");
+				int item = resultSet.getInt("ItemID");
+				String name = resultSet.getString("Name");
+				String description = resultSet.getString("Description");
+
+				activeQuest = new QuestModel(ID, reqLevel, rewardXP, item, rewardGold, name, description);
+				query = "INSERT INTO journal (JournalID, IsCompleted, IsActive, QuestID) VALUES (" + questID
+						+ ", 0, 1, " + questID + ");";
+				PreparedStatement preparedStatement2 = connection.prepareStatement(query);
+				preparedStatement2.executeUpdate();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		return activeQuest;
 	}
-	
+
 	/**
 	 * Method for turnin and accept the following Quest
+	 * 
 	 * @param Integer questID
 	 */
 	public void changeNewQuest(int questID) {
-		
-		try(Connection connection = DriverManager.getConnection(URL, USER, PW)) {
-			
-			String query = "UPDATE journal "
-					+ "SET isActive = 0, IsCompleted = 1 "
-					+ "WHERE QuestID = " + questID;
-			
+
+		try (Connection connection = DriverManager.getConnection(URL, USER, PW)) {
+
+			String query = "UPDATE journal " + "SET isActive = 0, IsCompleted = 1 " + "WHERE QuestID = " + questID;
+
 			PreparedStatement preparedStatement = connection.prepareStatement(query);
 			preparedStatement.executeUpdate();
-			
-			if(questID > 12) {
-				
+
+			if (questID > 12) {
+
 				questID++;
-				query = "UPDATE journal "
-						+ "SET isActive = 1 "
-						+ "WHERE QuestID = " + questID;
-				
+				query = "UPDATE journal " + "SET isActive = 1 " + "WHERE QuestID = " + questID;
+
 				preparedStatement = connection.prepareStatement(query);
 				preparedStatement.executeUpdate();
 			}
-			 
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
-	 * get NPC within all Fields. 
+	 * get NPC within all Fields.
+	 * 
 	 * @param Integer NpcID
 	 * @return NpcModel
-	 */	
+	 */
 	public NpcModel getNpcModelFromID(int NpcID) {
-		
+
 		NpcModel npc = null;
-		
-		try(Connection connection = DriverManager.getConnection(URL, USER, PW)) {
-			
+
+		try (Connection connection = DriverManager.getConnection(URL, USER, PW)) {
+
 			String query = "SELECT * FROM npc WHERE NpcID = " + NpcID;
 			PreparedStatement preparedStatement = connection.prepareStatement(query);
 			ResultSet resultSet = preparedStatement.executeQuery();
-			
-			while(resultSet.next()) {
-				
+
+			while (resultSet.next()) {
+
 				int iD = resultSet.getInt("NpcID");
 				int questID = resultSet.getInt("QuestID");
 				int hP = resultSet.getInt("HP");
@@ -552,180 +548,172 @@ public class SQLController {
 				// TODO Warum braucht man hier ein ENUM?
 				npc = new NpcModel(NpcID, questID, hP, killXP, level, itemID, null, name);
 			}
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return npc;
 	}
-	
-	
+
 	/**
 	 * Convert ItemID to specific Item Name. For every View with Quests
+	 * 
 	 * @param Integer itemID
-	 * @return String itemName 
+	 * @return String itemName
 	 */
-	
+
 	public String getItemNameFromItemID(int itemID) {
-		
+
 		String itemName = null;
-		
-		try(Connection connection = DriverManager.getConnection(URL, USER, PW)) {
-			
+
+		try (Connection connection = DriverManager.getConnection(URL, USER, PW)) {
+
 			String query = "SELECT Item.Name FROM item WHERE ItemID = " + itemID;
 			PreparedStatement preparedStatement = connection.prepareStatement(query);
 			ResultSet resultSet = preparedStatement.executeQuery();
-			if(resultSet.next()) {
+			if (resultSet.next()) {
 				itemName = resultSet.getString("Name");
 			}
-			
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return itemName;
 	}
-	
+
 	/**
-	 * Update one specific value in a table 
-	 * @param Integer datasetKey primary key 
-	 * @param String tableName 
-	 * @param String fieldName
-	 * @param String value
-	 * @param String iDName
+	 * Update one specific value in a table
+	 * 
+	 * @param Integer datasetKey primary key
+	 * @param String  tableName
+	 * @param String  fieldName
+	 * @param String  value
+	 * @param String  iDName
 	 */
 	public void updateSpecificValue(int datasetKey, String tableName, String fieldName, String value, String iDName) {
-		
+
 		try (Connection connection = DriverManager.getConnection(URL, USER, PW)) {
-			
-			String query = "UPDATE " + tableName +" SET " + fieldName + " = " + value + " WHERE " 
-							+ tableName + "." + iDName + " = " + datasetKey;
+
+			String query = "UPDATE " + tableName + " SET " + fieldName + " = " + value + " WHERE " + tableName + "."
+					+ iDName + " = " + datasetKey;
 			PreparedStatement preparedStatement = connection.prepareStatement(query);
 			preparedStatement.executeUpdate();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
-	public Object[][] convertListToObjectArray(List<Object[]> list, int fields){
-		
+
+	public Object[][] convertListToObjectArray(List<Object[]> list, int fields) {
+
 		Object[][] dataArray = new Object[list.size()][fields];
-		
-		for(int i = 0; i < list.size(); i++ ) {
-			
+
+		for (int i = 0; i < list.size(); i++) {
+
 			dataArray[i] = list.get(i);
 		}
-		
+
 		return dataArray;
 	}
-	
-	
+
 	/**
 	 * Count all existent datasets from a table
+	 * 
 	 * @param tableName
-	 * @return int 
+	 * @return int
 	 */
 	public int getNumberOfDatasets(String tableName) {
-		
+
 		int anzahl = 0;
-		
+
 		try (Connection connection = DriverManager.getConnection(URL, USER, PW)) {
 			String query = "SELECT COUNT(*) FROM " + tableName;
 			PreparedStatement preparedStatement = connection.prepareStatement(query);
 			ResultSet resultSet = preparedStatement.executeQuery();
-			if(resultSet.next()) {
+			if (resultSet.next()) {
 				anzahl = resultSet.getInt(1);
 			}
-			
-			
-		}
-		catch (Exception e) {
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return anzahl;
 	}
-	
-	
+
 	/**
 	 * convert RaceID to the actually Race name
+	 * 
 	 * @param Integer raceID
 	 * @return String race Name
 	 */
 	public String convertRaceIDToString(int raceID) {
-		String race ="";
-		
-		switch(raceID) {
-		
-			case 1:
-				race = "Mensch";
-				break;
-				
-			case 2:
-				race = "Elf";
-				break;
-				
-			case 3:
-				race = "Zwerg";
-				break;
-				
-			case 4:
-				race = "Halbling";
-				break;
-				
-			case 5:
-				race = "Ork";
-				break;
-				
-			case 6:
-				race = "Goblin";
-				break;
-			
+		String race = "";
+
+		switch (raceID) {
+
+		case 1:
+			race = "Mensch";
+			break;
+
+		case 2:
+			race = "Elf";
+			break;
+
+		case 3:
+			race = "Zwerg";
+			break;
+
+		case 4:
+			race = "Halbling";
+			break;
+
+		case 5:
+			race = "Ork";
+			break;
+
+		case 6:
+			race = "Goblin";
+			break;
+
 		}
 		return race;
 	}
-	
-	
+
 	/**
 	 * convert ClassID to the actually Class name
+	 * 
 	 * @param Integer ClassID
 	 * @return String Class name
 	 */
-	 
-	
-	public String convertClassIDToString(int ClassID) {
-		String playerClass ="";
-		
-		switch(ClassID) {
-		
-			case 1:
-				playerClass = "Krieger";
-				break;
-				
-			case 2:
-				playerClass = "Schurke";
-				break;
-				
-			case 3:
-				playerClass = "Magier";
-				break;
-				
-			case 4:
-				playerClass = "Elementarist";
-				break;
-				
-			case 5:
-				playerClass = "Waldläufer";
-				break;
-				
 
-			
+	public String convertClassIDToString(int ClassID) {
+		String playerClass = "";
+
+		switch (ClassID) {
+
+		case 1:
+			playerClass = "Krieger";
+			break;
+
+		case 2:
+			playerClass = "Schurke";
+			break;
+
+		case 3:
+			playerClass = "Magier";
+			break;
+
+		case 4:
+			playerClass = "Elementarist";
+			break;
+
+		case 5:
+			playerClass = "Waldläufer";
+			break;
+
 		}
 		return playerClass;
 	}
 }
-
-

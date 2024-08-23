@@ -21,6 +21,10 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableModel;
 
+import controller.CharacterController;
+import controller.SQLController;
+import model.PlayerCharacterModel;
+import model.QuestModel;
 import model.SerializationIDs;
 
 public class JournalView extends JFrame {
@@ -33,8 +37,17 @@ public class JournalView extends JFrame {
 	private String backgroundImgPath = "res/img/MenuImages/Journalview_Background2.png";
 	private JTable questsTbl;
 	private Font gameFont;
+	private SQLController sqlController;
+	private CharacterController characterController;
+	private QuestModel questModel;
+	private PlayerCharacterModel characterModel;
 
-	public JournalView() {
+	public JournalView(CharacterController characterController) {
+		
+		sqlController = new SQLController();
+		this.characterController = characterController;
+		characterModel = characterController.getCharacter();
+		questModel = sqlController.getActiveQuest();
 
 		setTitle("Quest-Tagebuch");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -43,6 +56,7 @@ public class JournalView extends JFrame {
 
 		// Game font
 		gameFont = new Font("Old English Text MT", Font.BOLD, 64);
+		Font headerFont = new Font("Arial", Font.BOLD, 38);
 
 		// Labels and buttons
 		detailsBtn = new JButton("Quest-Details");
@@ -58,14 +72,16 @@ public class JournalView extends JFrame {
 		buttonPnl = new JPanel(new FlowLayout());
 
 		// Example Data for the quest table
-		String[] headerData = { "Name", "Beschreibung","Level","Gold","XP","Questgeber", "Belohnung" };
-		Object[][] exampleData = {
-				{"Eine lang erwartete Reise","Besuche die Taverne im Dorf!","1","50","100","Tavernenwirt","Weltkarte"},
+		String[] headerData = { "Name", "Beschreibung","Level","Gold","XP", "Belohnung" };
+		
+		Object[][] questData = {
+				{questModel.getName(),questModel.getDescription(),questModel.getReqLevel(),questModel.getRewardGold(),
+					questModel.getRewardXP(),questModel.getItemID()},
 		};
 		
 		// Creates a table model with example data	
-		DefaultTableModel tableModel = new DefaultTableModel(exampleData, headerData);
-
+		DefaultTableModel tableModel = new DefaultTableModel(questData, headerData);
+		
 		// Create table
 		questsTbl = new JTable(tableModel);
 		questsTbl.setOpaque(false);
@@ -74,6 +90,16 @@ public class JournalView extends JFrame {
 		questsTbl.setRowHeight(42);
 		questsTbl.setForeground(Color.white);
 		((DefaultTableCellRenderer) questsTbl.getDefaultRenderer(Object.class)).setOpaque(false);
+		
+		// Adjust column widths
+		questsTbl.getColumnModel().getColumn(0).setPreferredWidth(350);
+		questsTbl.getColumnModel().getColumn(1).setPreferredWidth(500);
+		questsTbl.getColumnModel().getColumn(2).setPreferredWidth(20);
+		questsTbl.getColumnModel().getColumn(3).setPreferredWidth(20);
+		questsTbl.getColumnModel().getColumn(4).setPreferredWidth(20);
+		questsTbl.getColumnModel().getColumn(5).setPreferredWidth(50);
+		JTableHeader tableHeader = questsTbl.getTableHeader();
+		tableHeader.setFont(headerFont);
 		
 		//Inserts the table into a scroll pane if the amount of data increases
 		JScrollPane scrollPane = new JScrollPane(questsTbl);
@@ -94,7 +120,7 @@ public class JournalView extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new QuestView();
+				new QuestView(characterController);
 
 			}
 		});
@@ -137,9 +163,19 @@ public class JournalView extends JFrame {
 			}
 		});
 	}
-		// Main method for testing
-	public static void main (String[] args) {
-		new JournalView();
+	private Object[][] checkActiveQuest() {
+		questModel = sqlController.getActiveQuest();
+		if (questModel == null) {
+			Object[][] questData = {
+					{"", "", "", "", "", "",},
+			};
+			return questData;
+		} else {
+			Object[][] questData = {
+					{questModel.getName(),questModel.getDescription(),questModel.getReqLevel(),questModel.getRewardGold(),
+						questModel.getRewardXP(),questModel.getItemID()},
+			};
+			return questData;
+		}
 	}
-
 }

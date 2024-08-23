@@ -20,16 +20,7 @@ public class IntroView extends JFrame {
 	private SoundController soundController;
 	private JButton nextBtn;
 	private JTextArea scrollingTextArea;
-	private String introText = "Heute ist der Tag, an dem du dein Abenteuer beginnst!\n"
-	+ "\n"
-	+ "Du hast deine gesamte Kindheit im beschaulichen kleinen Eichenhain verbracht, in den blühenden Wiesen gespielt, im Wald die höchsten Bäume erklommen und mit deinem selbstgebauten Holzschwert gegen Schattenmonster gekämpft. Nach dem Tod eurer Eltern hast du mit deinem Bruder Rida den Hof geführt, jeden Morgen frisches Brot gebacken, die Ziegen gemolken und das Feld bestellt. \n"
-	+ "\n"
-	+ "Doch nach dem letzten Winter ist kaum noch etwas von der Idylle übrig. Die nordische Kälte hat die Frühjahrsernte vernichtet, die Sommerernte wurde von Überflutungen weggeschwemmt und nun steht bereits der nächste Spätherbst ins Haus. Das einst laute, fröhliche Dorf steht nahezu leer, selbst die Händler machen sich kaum noch auf den Weg in diesen Teil des Königreiches. Nur die alte Margarete harrt noch aus und häkelt warme Söckchen für die Kinder, die bestimmt eines Tages wieder hier spielen werden. Nichts erinnert noch an den Ort, an dem du dein ganzes Leben verbringen wolltest.\n"
-	+ "\n"
-	+ "Eines Morgens schlägst du die Augen auf, schaust dich in deinem spärlich eingerichteten, staubigen Zimmer um und weißt, du musst hier raus. Du wartest auf Rida, der spät vom Holz fällen heim kommt, um ihm deinen Entschluss mitzuteilen: ein Neuanfang in der großen Stadt! \n"
-	+ "\n"
-	+ "Doch die Stadt ist weit entfernt und du hast viele Geschichten über Geister, Drachen und Zauberer gehört. Bist du für diese gefährliche, lange aber aufregende Reise bereit? ";
-
+	private String introText;
 //    		"In einer Welt, in der Magie und Abenteuer allgegenwärtig sind, "
 //    		+ "ruht das Schicksal auf den Schultern eines mutigen Helden. "
 //    		+ "In einem malerischen Dorf namens Eichenhain, umgeben von majestätischen Wäldern "
@@ -52,6 +43,17 @@ public class IntroView extends JFrame {
 	public IntroView(CharacterController characterController) {
 		this.characterController = characterController;
 		characterModel = characterController.getCharacter();
+		
+		introText = characterModel.getName() + "! Heute ist der Tag, an dem du dein Abenteuer beginnst!\n"
+				+ "\n"
+				+ "Du hast deine gesamte Kindheit im beschaulichen kleinen Eichenhain verbracht, in den blühenden Wiesen gespielt, im Wald die höchsten Bäume erklommen und mit deinem selbstgebauten Holzschwert gegen Schattenmonster gekämpft. Nach dem Tod eurer Eltern hast du mit deinem Bruder Rida den Hof geführt, jeden Morgen frisches Brot gebacken, die Ziegen gemolken und das Feld bestellt. \n"
+				+ "\n"
+				+ "Doch nach dem letzten Winter ist kaum noch etwas von der Idylle übrig. Die nordische Kälte hat die Frühjahrsernte vernichtet, die Sommerernte wurde von Überflutungen weggeschwemmt und nun steht bereits der nächste Spätherbst ins Haus. Das einst laute, fröhliche Dorf steht nahezu leer, selbst die Händler machen sich kaum noch auf den Weg in diesen Teil des Königreiches. Nur die alte Margarete harrt noch aus und häkelt warme Söckchen für die Kinder, die bestimmt eines Tages wieder hier spielen werden. Nichts erinnert noch an den Ort, an dem du dein ganzes Leben verbringen wolltest.\n"
+				+ "\n"
+				+ "Eines Morgens schlägst du die Augen auf, schaust dich in deinem spärlich eingerichteten, staubigen Zimmer um und weißt, du musst hier raus. Du wartest auf Rida, der spät vom Holz fällen heim kommt, um ihm deinen Entschluss mitzuteilen: ein Neuanfang in der großen Stadt! \n"
+				+ "\n"
+				+ "Doch die Stadt ist weit entfernt und du hast viele Geschichten über Geister, Drachen und Zauberer gehört. Bist du für diese gefährliche, lange aber aufregende Reise bereit? ";
+
 		
 		setTitle("Intro");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -79,7 +81,7 @@ public class IntroView extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				soundController.stopMusicLoop();
 				soundController.playButtonClickSound();
-				new MapView(characterController);
+				new QuestView(characterController);
 				dispose();
 			}
 		});
