@@ -40,9 +40,10 @@ public class IntroView extends JFrame {
 //    		+ "\n"
 //    		+ "Die Reise beginnt jetzt...";
 
-	public IntroView(CharacterController characterController) {
+	public IntroView(CharacterController characterController, SoundController soundController) {
 		this.characterController = characterController;
 		characterModel = characterController.getCharacter();
+		this.soundController = soundController;
 		
 		introText = characterModel.getName() + "! Heute ist der Tag, an dem du dein Abenteuer beginnst!\n"
 				+ "\n"
@@ -59,9 +60,6 @@ public class IntroView extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setUndecorated(true);
-
-		// Soundcontroller Init
-		soundController = new SoundController();
 
 		scrollingTextArea = new JTextArea();
 		scrollingTextArea.setFont(new Font("Calisto MT", Font.PLAIN, 32)); // Schriftart anpassen
@@ -81,7 +79,7 @@ public class IntroView extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				soundController.stopMusicLoop();
 				soundController.playButtonClickSound();
-				new QuestView(characterController);
+				new QuestView(characterController, soundController);
 				dispose();
 			}
 		});

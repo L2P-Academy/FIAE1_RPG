@@ -27,6 +27,7 @@ import javax.swing.table.JTableHeader;
 
 import controller.CharacterController;
 import controller.SQLController;
+import controller.SoundController;
 import controller.TableTransferHandler;
 import model.PlayerCharacterModel;
 import model.SerializationIDs;
@@ -43,6 +44,7 @@ public class CharacterView extends JFrame {
 	private JProgressBar hpBar, manaBar, xpBar;
 	private SQLController sqlController;
 	public CharacterController characterController;
+	private SoundController soundController;
 	private PlayerCharacterModel characterModel;
 	private int genderIndex;
 	private String gender;
@@ -66,11 +68,13 @@ public class CharacterView extends JFrame {
 					"res/img/CharacterPortraits/New_Race_Gender/new_goblin_female.png",
 					"res/img/CharacterPortraits/New_Race_Gender/new_goblin_divers.png" } };
 
-	public CharacterView(CharacterController characterController) {
+	public CharacterView(CharacterController characterController, SoundController soundController) {
 
 		// initialize
 		this.characterController = characterController;
 		characterModel = characterController.getCharacter();
+		this.soundController = soundController;
+		
 		setTitle("Charakterübersicht");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -209,6 +213,7 @@ public class CharacterView extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
+            	soundController.playButtonClickSound();
                 dispose();
                 // TODO: Set Items equipped on isEquipped=1 on DB!
             }

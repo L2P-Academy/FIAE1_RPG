@@ -46,9 +46,10 @@ public class QuestView extends JFrame {
 	private SQLController sqlController;
 	private CharacterController characterController;
 
-	public QuestView(CharacterController characterController) {
+	public QuestView(CharacterController characterController, SoundController soundController) {
 		// initialize
 		this.characterController = characterController;
+		this.soundController = soundController;
 		characterModel = characterController.getCharacter();
 
 		// Create window
@@ -61,7 +62,6 @@ public class QuestView extends JFrame {
 		Font textFont = new Font("Arial", Font.ITALIC, 28);
 
 		// Controller
-		soundController = new SoundController();
 		sqlController = new SQLController();
 		
 		// Create quest
@@ -144,7 +144,7 @@ public class QuestView extends JFrame {
 					sqlController.acceptQuest(1);
 				}
 				
-				new MapView(characterController);
+				new MapView(characterController, soundController);
 				dispose();
 			}
 		});

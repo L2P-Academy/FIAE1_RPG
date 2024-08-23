@@ -23,6 +23,7 @@ import javax.swing.table.TableModel;
 
 import controller.CharacterController;
 import controller.SQLController;
+import controller.SoundController;
 import model.PlayerCharacterModel;
 import model.QuestModel;
 import model.SerializationIDs;
@@ -39,15 +40,17 @@ public class JournalView extends JFrame {
 	private Font gameFont;
 	private SQLController sqlController;
 	private CharacterController characterController;
+	private SoundController soundController;
 	private QuestModel questModel;
 	private PlayerCharacterModel characterModel;
 
-	public JournalView(CharacterController characterController) {
+	public JournalView(CharacterController characterController, SoundController soundController) {
 		
 		sqlController = new SQLController();
 		this.characterController = characterController;
 		characterModel = characterController.getCharacter();
 		questModel = sqlController.getActiveQuest();
+		this.soundController = soundController;
 
 		setTitle("Quest-Tagebuch");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -120,7 +123,8 @@ public class JournalView extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new QuestView(characterController);
+				soundController.playButtonClickSound();
+				new QuestView(characterController, soundController);
 
 			}
 		});
@@ -129,6 +133,7 @@ public class JournalView extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				soundController.playButtonClickSound();
 				dispose();
 			}
 		});

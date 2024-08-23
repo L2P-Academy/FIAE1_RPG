@@ -51,11 +51,11 @@ public class InventoryView extends JFrame {
 
     String imgPath = "res/img/MenuImages/InventoryBackgroundSuggestion1.png";
 
-    public InventoryView(CharacterController characterController) {
+    public InventoryView(CharacterController characterController, SoundController soundController) {
 
     	this.characterController = characterController;
         sqlController = new SQLController();
-        soundController = new SoundController();
+        this.soundController = soundController;
 
         setTitle("Inventar");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -173,7 +173,7 @@ public class InventoryView extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				soundController.playButtonClickSound();
-				new CharacterView(characterController);
+				new CharacterView(characterController, soundController);
 			}
 		});
         

@@ -14,6 +14,7 @@ import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sound.sampled.Clip;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -23,6 +24,7 @@ import javax.swing.Timer;
 
 import controller.CharacterController;
 import controller.SoundController;
+import launcher.Main;
 import model.PlayerCharacterModel;
 import model.SerializationIDs;
 import view.AnimationComponents.MapAnimationPanel;
@@ -41,7 +43,7 @@ public class MapView extends JFrame {
 
 	////////////////////////// TestButtons////////////////////////////
 	private JButton savegameBtn, combatViewBtn, journalViewBtn;
-
+ 
 	private SoundController soundController;
 	private CharacterController characterController;
 
@@ -50,24 +52,25 @@ public class MapView extends JFrame {
 	private MapCharacter mapCharacter;
 	private MapAnimationPanel mapPanel;
 	private PlayerCharacterModel characterModel;
+	public Clip musicClip;
 
-	public MapView(CharacterController characterController) {
+	public MapView(CharacterController characterController, SoundController soundController) {
 
 		this.characterController = characterController;
+		this.soundController = soundController;
 		characterModel = characterController.getCharacter(); 
 		isMapViewOpen = true;
 		setTitle("Weltkarte");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setUndecorated(true);
-		
-		soundController = new SoundController();
 
 		// Create Panels
 		mainPanel = new JPanel(new BorderLayout());
 
-		// Create BackgroundMusic
-		soundController.playMusicLoop("res/soundFX/music/Map_Music.wav");
+		// Create BackgroundMusic & save the clip inside the Map
+		this.soundController.setMusicClip(this.soundController.playMusicLoop("res/soundFX/music/Map_Music.wav"));
+		this.soundController.adjustVolume(this.soundController.getMusicClip(), this.soundController.getVolume());
 
 		// Create buttonPanel with BackgroundImage
 		buttonPanel = new BackGroundPanel(new ImageIcon(buttonPanelBackgroundPath).getImage());
@@ -148,7 +151,8 @@ public class MapView extends JFrame {
 		savegameBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new SavegameView(characterController);
+				soundController.playButtonClickSound();
+				new SavegameView(characterController, soundController);
 			}
 		});
 		combatViewBtn.addActionListener(new ActionListener() {
@@ -163,7 +167,7 @@ public class MapView extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				soundController.playFxSound("res/soundFX/fxEffects/cloth-inventory.wav");
-				new InventoryView(characterController);
+				new InventoryView(characterController, soundController);
 			}
 		});
 
@@ -171,7 +175,7 @@ public class MapView extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				soundController.playButtonClickSound();
-				new CharacterView(characterController);
+				new CharacterView(characterController, soundController);
 			}
 		});
 
@@ -179,13 +183,14 @@ public class MapView extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				soundController.playFxSound("res/soundFX/fxEffects/turn_page.wav");
-				new JournalView(characterController);
+				new JournalView(characterController, soundController);
 			}
 		});
 
 		settingsBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new SettingsView();
+				soundController.playButtonClickSound();
+				new SettingsView(soundController);
 			}
 		});
 		
@@ -193,7 +198,8 @@ public class MapView extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new CreditView();				
+				soundController.playButtonClickSound();
+				new CreditView(soundController);				
 			}
 		});
 		
@@ -302,6 +308,14 @@ public class MapView extends JFrame {
 			}
 		});
 		timer.start();
+	}
+	
+	public Clip getMusicClip() {
+		return soundController.musicClip;
+	}
+
+	public void setMusicClip(Clip musicClip) {
+		soundController.setMusicClip(musicClip);
 	}
 	
 	public static boolean isMapViewOpen() {

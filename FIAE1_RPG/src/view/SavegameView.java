@@ -48,11 +48,12 @@ public class SavegameView extends JFrame {
 	public CharacterController characterController;
 	public PlayerCharacterModel characterModel;
 
-	public SavegameView(CharacterController characterController) {
+	public SavegameView(CharacterController characterController, SoundController soundController) {
 		
 		// initialize
 		this.characterController = characterController;
 		characterModel = characterController.getCharacter();
+		this.soundController = soundController;
 
 		setTitle("Spielstände");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -61,8 +62,6 @@ public class SavegameView extends JFrame {
 
 		// create Controllers
 		sqlController = new SQLController();
-		soundController = new SoundController();
-//		this.musicClip = soundController.getMusicClip();
 
 		// create Panels
 		buttonPnl = new JPanel(new FlowLayout());
@@ -119,12 +118,13 @@ public class SavegameView extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				soundController.stopMusicLoop();
 				int selectedRow = saveTbl.getSelectedRow();
 				if (selectedRow >= 0) {
 					soundController.playButtonClickSound();
 					int selectedID = (int) saveTbl.getValueAt(saveTbl.getSelectedRow(), 0);
 					characterController.setCharacter((sqlController.getCharacterInformation(selectedID)));
-					new MapView(characterController);
+					new MapView(characterController, soundController);
 					dispose();
 				} else  {
 					JOptionPane.showMessageDialog(SavegameView.this,

@@ -17,6 +17,10 @@ import model.PlayerCharacterModel;
 import model.QuestModel;
 
 public class SQLController {
+	
+	// TODO für Chris: 
+	// Methoden für Tabellen: Ability, Boss, -> *NPC* <-
+ 
 
 	// Connection information
 	private static final String URL = "jdbc:mysql://localhost:3306/rpg_db";

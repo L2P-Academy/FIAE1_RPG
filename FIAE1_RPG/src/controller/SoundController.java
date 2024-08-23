@@ -5,8 +5,10 @@ import java.io.File;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 
 public class SoundController {
+	private int volume = 65;
 
 	public Clip buttonClip, ambientClip, musicClip, fxClip;
 	private File filepath;
@@ -20,6 +22,8 @@ public class SoundController {
 	}
 
 	public SoundController() {
+		// set standard volume to 65 for not ear-exploding!
+		setVolume(this.volume);
 
 	}
 
@@ -59,12 +63,19 @@ public class SoundController {
 	}
 
 	public void playButtonClickSound() {
+		if (buttonClip != null && buttonClip.isOpen()) {
+			buttonClip.stop();
+			buttonClip.flush();
+		}
 		try {
 			AudioInputStream audioInputStream = AudioSystem
 					.getAudioInputStream(new File("res/soundFX/fxEffects/button_click_Sound.wav"));
 			buttonClip = AudioSystem.getClip();
 			buttonClip.open(audioInputStream);
-			buttonClip.loop(0);
+			adjustVolume(buttonClip, volume);
+			System.out.println("Current Button Volume is:" + volume);
+			buttonClip.setFramePosition(0);
+			buttonClip.start();
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -85,28 +96,37 @@ public class SoundController {
 	}
 
 	public void playFxSound(String filepath) {
+		if (fxClip != null && buttonClip.isOpen()) {
+			fxClip.stop();
+			fxClip.flush();
+		}
 		try {
 			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(filepath));
 			fxClip = AudioSystem.getClip();
 			fxClip.open(audioInputStream);
-			fxClip.loop(0);
-
+			adjustVolume(fxClip, volume);
+			System.out.println("Current FX Volume is:" + volume);
+			fxClip.setFramePosition(0);
+			fxClip.start();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	public void playMusicLoop(String filepath) {
-		try {
-			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(filepath));
-			musicClip = AudioSystem.getClip();
-			musicClip.open(audioInputStream);
-			musicClip.loop(Clip.LOOP_CONTINUOUSLY);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public Clip playMusicLoop(String filepath) {
+	    try {
+	        if (musicClip == null || !musicClip.isOpen()) { // Überprüfen, ob der Clip bereits existiert
+	            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(filepath));
+	            musicClip = AudioSystem.getClip();
+	            musicClip.open(audioInputStream);
+	            adjustVolume(musicClip, volume);
+	            musicClip.loop(Clip.LOOP_CONTINUOUSLY);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return musicClip;
 	}
 
 	public void stopAmbientSound() {
@@ -120,4 +140,36 @@ public class SoundController {
 		musicClip.stop();
 		musicClip.close();
 	}
+	
+	public void setVolume(int volume) {
+		this.volume = volume;
+		adjustVolume(getButtonClip(), volume);
+		adjustVolume(ambientClip, volume);
+		adjustVolume(getMusicClip(), volume);
+		adjustVolume(getFxClip(), volume);
+	}
+	
+	public int getVolume() {
+	    return this.volume;
+	}
+	
+	public void adjustVolume(Clip clip, int volume) {
+	    if (clip != null && clip.isOpen() && clip.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
+	        FloatControl volumeControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+	        
+	        // Get the range of the volume control
+	        float min = volumeControl.getMinimum(); // -80.0f
+	        float max = volumeControl.getMaximum(); // 6.0206f
+	        
+	        // Scale the volume to fit within the range of the volume control
+	        float scaledVolume = min + (volume / 100.0f) * (max - min);
+	        
+	        // Set the volume
+	        volumeControl.setValue(scaledVolume);
+	        System.out.println("Volume set to: " + scaledVolume);
+	    } else {
+	    	System.out.println("Clip not ready or not supported");
+	    }
+	}
+
 }
