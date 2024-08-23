@@ -42,8 +42,7 @@ public class SettingsView extends JFrame{
 	private Font settingsFont, titleFont;
 	
 	private SoundController soundController;
-	
-	private SQLController sqlController;
+    private SQLController sqlController;
 	
 	public SettingsView() {
 		
