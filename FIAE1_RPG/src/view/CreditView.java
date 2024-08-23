@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
+import controller.SoundController;
 import model.SerializationIDs;
 
 public class CreditView extends JFrame {
@@ -25,8 +26,11 @@ public class CreditView extends JFrame {
 	private JPanel buttonPnl, listPnl, mainPnl;
 	private JLabel titleLbl, creditLbl;
 	private Font gameFont;
+	private SoundController soundController;
 
-	public CreditView() {
+	public CreditView(SoundController soundController) {
+		
+		this.soundController = soundController;
 
 		setTitle("CreditView");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -52,6 +56,7 @@ public class CreditView extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				soundController.playButtonClickSound(); 
 				dispose();
 			}
 		});

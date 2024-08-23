@@ -82,17 +82,17 @@ public class CharacterCreationView extends JFrame{
 	
 	private String backgroundImgPath = "res/img/Backgrounds/backgr_ccv_charactercreation1.jpeg";
 		
-	public CharacterCreationView(CharacterController characterController) {
+	public CharacterCreationView(CharacterController characterController, SoundController soundController) {
 		
 		// initialize
 		this.characterController = characterController;
 		characterModel = characterController.getCharacter();
+		this.soundController = soundController;
 			
 		setTitle("Charaktererstellung");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setUndecorated(true);
-		soundController = new SoundController();
 		sqlController = new SQLController();
 		
 		//  Set Fontvalues
@@ -404,7 +404,7 @@ public class CharacterCreationView extends JFrame{
 					sqlController.insertIntoTable("playercharacter", playerMap);
 					soundController.playButtonClickSound();
 					characterController.setCharacter(characterModel);
-					new IntroView(characterController);
+					new IntroView(characterController, soundController);
 					dispose();
 				} 
 			}

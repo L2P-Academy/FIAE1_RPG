@@ -6,10 +6,12 @@ import view.MainMenuView;
 public class CharacterController {
 	
 	private PlayerCharacterModel character;
+	private SoundController soundController;
 	
-	public CharacterController(PlayerCharacterModel playerCharacter) {
+	public CharacterController(PlayerCharacterModel playerCharacter, SoundController soundController) {
 		// initializes and loads characterInformation for all classes
 		this.character = playerCharacter;
+		this.soundController = soundController;
 	}
 
 	public PlayerCharacterModel getCharacter() {
@@ -21,7 +23,7 @@ public class CharacterController {
 	}
 	
 	public void initialize() {
-		new MainMenuView(this);
+		new MainMenuView(this, soundController);
 		
 	}
 }

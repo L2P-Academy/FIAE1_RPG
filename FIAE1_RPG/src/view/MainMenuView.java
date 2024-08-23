@@ -16,24 +16,24 @@ public class MainMenuView extends JFrame {
 	
 	private JLabel gameTitleLbl;
 	private JPanel backgroundPanel, buttonPanel;
-	private JButton newGameBtn, loadGameBtn, closeGameBtn;
+	private JButton newGameBtn, loadGameBtn, closeGameBtn, settingsBtn;
 	private String introImgPath = "res/img/MenuImages/Intro_Picture_Suggestion.png";
 	private Font gameFont;
 	private SoundController soundController;
 	private PlayerCharacterModel characterModel;
 	private CharacterController characterController;
 
-	public MainMenuView(CharacterController characterController) {
+	public MainMenuView(CharacterController characterController, SoundController soundController) {
 
 		// initialize
 		this.characterController = characterController;
 		characterModel = characterController.getCharacter();
+		this.soundController = soundController;
 		
 		setTitle("Dungeons & Legends");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setUndecorated(true);
-		soundController = new SoundController();
 		soundController.playMusicLoop("res/soundFX/music/mainMenu_music.wav");
 
 		// create background Panel
@@ -56,11 +56,14 @@ public class MainMenuView extends JFrame {
 		beautifyButton(loadGameBtn);
 		closeGameBtn = new JButton("Beenden");
 		beautifyButton(closeGameBtn);
+		settingsBtn = new JButton("Einstellungen");
+		beautifyButton(settingsBtn);
 
 		// fill buttonPanel with Buttons
 		buttonPanel.add(newGameBtn);
 		buttonPanel.add(loadGameBtn);
 		buttonPanel.add(closeGameBtn);
+		buttonPanel.add(settingsBtn);
 		buttonPanel.setOpaque(false);
 
 		// fill the background with contents
@@ -73,7 +76,7 @@ public class MainMenuView extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				soundController.playButtonClickSound();
 				soundController.stopMusicLoop();
-				new CharacterCreationView(characterController);
+				new CharacterCreationView(characterController, soundController);
 				dispose();
 			}
 		});
@@ -82,9 +85,8 @@ public class MainMenuView extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				soundController.stopMusicLoop();
 				soundController.playButtonClickSound();
-				new SavegameView(characterController);
+				new SavegameView(characterController, soundController);
 
 			}
 		});
@@ -98,6 +100,15 @@ public class MainMenuView extends JFrame {
 
 				dispose();
 
+			}
+		});
+		
+		settingsBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				soundController.playButtonClickSound();
+				new SettingsView(soundController);				
 			}
 		});
 
