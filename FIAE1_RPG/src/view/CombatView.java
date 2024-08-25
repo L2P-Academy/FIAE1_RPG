@@ -46,12 +46,16 @@ public class CombatView extends JFrame {
 	private String battlemapPath = "res/img/BattleBackgrounds/";
 	private String enemyPath = "res/img/EnemyPortraits/";
 	private String battlemapImg = "";
+	private int[][] enemiesStats;
+	private NpcModel[] enemiesInCombat;
 
 	private JPanel backgroundPnl, spacerPnl, btnPnl, dialoguePnl, enemiesPnl, enemyPnl, heroPnl;
 	private JLabel dialogueTopMsg, heroImgLbl, enemyLbl1, enemyLbl2;
+	private JLabel[] enemyLbl = new JLabel[4];
 	private JTextArea dialogueText;
 	// private JButton continueBtn, clickBtn;
 	private JProgressBar enemyHp1, enemyHp2, heroHp, heroMana;
+	private JProgressBar[] enemyHp = new JProgressBar[4];
 	private ImageIcon enemyIcon, heroIcon;
 	private Image resizedImg;
 	private Font defaultFont = new Font("Calisto MT", Font.PLAIN, 26);
@@ -86,10 +90,13 @@ public class CombatView extends JFrame {
 				"res/img/CharacterPortraits/New_Race_Gender/new_goblin_divers.png"}
 	};
 
-	public CombatView(CharacterController characterController, int battlemapID, int... npcID) {		
+	public CombatView(SoundController soundController, CharacterController characterController, int battlemapID, int... npcID) {		
 
 		this.characterController = characterController;
+		this.soundController = soundController;
+		
 		characterModel = characterController.getCharacter();
+		
 		// frame initialize
 		setTitle("Kampfuebung");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -97,69 +104,17 @@ public class CombatView extends JFrame {
 		setUndecorated(true);
 
 		// Controllers
-		soundController = new SoundController();
 		sqlController = new SQLController();
+		
 		// combatController = new CombatController();
 
-		// load battlemapID
-		if (battlemapID == 1) {
-			battlemapImg = "Forest.jpg";
-		}
-
-		// battlemap Panel and adjustments
-		backgroundPnl = new BackGroundPanel(new ImageIcon(battlemapPath + battlemapImg).getImage());
-		backgroundPnl.setLayout(new BorderLayout());
-		getContentPane().add(backgroundPnl);
-
-		// top Panel will be used as an empty space to adjust the position of enemies
-		spacerPnl = new JPanel();
-		spacerPnl.setPreferredSize(new Dimension(100, 0));
-		spacerPnl.setOpaque(false);
-
-		// other Panels
-		amountOfEnemies = 0;
-		enemiesPnl = new JPanel(); // will hold the enemy1..4 panels
-		enemiesPnl.setLayout(new BoxLayout(enemiesPnl, BoxLayout.X_AXIS));
-		enemiesPnl.setOpaque(false);
-		for (int i : npcID) {
-			if (i == 1) {
-				addEnemiesPnl();
-			}
-		}
-
-		createHeroPanel();
-
-		dialoguePnl = new JPanel(); // will hold the title, text and buttons
-		dialoguePnl.setLayout(new BorderLayout());
-		dialoguePnl.setPreferredSize(new Dimension(WIDTH, 200));
-		// Word above Text / Dialogue
-		dialogueTopMsg = new JLabel("Player Hero");
-		dialogueTopMsg.setFont(new Font("Calisto MT", Font.BOLD, 28));
-		// Text / Dialogue
-		dialogueText = new JTextArea();
-		dialogueText.setFont(defaultFont); // Schriftart anpassen
-		dialogueText.setLineWrap(true); // Textumbruch aktivieren
-		dialogueText.setWrapStyleWord(true); // Wortumbruch aktivieren
-		dialogueText.setEditable(false); // Text nicht editierbar machen
-		dialogueText.setPreferredSize(new Dimension(400, 120));
-		dialogueText.setBackground(new Color(245, 245, 220));
-		updateDialogue("Start");
-
-		// add buttons to the btnPnl
-		btnPnl = new JPanel();
-		btnPnl.setLayout(new BoxLayout(btnPnl, BoxLayout.Y_AXIS));
-		updateBtn("Zurück");
-
-		// filling dialoguePanel (bottom Panel)
-		dialoguePnl.add(dialogueText, BorderLayout.CENTER);
-		dialoguePnl.add(dialogueTopMsg, BorderLayout.NORTH);
-		dialoguePnl.add(btnPnl, BorderLayout.EAST);
+		// setup for view: adding battlebackground by ID, enemies by IDs, hero by data and adjust all panels/labels
+		loadBattleBackgroundPath(1); // load battlemap by ID and update backgroundPnl
+		updateMonsterList(7,14,13,13); // load enemies by IDs and update enemiesInCombat[] + enemiesStats[][]
+		createHeroPanel(); // load and prepare heroPnl
+		prepareDialoguePnl(); // prepare dialoguePnl
 
 		// frame finish-up
-		backgroundPnl.add(spacerPnl, BorderLayout.WEST);
-		backgroundPnl.add(enemiesPnl, BorderLayout.CENTER);
-		backgroundPnl.add(dialoguePnl, BorderLayout.SOUTH);
-		backgroundPnl.add(heroPnl, BorderLayout.EAST);
 		setLocationRelativeTo(null);
 		setVisible(true);
 
@@ -192,8 +147,18 @@ public class CombatView extends JFrame {
 			}
 		});
 	}
-
-	private void addEnemiesPnl() {
+	
+	private String getEnemyImagePath(String name) {
+		// TODO: Here is the list of monster portraits, adjust if name is not equal to X_01 file
+		switch (name) {
+		case "Dire Wolf":
+			return enemyPath + "wolf_02.png";
+		default:
+			return enemyPath + name + "_01.png";
+		}
+	}
+	
+	private void addEnemiesPnl() { // old
 		amountOfEnemies = amountOfEnemies + 1;
 		switch (amountOfEnemies) {
 		case 1:
@@ -304,6 +269,7 @@ public class CombatView extends JFrame {
 		heroPnl.add(heroImgLbl);
 		heroPnl.add(heroHp);
 		heroPnl.add(heroMana);
+		backgroundPnl.add(heroPnl, BorderLayout.EAST);
 	}
 
 	private void updateDialogue(String dialogue) {
@@ -496,5 +462,142 @@ public class CombatView extends JFrame {
 		}
 		// Image Paths
 		return imagePaths[raceID][genderIndex];	
+	}
+		
+	private void prepareMonsters() {
+		System.out.println("Prepare to create monsters... ");
+		NpcModel wildboar = new NpcModel(13, 10, 50, 10, 5, 0, null, "Wildboar");
+		NpcModel wolf = new NpcModel(7, 20, 100, 20, 5, 0, null, "Wolf");
+		NpcModel direwolf = new NpcModel(14, 50, 200, 30, 15, 0, null, "Dire Wolf");
+		System.out.println("Added monsters to the List");
+	}
+	
+	private void updateMonsterList(int... npcIDs) {
+		//amountOfEnemies = 0;	
+		prepareMonsters();
+		
+		// adding all recorded monsters from npcIDs to enemiesInCombat[] and adjusting enemiesStats[][]
+		NpcModel[] enemiesInCombat = new NpcModel[npcIDs.length]; // this will reset upon start and record the new enemies for the combat
+		enemiesStats = new int[npcIDs.length][3];
+		for (int i = 0; i < npcIDs.length; i++) {
+			enemiesInCombat[i] = NpcModel.getNpcModelByID(npcIDs[i]); // TODO: might not need to record npcModels
+			System.out.println(enemiesStats[0][0]);
+			enemiesStats[i] = new int[] {
+					NpcModel.getNpcModelByID(npcIDs[i]).getHp(), // hp
+					NpcModel.getNpcModelByID(npcIDs[i]).getKillXP(), // xp
+					NpcModel.getNpcModelByID(npcIDs[i]).getQuestID(), // atk
+					NpcModel.getNpcModelByID(npcIDs[i]).getLevel()}; // def
+		}
+
+		prepareEnemiesPnl(npcIDs); // update spacerPnl, enemiesPnl and enemyLbl(s)
+		
+	}
+	
+	private void loadBattleBackgroundPath(int id) {
+		// TODO: List of battleground imagepaths by id
+		switch (id) {
+		case 1:
+				battlemapImg = "Forest.jpg";
+		default:
+			break;
+		}
+
+		// add backgroundPnl and adjust battleground img
+		backgroundPnl = new BackGroundPanel(new ImageIcon(battlemapPath + battlemapImg).getImage());
+		backgroundPnl.setLayout(new BorderLayout());
+		getContentPane().add(backgroundPnl);
+	}
+	
+	private void prepareEnemiesPnl(int... npcIDs) {
+		// top Panel will be used as an empty space to adjust the position of enemies
+		spacerPnl = new JPanel();
+		spacerPnl.setPreferredSize(new Dimension(100, 0));
+		spacerPnl.setOpaque(false);
+		backgroundPnl.add(spacerPnl, BorderLayout.WEST);
+		
+		// update enemiesPnl and enemyLbl(s) within
+		enemiesPnl = new JPanel(); // will hold the enemy1..4 panels
+		enemiesPnl.setLayout(new BoxLayout(enemiesPnl, BoxLayout.X_AXIS));
+		enemiesPnl.setOpaque(false);
+		
+		// prepare JLabel[3] enemyPnl and then add enemyPnl(s) to enemiesPnl
+		for (int i = 0; i < enemyLbl.length; i++) {
+	        enemyLbl[i] = new JLabel();
+	        //enemyHp[i] = new JProgressBar();
+	    }
+		
+		int i = 0;
+		for (int id : npcIDs) {
+			enemyPnl = new JPanel();
+			enemyPnl.setLayout(new BoxLayout(enemyPnl, BoxLayout.Y_AXIS));
+			enemyPnl.setOpaque(false);
+			enemyPnl.setMaximumSize(new Dimension(200, 300));
+			resizedImg = new ImageIcon(getEnemyImagePath(NpcModel.getNpcModelByID(id).getName()))
+					.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+			enemyIcon = new ImageIcon(resizedImg);
+			enemyLbl[i].setIcon(enemyIcon);
+			enemyLbl[i].setPreferredSize(new Dimension(200, 200));
+			enemyLbl[i].setText((NpcModel.getNpcModelByID(id).getName()));
+			enemyLbl[i].setFont(defaultFont);
+			enemyLbl[i].setForeground(Color.white);
+			enemyLbl[i].setVerticalTextPosition(JLabel.TOP);
+			enemyLbl[i].setHorizontalTextPosition(JLabel.CENTER);
+			enemyLbl[i].setIconTextGap(-25);
+
+			enemyHp[i] = new JProgressBar(0, (enemiesStats[i][0]));
+			enemyHp[i].setForeground(Color.green);
+			enemyHp[i].setBackground(Color.red);
+			enemyHp[i].setValue(enemiesStats[i][0]);
+			enemyHp[i].setPreferredSize(new Dimension(100, 100));
+			enemyHp[i].setMaximumSize(new Dimension(350, 20));
+			enemyHp[i].setAlignmentX(Component.CENTER_ALIGNMENT);
+			
+
+			enemyPnl.add(enemyLbl[i]);
+			enemyPnl.add(enemyHp[i]);
+			i++;
+			
+			if (id == 0) { // TODO: if ID is 0, then is flying creature
+			enemyPnl.setAlignmentY(Component.CENTER_ALIGNMENT); 
+			}
+			else {
+			enemyPnl.setAlignmentY(Component.BOTTOM_ALIGNMENT); 
+			}
+			
+			enemiesPnl.add(enemyPnl);
+		}
+		backgroundPnl.add(enemiesPnl, BorderLayout.CENTER);
+	}
+	
+	private void prepareDialoguePnl() {
+
+		dialoguePnl = new JPanel(); // will hold the title, text and buttons
+		dialoguePnl.setLayout(new BorderLayout());
+		dialoguePnl.setPreferredSize(new Dimension(WIDTH, 200));
+		// Word above Text / Dialogue
+		dialogueTopMsg = new JLabel("Player Hero");
+		dialogueTopMsg.setFont(new Font("Calisto MT", Font.BOLD, 28));
+		// Text / Dialogue
+		dialogueText = new JTextArea();
+		dialogueText.setFont(defaultFont); // Schriftart anpassen
+		dialogueText.setLineWrap(true); // Textumbruch aktivieren
+		dialogueText.setWrapStyleWord(true); // Wortumbruch aktivieren
+		dialogueText.setEditable(false); // Text nicht editierbar machen
+		dialogueText.setPreferredSize(new Dimension(400, 120));
+		dialogueText.setBackground(new Color(245, 245, 220));
+		updateDialogue("Start");
+		
+
+		// add buttons to the btnPnl
+		btnPnl = new JPanel();
+		btnPnl.setLayout(new BoxLayout(btnPnl, BoxLayout.Y_AXIS));
+		updateBtn("Zurück");
+		
+
+		// filling dialoguePanel (bottom Panel)
+		dialoguePnl.add(dialogueText, BorderLayout.CENTER);
+		dialoguePnl.add(dialogueTopMsg, BorderLayout.NORTH);
+		dialoguePnl.add(btnPnl, BorderLayout.EAST);
+		backgroundPnl.add(dialoguePnl, BorderLayout.SOUTH);
 	}
 }
