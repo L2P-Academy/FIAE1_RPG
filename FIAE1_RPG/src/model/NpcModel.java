@@ -1,8 +1,13 @@
 package model;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class NpcModel {
 	private int npcID, questID, hp, killXP, level, itemID;
 	private String  name;
 	private NpcCategory category;
+	private static List<NpcModel> npcModels = new ArrayList<>(); // for combatView
 	
 	// Categories from Database: Trader, Mob, Companion, Innkeeper
 	public enum NpcCategory {
@@ -19,6 +24,8 @@ public class NpcModel {
 		this.itemID = itemID;
 		this.category = category;
 		this.name = name;
+		npcModels.add(this); // for combatView
+		System.out.println(this + " added to " + npcModels); // for combatView
 	}
 	
 	//Getter and Setter
@@ -71,4 +78,14 @@ public class NpcModel {
 		this.category = category;
 	}
 	
+	// Combatview extras
+	public static NpcModel getNpcModelByID(int npcID) {
+		
+		for (NpcModel npcModel : npcModels) {
+			if (npcModel.getNpcID() == npcID) {
+				return npcModel;
+			}
+		}
+		return null;
+	}
 }
