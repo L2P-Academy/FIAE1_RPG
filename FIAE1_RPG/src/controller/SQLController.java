@@ -58,6 +58,34 @@ public class SQLController {
 		}
 		return characters;
 	}
+	/**
+	 * Getting all Npc from a specific Category
+	 * @param String npcCategory
+	 * @return List<NpcModel>
+	 */
+	public List<NpcModel> getAllNpcs(String npcCategory) {
+		List<NpcModel> npcModels = new ArrayList<NpcModel>();
+		
+		try (Connection connection = DriverManager.getConnection(URL, USER, PW)) {
+			String query = "SELECT * FROM npc WHERE Category = \"" + npcCategory +"\"";
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			
+			while(resultSet.next()) {
+				NpcModel model = new NpcModel(resultSet.getInt("NpcID"),
+						resultSet.getInt("QuestID"), resultSet.getInt("HP"), resultSet.getInt("Damage"),
+						resultSet.getInt("KillXP"), resultSet.getInt("Level"), resultSet.getInt("ItemID"), 
+						resultSet.getInt("LocationID"), NpcCategory.valueOf(resultSet.getString("Category")),
+						resultSet.getString("Name"));
+				npcModels.add(model);
+				
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return npcModels;
+	}
 
 	/**
 	 * Getting Character Information within all Fields and Values from the Database.
@@ -528,37 +556,37 @@ public class SQLController {
 	 * @param Integer NpcID
 	 * @return NpcModel
 	 */
-	public NpcModel getNpcModelFromID(int NpcID) {
-
-		NpcModel npc = null;
-
-		try (Connection connection = DriverManager.getConnection(URL, USER, PW)) {
-
-			String query = "SELECT * FROM npc WHERE NpcID = " + NpcID;
-			PreparedStatement preparedStatement = connection.prepareStatement(query);
-			ResultSet resultSet = preparedStatement.executeQuery();
-
-			while (resultSet.next()) {
-
-				int iD = resultSet.getInt("NpcID");
-				int questID = resultSet.getInt("QuestID");
-				int hP = resultSet.getInt("HP");
-				int killXP = resultSet.getInt("KillXP");
-				int level = resultSet.getInt("Level");
-				int itemID = resultSet.getInt("ItemID");
-				int locationID = resultSet.getInt("LocationID");
-				String name = resultSet.getString("Name");
-				String category = resultSet.getString("Category");
-				// TODO Warum braucht man hier ein ENUM?
-				npc = new NpcModel(NpcID, questID, hP, killXP, level, itemID, null, name);
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return npc;
-	}
+//	public NpcModel getNpcModelFromID(int NpcID) {
+//
+//		NpcModel npc = null;
+//
+//		try (Connection connection = DriverManager.getConnection(URL, USER, PW)) {
+//
+//			String query = "SELECT * FROM npc WHERE NpcID = " + NpcID;
+//			PreparedStatement preparedStatement = connection.prepareStatement(query);
+//			ResultSet resultSet = preparedStatement.executeQuery();
+//
+//			while (resultSet.next()) {
+//
+//				int iD = resultSet.getInt("NpcID");
+//				int questID = resultSet.getInt("QuestID");
+//				int hP = resultSet.getInt("HP");
+//				int killXP = resultSet.getInt("KillXP");
+//				int level = resultSet.getInt("Level");
+//				int itemID = resultSet.getInt("ItemID");
+//				int locationID = resultSet.getInt("LocationID");
+//				String name = resultSet.getString("Name");
+//				String category = resultSet.getString("Category");
+//				// TODO Warum braucht man hier ein ENUM?
+//				npc = new NpcModel(NpcID, questID, hP, killXP, level, itemID, null, name);
+//			}
+//
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//
+//		return npc;
+//	}
 
 	/**
 	 * Convert ItemID to specific Item Name. For every View with Quests
