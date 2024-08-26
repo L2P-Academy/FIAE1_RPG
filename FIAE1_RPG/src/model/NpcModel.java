@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NpcModel {
-	private int npcID, questID, hp, killXP, level, itemID;
+	private int npcID, questID, hp, damage, killXP, level, itemID, locationID;
 	private String  name;
-	private NpcCategory category;
+	public NpcCategory category;
 	private static List<NpcModel> npcModels = new ArrayList<>(); // for combatView
 	
 	// Categories from Database: Trader, Mob, Companion, Innkeeper
@@ -14,14 +14,17 @@ public class NpcModel {
 		TRADER, MOB, COMPANION, INNKEEPER
 	}
 	
-	public NpcModel(int npcID, int questID, int hp, int killXP, int level, int itemID, NpcCategory category, String name) {
+	public NpcModel(int npcID, int questID, int hp, int damage, int killXP, int level, int itemID, int locationID,
+			NpcCategory category, String name) {
 		super();
 		this.npcID = npcID;
 		this.questID = questID;
 		this.hp = hp;
+		this.damage = damage;
 		this.killXP = killXP;
 		this.level = level;
 		this.itemID = itemID;
+		this.locationID = locationID;
 		this.category = category;
 		this.name = name;
 		npcModels.add(this); // for combatView
@@ -47,6 +50,15 @@ public class NpcModel {
 	public void setHp(int hp) {
 		this.hp = hp;
 	}
+	
+	public int getDamage() {
+		return damage;
+	}
+
+	public void setDamage(int damage) {
+		this.damage = damage;
+	}
+
 	public int getKillXP() {
 		return killXP;
 	}
@@ -65,6 +77,16 @@ public class NpcModel {
 	public void setItemID(int itemID) {
 		this.itemID = itemID;
 	}
+	
+	
+	public int getLocationID() {
+		return locationID;
+	}
+
+	public void setLocationID(int locationID) {
+		this.locationID = locationID;
+	}
+
 	public String getName() {
 		return name;
 	}
