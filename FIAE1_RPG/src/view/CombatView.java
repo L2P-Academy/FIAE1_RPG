@@ -4,12 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Timer;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -21,16 +19,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JTextArea;
-import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
 import controller.SoundController;
 import controller.CharacterController;
-import controller.InventoryController;
+import controller.CombatController;
 import controller.SQLController;
-import model.AbilityModel;
 import model.BossModel;
-import model.AbilityModel.AbilityElement;
 import model.NpcModel;
 import model.PlayerCharacterModel;
 import model.RaceAbilityModel;
@@ -46,8 +41,6 @@ public class CombatView extends JFrame {
 	private String battlemapPath = "res/img/BattleBackgrounds/";
 	private String enemyPath = "res/img/EnemyPortraits/";
 	private String battlemapImg = "";
-	private int[][] enemiesStats;
-	private NpcModel[] enemiesInCombat;
 
 	private JPanel backgroundPnl, spacerPnl, btnPnl, dialoguePnl, enemiesPnl, enemyPnl, heroPnl;
 	private JLabel dialogueTopMsg, heroImgLbl, enemyLbl1, enemyLbl2;
@@ -69,6 +62,7 @@ public class CombatView extends JFrame {
 	private SQLController sqlController;
 	private SoundController soundController;
 	private CharacterController characterController;
+	private CombatController combatController;
 	private String[][] imagePaths = {
 			{"res/img/CharacterPortraits/New_Race_Gender/new_human_male.png",
 				"res/img/CharacterPortraits/New_Race_Gender/new_human_female.png",
@@ -90,27 +84,26 @@ public class CombatView extends JFrame {
 				"res/img/CharacterPortraits/New_Race_Gender/new_goblin_divers.png"}
 	};
 
-	public CombatView(SoundController soundController, CharacterController characterController, int battlemapID, int... npcID) {		
+	public CombatView(SoundController soundController, CharacterController characterController) {		
 
 		this.characterController = characterController;
 		this.soundController = soundController;
-		
+
+		// Controllers
+		sqlController = new SQLController();
 		characterModel = characterController.getCharacter();
+		combatController = new CombatController(characterModel, soundController);
 		
 		// frame initialize
 		setTitle("Kampfuebung");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setUndecorated(true);
-
-		// Controllers
-		sqlController = new SQLController();
 		
-		// combatController = new CombatController();
+		combatController.combatInitialize();
 
 		// setup for view: adding battlebackground by ID, enemies by IDs, hero by data and adjust all panels/labels
 		loadBattleBackgroundPath(1); // load battlemap by ID and update backgroundPnl
-		updateMonsterList(7,14,13,13); // load enemies by IDs and update enemiesInCombat[] + enemiesStats[][]
 		createHeroPanel(); // load and prepare heroPnl
 		prepareDialoguePnl(); // prepare dialoguePnl
 
@@ -235,6 +228,7 @@ public class CombatView extends JFrame {
 
 	}
 
+	// creates the hero Panel, loads character information
 	private void createHeroPanel() {
 		heroPnl = new JPanel();
 		heroPnl.setLayout(new BoxLayout(heroPnl, BoxLayout.Y_AXIS));
@@ -472,27 +466,6 @@ public class CombatView extends JFrame {
 		System.out.println("Added monsters to the List");
 	}
 	
-	private void updateMonsterList(int... npcIDs) {
-		//amountOfEnemies = 0;	
-		prepareMonsters();
-		
-		// adding all recorded monsters from npcIDs to enemiesInCombat[] and adjusting enemiesStats[][]
-		NpcModel[] enemiesInCombat = new NpcModel[npcIDs.length]; // this will reset upon start and record the new enemies for the combat
-		enemiesStats = new int[npcIDs.length][3];
-		for (int i = 0; i < npcIDs.length; i++) {
-			enemiesInCombat[i] = NpcModel.getNpcModelByID(npcIDs[i]); // TODO: might not need to record npcModels
-			System.out.println(enemiesStats[0][0]);
-			enemiesStats[i] = new int[] {
-					NpcModel.getNpcModelByID(npcIDs[i]).getHp(), // hp
-					NpcModel.getNpcModelByID(npcIDs[i]).getKillXP(), // xp
-					NpcModel.getNpcModelByID(npcIDs[i]).getQuestID(), // atk
-					NpcModel.getNpcModelByID(npcIDs[i]).getLevel()}; // def
-		}
-
-		prepareEnemiesPnl(npcIDs); // update spacerPnl, enemiesPnl and enemyLbl(s)
-		
-	}
-	
 	private void loadBattleBackgroundPath(int id) {
 		// TODO: List of battleground imagepaths by id
 		switch (id) {
@@ -506,67 +479,6 @@ public class CombatView extends JFrame {
 		backgroundPnl = new BackGroundPanel(new ImageIcon(battlemapPath + battlemapImg).getImage());
 		backgroundPnl.setLayout(new BorderLayout());
 		getContentPane().add(backgroundPnl);
-	}
-	
-	private void prepareEnemiesPnl(int... npcIDs) {
-		// top Panel will be used as an empty space to adjust the position of enemies
-		spacerPnl = new JPanel();
-		spacerPnl.setPreferredSize(new Dimension(100, 0));
-		spacerPnl.setOpaque(false);
-		backgroundPnl.add(spacerPnl, BorderLayout.WEST);
-		
-		// update enemiesPnl and enemyLbl(s) within
-		enemiesPnl = new JPanel(); // will hold the enemy1..4 panels
-		enemiesPnl.setLayout(new BoxLayout(enemiesPnl, BoxLayout.X_AXIS));
-		enemiesPnl.setOpaque(false);
-		
-		// prepare JLabel[3] enemyPnl and then add enemyPnl(s) to enemiesPnl
-		for (int i = 0; i < enemyLbl.length; i++) {
-	        enemyLbl[i] = new JLabel();
-	        //enemyHp[i] = new JProgressBar();
-	    }
-		
-		int i = 0;
-		for (int id : npcIDs) {
-			enemyPnl = new JPanel();
-			enemyPnl.setLayout(new BoxLayout(enemyPnl, BoxLayout.Y_AXIS));
-			enemyPnl.setOpaque(false);
-			enemyPnl.setMaximumSize(new Dimension(200, 300));
-			resizedImg = new ImageIcon(getEnemyImagePath(NpcModel.getNpcModelByID(id).getName()))
-					.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
-			enemyIcon = new ImageIcon(resizedImg);
-			enemyLbl[i].setIcon(enemyIcon);
-			enemyLbl[i].setPreferredSize(new Dimension(200, 200));
-			enemyLbl[i].setText((NpcModel.getNpcModelByID(id).getName()));
-			enemyLbl[i].setFont(defaultFont);
-			enemyLbl[i].setForeground(Color.white);
-			enemyLbl[i].setVerticalTextPosition(JLabel.TOP);
-			enemyLbl[i].setHorizontalTextPosition(JLabel.CENTER);
-			enemyLbl[i].setIconTextGap(-25);
-
-			enemyHp[i] = new JProgressBar(0, (enemiesStats[i][0]));
-			enemyHp[i].setForeground(Color.green);
-			enemyHp[i].setBackground(Color.red);
-			enemyHp[i].setValue(enemiesStats[i][0]);
-			enemyHp[i].setPreferredSize(new Dimension(100, 100));
-			enemyHp[i].setMaximumSize(new Dimension(350, 20));
-			enemyHp[i].setAlignmentX(Component.CENTER_ALIGNMENT);
-			
-
-			enemyPnl.add(enemyLbl[i]);
-			enemyPnl.add(enemyHp[i]);
-			i++;
-			
-			if (id == 0) { // TODO: if ID is 0, then is flying creature
-			enemyPnl.setAlignmentY(Component.CENTER_ALIGNMENT); 
-			}
-			else {
-			enemyPnl.setAlignmentY(Component.BOTTOM_ALIGNMENT); 
-			}
-			
-			enemiesPnl.add(enemyPnl);
-		}
-		backgroundPnl.add(enemiesPnl, BorderLayout.CENTER);
 	}
 	
 	private void prepareDialoguePnl() {
@@ -601,3 +513,4 @@ public class CombatView extends JFrame {
 		backgroundPnl.add(dialoguePnl, BorderLayout.SOUTH);
 	}
 }
+

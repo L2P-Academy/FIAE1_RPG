@@ -158,7 +158,7 @@ public class MapView extends JFrame {
 		combatViewBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				soundController.stopMusicLoop();
-				new CombatView(soundController, characterController, 1, 1, 1);
+				new CombatView(soundController, characterController);
 			}
 		});
 		
