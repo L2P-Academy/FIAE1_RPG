@@ -8,6 +8,8 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -42,9 +44,9 @@ public class CombatView extends JFrame {
 	private String enemyPath = "res/img/EnemyPortraits/";
 	private String battlemapImg = "";
 
-	private JPanel backgroundPnl, spacerPnl, btnPnl, dialoguePnl, enemiesPnl, enemyPnl, heroPnl;
+	private JPanel backgroundPnl, spacerPnl1, spacerPnl2, btnPnl, dialoguePnl, enemiesPnl, enemyPnl, heroPnl;
 	private JLabel dialogueTopMsg, heroImgLbl, enemyLbl1, enemyLbl2;
-	private JLabel[] enemyLbl = new JLabel[4];
+	private JLabel enemyLbl;
 	private JTextArea dialogueText;
 	// private JButton continueBtn, clickBtn;
 	private JProgressBar enemyHp1, enemyHp2, heroHp, heroMana;
@@ -58,11 +60,13 @@ public class CombatView extends JFrame {
 	// private AbilityModel<Enum<AbilityElement>> abililtyModel;
 	private BossModel bossModel;
 	private RaceAbilityModel raceAbilityModel;
-	// private InventoryController inventoryController;
+
 	private SQLController sqlController;
 	private SoundController soundController;
 	private CharacterController characterController;
 	private CombatController combatController;
+	
+	private List<NpcModel> enemiesList;
 	private String[][] imagePaths = {
 			{"res/img/CharacterPortraits/New_Race_Gender/new_human_male.png",
 				"res/img/CharacterPortraits/New_Race_Gender/new_human_female.png",
@@ -100,11 +104,12 @@ public class CombatView extends JFrame {
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setUndecorated(true);
 		
-		combatController.combatInitialize();
+		enemiesList = combatController.combatInitialize();
 
 		// setup for view: adding battlebackground by ID, enemies by IDs, hero by data and adjust all panels/labels
 		loadBattleBackgroundPath(1); // load battlemap by ID and update backgroundPnl
 		createHeroPanel(); // load and prepare heroPnl
+		createEnemiesPnl(enemiesList);
 		prepareDialoguePnl(); // prepare dialoguePnl
 
 		// frame finish-up
@@ -149,6 +154,65 @@ public class CombatView extends JFrame {
 		default:
 			return enemyPath + name + "_01.png";
 		}
+	}
+	
+	private void createEnemiesPnl(List<NpcModel> npcList) {
+		// Spacing for better UI experience
+		spacerPnl1 = new JPanel();
+		spacerPnl1.setPreferredSize(new Dimension(100, 0));
+		spacerPnl1.setOpaque(false);
+		spacerPnl2 = new JPanel();
+		spacerPnl2.setPreferredSize(new Dimension(200, 0));
+		spacerPnl2.setOpaque(false);
+		
+		// create all enemies in seperate panels
+		enemiesPnl = new JPanel();
+		enemiesPnl.setLayout(new BoxLayout(enemiesPnl, BoxLayout.X_AXIS));
+		enemiesPnl.setOpaque(false);
+		// Get all NPCModels from npcList and retrieve information about every single enemy
+		for (NpcModel npcModel : npcList) {
+			JPanel enemyPnl = new JPanel();
+			enemyPnl.setLayout(new BoxLayout(enemyPnl, BoxLayout.Y_AXIS));
+			enemyPnl.setOpaque(false);
+			enemyPnl.setMaximumSize(new Dimension(200, 300));
+			enemyPnl.setAlignmentY(Component.BOTTOM_ALIGNMENT);
+			
+			JLabel enemyImgLbl = new JLabel();
+			JLabel enemyNameLbl = new JLabel();
+			
+			// TODO: remove numbers from path								     HERE!
+			Image resizedImg = new ImageIcon(enemyPath + npcModel.getName() + "_01.png").getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+			ImageIcon enemyIcon = new ImageIcon(resizedImg);
+			enemyImgLbl.setIcon(enemyIcon);
+			enemyImgLbl.setPreferredSize(new Dimension(200, 200));
+			enemyImgLbl.setForeground(Color.white);
+			enemyImgLbl.setHorizontalAlignment(JLabel.CENTER);
+			
+			enemyNameLbl.setText(npcModel.getName());
+			enemyNameLbl.setFont(defaultFont);
+			enemyNameLbl.setHorizontalAlignment(JLabel.CENTER);
+			enemyNameLbl.setForeground(Color.white);
+//			enemyNameLbl.setVerticalTextPosition(JLabel.TOP);
+			
+			// Health Bar
+			JProgressBar enemyHp = new JProgressBar(0, npcModel.getHp());
+			enemyHp.setForeground(Color.green);
+			enemyHp.setBackground(Color.red);
+			enemyHp.setValue(npcModel.getHp());
+			enemyHp.setPreferredSize(new Dimension(200, 20));
+			enemyHp.setAlignmentX(Component.CENTER_ALIGNMENT);
+			
+			// add components to singleEnemyPnl
+			enemyPnl.add(enemyNameLbl);
+			enemyPnl.add(enemyImgLbl);
+			enemyPnl.add(enemyHp);
+			
+			enemiesPnl.add(enemyPnl);
+			enemiesPnl.add(Box.createRigidArea(new Dimension(50, 50)));
+		}
+		backgroundPnl.add(spacerPnl1, BorderLayout.WEST);
+		backgroundPnl.add(spacerPnl2, BorderLayout.SOUTH);
+		backgroundPnl.add(enemiesPnl, BorderLayout.CENTER);
 	}
 	
 	private void addEnemiesPnl() { // old
@@ -456,14 +520,6 @@ public class CombatView extends JFrame {
 		}
 		// Image Paths
 		return imagePaths[raceID][genderIndex];	
-	}
-		
-	private void prepareMonsters() {
-		System.out.println("Prepare to create monsters... ");
-		NpcModel wildboar = new NpcModel(13, 10, 50, 10, 5, 0, null, "Wildboar");
-		NpcModel wolf = new NpcModel(7, 20, 100, 20, 5, 0, null, "Wolf");
-		NpcModel direwolf = new NpcModel(14, 50, 200, 30, 15, 0, null, "Dire Wolf");
-		System.out.println("Added monsters to the List");
 	}
 	
 	private void loadBattleBackgroundPath(int id) {
