@@ -8,8 +8,11 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Iterator;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -37,30 +40,27 @@ public class CombatView extends JFrame {
 
 	private static final long serialVersionUID = SerializationIDs.combatViewID;
 
-	private int amountOfEnemies = 0, damageDealt = 10, currentTurn = 0;
 	private int genderIndex;
-	private String enemyName = "";
 	private String battlemapPath = "res/img/BattleBackgrounds/";
 	private String enemyPath = "res/img/EnemyPortraits/";
 	private String battlemapImg = "";
 
 	private JPanel backgroundPnl, spacerPnl1, spacerPnl2, btnPnl, dialoguePnl, enemiesPnl, enemyPnl, heroPnl;
-	private JLabel dialogueTopMsg, heroImgLbl, enemyLbl1, enemyLbl2;
-	private JLabel enemyLbl;
+	private JLabel heroImgLbl, selectedNpcLbl;
 	private JTextArea dialogueText;
-	// private JButton continueBtn, clickBtn;
-	private JProgressBar enemyHp1, enemyHp2, heroHp, heroMana;
-	private JProgressBar[] enemyHp = new JProgressBar[4];
-	private ImageIcon enemyIcon, heroIcon;
+	private JProgressBar heroHp, heroMana;
+	private ImageIcon heroIcon;
 	private Image resizedImg;
 	private Font defaultFont = new Font("Calisto MT", Font.PLAIN, 26);
+	private JButton attackBtn, inventoryBtn, abilityBtn, escapeBtn;
 
 	private PlayerCharacterModel characterModel;
-	private NpcModel npcModel;
+	private NpcModel selectedNpc;
 	// private AbilityModel<Enum<AbilityElement>> abililtyModel;
 	private BossModel bossModel;
 	private RaceAbilityModel raceAbilityModel;
-
+	private Map<NpcModel, JProgressBar> npcProgressBars;
+	
 	private SQLController sqlController;
 	private SoundController soundController;
 	private CharacterController characterController;
@@ -96,7 +96,7 @@ public class CombatView extends JFrame {
 		// Controllers
 		sqlController = new SQLController();
 		characterModel = characterController.getCharacter();
-		combatController = new CombatController(characterModel, soundController);
+		combatController = new CombatController(characterController.getCharacter(), soundController, this);
 		
 		// frame initialize
 		setTitle("Kampfuebung");
@@ -104,13 +104,16 @@ public class CombatView extends JFrame {
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setUndecorated(true);
 		
+		// Combat Initialize
+		npcProgressBars = new HashMap<>();		
 		enemiesList = combatController.combatInitialize();
 
 		// setup for view: adding battlebackground by ID, enemies by IDs, hero by data and adjust all panels/labels
 		loadBattleBackgroundPath(1); // load battlemap by ID and update backgroundPnl
 		createHeroPanel(); // load and prepare heroPnl
 		createEnemiesPnl(enemiesList);
-		prepareDialoguePnl(); // prepare dialoguePnl
+		prepareDialoguePnl();
+		
 
 		// frame finish-up
 		setLocationRelativeTo(null);
@@ -118,6 +121,39 @@ public class CombatView extends JFrame {
 
 		// play Music in background after rendering
 		soundController.playMusicLoop("res/soundFX/music/Combat_Music.wav");
+		
+		
+		
+		// ActionListeners
+		
+		attackBtn.addActionListener(new ActionListener() {			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				combatController.processPlayerAction("Angreifen");
+				
+			}
+		});
+		
+		escapeBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO: must process player action via combatController..
+				soundController.stopMusicLoop();
+				soundController.playMusicLoop("res/soundFX/music/Map_Music.wav");
+				dispose();
+			}
+		});
+	}
+	
+	// Mapping Model to ProgressBar
+	public void updateNpcHealth(NpcModel npcModel) {
+		JProgressBar healthBar = npcProgressBars.get(npcModel);
+		if (healthBar != null) {
+			healthBar.setValue(npcModel.getHp());
+			revalidate();
+			repaint();
+		}
 	}
 
 	// Modify Buttons
@@ -146,16 +182,6 @@ public class CombatView extends JFrame {
 		});
 	}
 	
-	private String getEnemyImagePath(String name) {
-		// TODO: Here is the list of monster portraits, adjust if name is not equal to X_01 file
-		switch (name) {
-		case "Dire Wolf":
-			return enemyPath + "wolf_02.png";
-		default:
-			return enemyPath + name + "_01.png";
-		}
-	}
-	
 	private void createEnemiesPnl(List<NpcModel> npcList) {
 		// Spacing for better UI experience
 		spacerPnl1 = new JPanel();
@@ -171,20 +197,19 @@ public class CombatView extends JFrame {
 		enemiesPnl.setOpaque(false);
 		// Get all NPCModels from npcList and retrieve information about every single enemy
 		for (NpcModel npcModel : npcList) {
-			JPanel enemyPnl = new JPanel();
+			enemyPnl = new JPanel();
 			enemyPnl.setLayout(new BoxLayout(enemyPnl, BoxLayout.Y_AXIS));
 			enemyPnl.setOpaque(false);
-			enemyPnl.setMaximumSize(new Dimension(200, 300));
+			enemyPnl.setMaximumSize(new Dimension(350, 450));
 			enemyPnl.setAlignmentY(Component.BOTTOM_ALIGNMENT);
 			
 			JLabel enemyImgLbl = new JLabel();
 			JLabel enemyNameLbl = new JLabel();
-			
-			// TODO: remove numbers from path								     HERE!
-			Image resizedImg = new ImageIcon(enemyPath + npcModel.getName() + "_01.png").getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+		
+			Image resizedImg = new ImageIcon(enemyPath + npcModel.getName() + ".png").getImage().getScaledInstance(350, 350, Image.SCALE_SMOOTH);
 			ImageIcon enemyIcon = new ImageIcon(resizedImg);
 			enemyImgLbl.setIcon(enemyIcon);
-			enemyImgLbl.setPreferredSize(new Dimension(200, 200));
+			enemyImgLbl.setPreferredSize(new Dimension(350, 350));
 			enemyImgLbl.setForeground(Color.white);
 			enemyImgLbl.setHorizontalAlignment(JLabel.CENTER);
 			
@@ -192,15 +217,26 @@ public class CombatView extends JFrame {
 			enemyNameLbl.setFont(defaultFont);
 			enemyNameLbl.setHorizontalAlignment(JLabel.CENTER);
 			enemyNameLbl.setForeground(Color.white);
-//			enemyNameLbl.setVerticalTextPosition(JLabel.TOP);
 			
 			// Health Bar
 			JProgressBar enemyHp = new JProgressBar(0, npcModel.getHp());
 			enemyHp.setForeground(Color.green);
 			enemyHp.setBackground(Color.red);
 			enemyHp.setValue(npcModel.getHp());
-			enemyHp.setPreferredSize(new Dimension(200, 20));
+			enemyHp.setSize(new Dimension(350, 40));
 			enemyHp.setAlignmentX(Component.CENTER_ALIGNMENT);
+			
+			// ProgressBar Mapping
+			npcProgressBars.put(npcModel, enemyHp);
+			System.out.println("Mapped " + npcModel + "to" + enemyHp);
+			
+			// Event-Listener for enemy selection
+			enemyImgLbl.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					selectNpcForCombat(npcModel, enemyImgLbl);
+				}
+			});
 			
 			// add components to singleEnemyPnl
 			enemyPnl.add(enemyNameLbl);
@@ -209,87 +245,31 @@ public class CombatView extends JFrame {
 			
 			enemiesPnl.add(enemyPnl);
 			enemiesPnl.add(Box.createRigidArea(new Dimension(50, 50)));
+			
 		}
 		backgroundPnl.add(spacerPnl1, BorderLayout.WEST);
 		backgroundPnl.add(spacerPnl2, BorderLayout.SOUTH);
 		backgroundPnl.add(enemiesPnl, BorderLayout.CENTER);
 	}
 	
-	private void addEnemiesPnl() { // old
-		amountOfEnemies = amountOfEnemies + 1;
-		switch (amountOfEnemies) {
-		case 1:
-			System.out.println("Amount: " + amountOfEnemies + "(Add Monster 1)");
-			enemyPnl = new JPanel();
-			enemyPnl.setLayout(new BoxLayout(enemyPnl, BoxLayout.Y_AXIS));
-			enemyPnl.setOpaque(false);
-			enemyPnl.setMaximumSize(new Dimension(200, 300));
-
-			enemyLbl1 = new JLabel();
-
-			resizedImg = new ImageIcon(enemyPath + "Wolf.png").getImage().getScaledInstance(200, 200,
-					Image.SCALE_SMOOTH);
-			enemyIcon = new ImageIcon(resizedImg);
-			enemyLbl1.setIcon(enemyIcon);
-			enemyLbl1.setPreferredSize(new Dimension(200, 200));
-			enemyLbl1.setText("Wolf");
-			enemyLbl1.setFont(defaultFont);
-			enemyLbl1.setForeground(Color.white);
-			enemyLbl1.setVerticalTextPosition(JLabel.TOP);
-			enemyLbl1.setHorizontalTextPosition(JLabel.CENTER);
-			enemyLbl1.setIconTextGap(-25);
-
-			enemyHp1 = new JProgressBar(0, 40);
-			enemyHp1.setForeground(Color.green);
-			enemyHp1.setBackground(Color.red);
-			enemyHp1.setValue(40);
-
-			enemyPnl.add(enemyLbl1);
-			enemyPnl.add(enemyHp1);
-
-			enemyPnl.setAlignmentY(Component.BOTTOM_ALIGNMENT); // Bottom Alignment for ground creatures and default for
-																// flying creatures
-
-			enemiesPnl.add(enemyPnl);
-			break;
-		case 2:
-			System.out.println("Amount: " + amountOfEnemies + "(Add Monster 1)");
-			enemyPnl = new JPanel();
-			enemyPnl.setLayout(new BoxLayout(enemyPnl, BoxLayout.Y_AXIS));
-			enemyPnl.setOpaque(false);
-			enemyPnl.setMaximumSize(new Dimension(200, 300));
-
-			enemyLbl2 = new JLabel();
-
-			resizedImg = new ImageIcon(enemyPath + "Wolf.png").getImage().getScaledInstance(200, 200,
-					Image.SCALE_SMOOTH);
-			enemyIcon = new ImageIcon(resizedImg);
-			enemyLbl2.setIcon(enemyIcon);
-			enemyLbl2.setPreferredSize(new Dimension(200, 200));
-			enemyLbl2.setText("Wolf 2");
-			enemyLbl2.setFont(defaultFont);
-			enemyLbl2.setForeground(Color.white);
-			enemyLbl2.setVerticalTextPosition(JLabel.TOP);
-			enemyLbl2.setHorizontalTextPosition(JLabel.CENTER);
-			enemyLbl2.setIconTextGap(-25);
-
-			enemyHp2 = new JProgressBar(0, 40);
-			enemyHp2.setForeground(Color.green);
-			enemyHp2.setBackground(Color.red);
-			enemyHp2.setValue(30);
-
-			enemyPnl.add(enemyLbl2);
-			enemyPnl.add(enemyHp2);
-
-			enemyPnl.setAlignmentY(Component.BOTTOM_ALIGNMENT); // Bottom Alignment for ground creatures and default for
-																// flying creatures
-
-			enemiesPnl.add(Box.createRigidArea(new Dimension(50, 0)));
-			enemiesPnl.add(enemyPnl);
-			break;
-		default:
+	// select Npcs to fight
+	public void selectNpcForCombat(NpcModel npcModel, JLabel npcLabel) {
+		if (selectedNpcLbl != null) {
+			selectedNpcLbl.setBorder(null);
 		}
-
+		
+		// set Npc
+		selectedNpc = npcModel;
+		selectedNpcLbl = npcLabel;
+		
+		System.out.println("NPC ausgewählt: " + npcModel.getName() + " und hat noch Leben: " + npcModel.getHp());
+		
+		// highlight the selected Npc
+		Border highlighter = BorderFactory.createLineBorder(Color.RED);
+		selectedNpcLbl.setBorder(highlighter);
+		
+		selectedNpcLbl.revalidate();
+		selectedNpcLbl.repaint();
 	}
 
 	// creates the hero Panel, loads character information
@@ -329,179 +309,6 @@ public class CombatView extends JFrame {
 		heroPnl.add(heroMana);
 		backgroundPnl.add(heroPnl, BorderLayout.EAST);
 	}
-
-	private void updateDialogue(String dialogue) {
-		switch (dialogue) {
-		case "Haupt":
-			dialogueText.setText(
-					"Lord Christoph stehe mir bei... Möge der Bessere gewinnen!\n\nKampf: Zum direkten Kampf wechseln.\nInventar: Öffnet das Inventar.\nFlüchten: Die Flucht ergreifen.");
-			break;
-		case "Kampf":
-			dialogueText.setText(
-					"Angreifen: Direkter Angriff gegen einen Gegner.\nFähigkeit: Magie oder eine Fähigkeit einsetzen.\nZurück: Vorherige Auswahl wiederbringen.");
-			break;
-		case "Angreifen":
-			dialogueText.setText(
-					"Welcher Gegner soll angegriffen werden?\n\nOder drücken Sie auf Zurück; um zur Haupt-Auswahl zu gelangen.");
-			break;
-		case "Gegner 1":
-			enemyName = enemyLbl1.getText();
-			dialogueText.setText("Ihr greift " + enemyName + " an, und fügt diesem " + damageDealt + " Schaden zu!");
-			break;
-		case "Gegner 2":
-			enemyName = enemyLbl2.getText();
-			dialogueText.setText("Ihr greift " + enemyName + " an, und fügt diesem " + damageDealt + " Schaden zu!");
-			break;
-		case "EnemyTurn":
-			dialogueText.setText("Die Wölfe schauen erstmal nur dumm aus der Wäsche raus.");
-			break;
-		case "PlayerTurn":
-			dialogueText.setText(
-					"Kampf: Zum direkten Kampf wechseln.\nInventar: Öffnet das Inventar.\nFlüchten: Die Flucht ergreifen.");
-			break;
-		default:
-			dialogueText.setText("");
-		}
-
-	}
-
-	private class ButtonClickListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			JButton source = (JButton) e.getSource();
-			String buttonText = source.getText();
-			if (buttonText == "Flüchten") {
-				soundController.stopMusicLoop();
-				soundController.playMusicLoop("res/soundFX/music/Map_Music.wav");
-				dispose();
-			}
-			// Update the panel based on button text
-			updateBtn(buttonText);
-		}
-	}
-
-	private void updateBtn(String word) {
-		btnPnl.removeAll();
-		switch (word) {
-		case "Zurück":
-			addBtn("Kampf");
-			addBtn("Inventar");
-			addBtn("Flüchten");
-			updateDialogue("Haupt");
-			break;
-		case "Kampf":
-			addBtn("Angreifen");
-			addBtn("Fähigkeiten");
-			addBtn("Zurück");
-			updateDialogue("Kampf");
-			break;
-		case "Angreifen":
-			addBtn("Gegner 1");
-			addBtn("Gegner 2");
-			addBtn("Zurück");
-			updateDialogue("Angreifen");
-			break;
-		case "Gegner 1":
-			updateDialogue("Gegner 1");
-			enemyHp1.setValue((enemyHp1.getValue() - damageDealt));
-			addBtn("Weiter");
-			currentTurn += 1;
-			break;
-		case "Gegner 2":
-			updateDialogue("Gegner 2");
-			enemyHp2.setValue((enemyHp2.getValue() - damageDealt));
-			addBtn("Weiter");
-			currentTurn += 1;
-			break;
-		case "Weiter":
-			if (currentTurn >= 1) { // turn 0 is player, turn 1+ is enemy
-				updateDialogue("EnemyTurn");
-				addBtn("Weiter");
-				currentTurn = 0;
-			} else {
-				updateDialogue("PlayerTurn");
-				addBtn("Kampf");
-				addBtn("Inventar");
-				addBtn("Flüchten");
-			}
-			break;
-		default:
-
-		}
-		// Refresh the panel
-		btnPnl.revalidate();
-		btnPnl.repaint();
-
-	}
-
-	private void addBtn(String word) { // Here is the order to add a button to the choices panel
-		switch (word) {
-		case "Zurück":
-			JButton btnBack = new JButton("Zurück");
-			btnBack.addActionListener(new ButtonClickListener());
-			beautifyButtons(btnBack);
-			btnPnl.add(btnBack);
-			break;
-		case "Weiter":
-			JButton btnContinue = new JButton("Weiter");
-			btnContinue.addActionListener(new ButtonClickListener());
-			beautifyButtons(btnContinue);
-			btnPnl.add(btnContinue);
-			break;
-		case "Angreifen":
-			JButton btnAttack = new JButton("Angreifen");
-			btnAttack.addActionListener(new ButtonClickListener());
-			beautifyButtons(btnAttack);
-			btnPnl.add(btnAttack);
-			break;
-		case "Kampf":
-			JButton btnAction = new JButton("Kampf");
-			btnAction.addActionListener(new ButtonClickListener());
-			beautifyButtons(btnAction);
-			btnPnl.add(btnAction);
-			break;
-		case "Gegner 1":
-			JButton btnEnemy1 = new JButton("Gegner 1");
-			beautifyButtons(btnEnemy1);
-			if (enemyHp1.getValue() != 0) {
-				btnEnemy1.addActionListener(new ButtonClickListener());
-			} else {
-				btnEnemy1.setEnabled(false);
-			}
-			btnPnl.add(btnEnemy1);
-			break;
-		case "Gegner 2":
-			JButton btnEnemy2 = new JButton("Gegner 2");
-			beautifyButtons(btnEnemy2);
-			if (enemyHp2.getValue() != 0) {
-				btnEnemy2.addActionListener(new ButtonClickListener());
-			} else {
-				btnEnemy2.setEnabled(false);
-			}
-			btnPnl.add(btnEnemy2);
-			break;
-		case "Fähigkeiten":
-			JButton btnAbility = new JButton("Fähigkeiten");
-			// btnAbility.addActionListener(new ButtonClickListener());
-			btnAbility.setEnabled(false);
-			beautifyButtons(btnAbility);
-			btnPnl.add(btnAbility);
-			break;
-		case "Inventar":
-			JButton btnInventory = new JButton("Inventar");
-			// btnInventory.addActionListener(new ButtonClickListener());
-			btnInventory.setEnabled(false);
-			beautifyButtons(btnInventory);
-			btnPnl.add(btnInventory);
-			break;
-		case "Flüchten":
-			JButton btnEscape = new JButton("Flüchten");
-			btnEscape.addActionListener(new ButtonClickListener());
-			beautifyButtons(btnEscape);
-			btnPnl.add(btnEscape);
-			break;
-		}
-	}
 	
 	private String selectHeroImgPath(int raceID, String gender) {
 		
@@ -539,12 +346,11 @@ public class CombatView extends JFrame {
 	
 	private void prepareDialoguePnl() {
 
+		Dimension btnDimension = new Dimension(200, 25);
 		dialoguePnl = new JPanel(); // will hold the title, text and buttons
 		dialoguePnl.setLayout(new BorderLayout());
-		dialoguePnl.setPreferredSize(new Dimension(WIDTH, 200));
-		// Word above Text / Dialogue
-		dialogueTopMsg = new JLabel("Player Hero");
-		dialogueTopMsg.setFont(new Font("Calisto MT", Font.BOLD, 28));
+		dialoguePnl.setPreferredSize(new Dimension(WIDTH, 250));
+		
 		// Text / Dialogue
 		dialogueText = new JTextArea();
 		dialogueText.setFont(defaultFont); // Schriftart anpassen
@@ -552,19 +358,28 @@ public class CombatView extends JFrame {
 		dialogueText.setWrapStyleWord(true); // Wortumbruch aktivieren
 		dialogueText.setEditable(false); // Text nicht editierbar machen
 		dialogueText.setPreferredSize(new Dimension(400, 120));
-		dialogueText.setBackground(new Color(245, 245, 220));
-		updateDialogue("Start");
+		dialogueText.setBackground(new Color(245, 245, 220));	
 		
-
-		// add buttons to the btnPnl
 		btnPnl = new JPanel();
 		btnPnl.setLayout(new BoxLayout(btnPnl, BoxLayout.Y_AXIS));
-		updateBtn("Zurück");
 		
+		attackBtn = new JButton("Angreifen");
+		beautifyButtons(attackBtn);		
+		inventoryBtn = new JButton("Inventar");
+		beautifyButtons(inventoryBtn);
+		abilityBtn = new JButton("Fähigkeiten");
+		beautifyButtons(abilityBtn);
+		escapeBtn = new JButton("Flüchten");
+		beautifyButtons(escapeBtn);
+
+		
+		btnPnl.add(attackBtn);
+		btnPnl.add(abilityBtn);
+		btnPnl.add(inventoryBtn);
+		btnPnl.add(escapeBtn);
 
 		// filling dialoguePanel (bottom Panel)
 		dialoguePnl.add(dialogueText, BorderLayout.CENTER);
-		dialoguePnl.add(dialogueTopMsg, BorderLayout.NORTH);
 		dialoguePnl.add(btnPnl, BorderLayout.EAST);
 		backgroundPnl.add(dialoguePnl, BorderLayout.SOUTH);
 	}
