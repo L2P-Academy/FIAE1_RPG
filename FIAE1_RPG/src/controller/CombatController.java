@@ -1,21 +1,22 @@
 package controller;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
 import model.AbilityModel;
 import model.NpcModel;
 import model.PlayerCharacterModel;
+import view.CombatView;
 
 public class CombatController {
 	private PlayerCharacterModel character;
 	private SoundController soundController;
 	private SQLController sqlController;
-	private NpcModel npcModel1, npcModel2, npcModel3, npcModel4;
+	private NpcModel selectedNpc;
 	private List<NpcModel> allNpcsList, combatantsNpcList;
 	private int currentRound, numberOfEnemies, randomEnemyNumber;
+	private CombatView combatView;
 
 	/*
 	 * TODO (erledigt): NPCs (Mobs) -> zufällige Anzahl 1-4 bei Öffnen der View 1. Zufallszahl
@@ -31,21 +32,27 @@ public class CombatController {
 	 * getAllAbilities (Datenbank)
 	 */
 
-	public CombatController(PlayerCharacterModel playerCharacter, SoundController soundController) {
+	public CombatController(PlayerCharacterModel playerCharacter, SoundController soundController, CombatView combatView) {
 		this.character = playerCharacter;
 		this.soundController = soundController;
-		sqlController = new SQLController();
+		this.sqlController = new SQLController();
+		this.combatView = combatView;
 	}
 
 	public List<NpcModel> combatInitialize() {
 		numberOfEnemies = createRngOfEnemies();
 		combatantsNpcList = setEnemiesForCombat(numberOfEnemies);
 		currentRound = 1;
+		selectNpc(combatantsNpcList.get(0));
+		
 		while (isCombatRunning(combatantsNpcList)) {
 			currentRound = startCombat(numberOfEnemies, currentRound);
-			return combatantsNpcList;
 		}
 		return combatantsNpcList;
+	}
+	
+	private void selectNpc(NpcModel npcModel) {
+		this.selectedNpc = npcModel;
 	}
 
 	public int startCombat(int numberOfEnemies, int currentRound) {
@@ -64,14 +71,21 @@ public class CombatController {
 		return currentRound;
 	}
 
-	public void processPlayerAction(String action, NpcModel target) {
+	public void processPlayerAction(String action) {
 		switch (action) {
 		case "Angreifen": {
-			playerAttack(target);
+			if (selectedNpc != null) {
+				playerAttack(selectedNpc);
+				combatView.updateNpcHealth(selectedNpc);
+			}
 			break;
 		}
 		case "Flüchten": {
-			playerEscape();
+			if (combatView != null) {
+				soundController.stopMusicLoop();
+				combatView.dispose();
+			}
+			break;
 		}
 		}
 	}
@@ -79,10 +93,8 @@ public class CombatController {
 	public void playerAttack(NpcModel npcModel) {
 		int baseDmg = 20;
 		npcModel.setHp(calculateDamage(npcModel.getHp(), baseDmg));
-	}
-
-	public void playerEscape() {
-
+		soundController.playFxSound("res/soundFX/fxEffects/sword_sound.wav");
+		combatView.updateNpcHealth(npcModel);
 	}
 
 	public void mobAttack(PlayerCharacterModel character) {
@@ -112,7 +124,7 @@ public class CombatController {
 			System.out.println(character.getName() + " hat kein kampffähiges Pokemon mehr, du fällst in Ohnmacht!");
 			return false;
 		}
-		for (NpcModel npc : combatantsNpcList) {
+		for (NpcModel npc : combatantsNpcList) { 
 			if (npc.getHp() <= 0) {
 				System.out.println("Alle Monster wurden besiegt!");
 				return true;
@@ -122,11 +134,12 @@ public class CombatController {
 	}
 
 	public int createRngOfEnemies() {
-		return new Random().nextInt(3) + 1;
+		return new Random().nextInt(4) + 1;
 	}
 
 	public int createRngForEnemySelection() {
-		return new Random().nextInt(6) + 1;
+		// TODO: adjust number of enemies based on database
+		return new Random().nextInt(7);
 	}
 
 	public PlayerCharacterModel getCharacter() {
