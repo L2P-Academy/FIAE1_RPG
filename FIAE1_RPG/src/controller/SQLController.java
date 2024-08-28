@@ -259,22 +259,25 @@ public class SQLController {
 	 * @return boolean
 	 */
 	public boolean doesDataExistInTable(String tableName) {
-
+		 
 		boolean dataExist = false;
-
+ 
 		try (Connection connection = DriverManager.getConnection(URL, USER, PW)) {
-
+ 
 			String query = "SELECT COUNT(*) FROM " + tableName;
 			PreparedStatement preparedStatment = connection.prepareStatement(query);
 			ResultSet result = preparedStatment.executeQuery();
-			int Quantity = result.getInt(0);
-			if (Quantity > 0) {
-				dataExist = true;
+			if(result.next()) {
+				int Quantity = result.getInt(1);
+				if (Quantity > 0) {
+					dataExist = true;
+				}	
 			}
+		
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+ 
 		return dataExist;
 	}
 
