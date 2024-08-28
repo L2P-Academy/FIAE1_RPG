@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javax.swing.SwingUtilities;
+
 import model.AbilityModel;
 import model.NpcModel;
 import model.PlayerCharacterModel;
@@ -15,60 +17,79 @@ public class CombatController {
 	private SQLController sqlController;
 	private NpcModel selectedNpc;
 	private List<NpcModel> allNpcsList, combatantsNpcList;
-	private int currentRound, numberOfEnemies, randomEnemyNumber;
+	private int numberOfEnemies, randomEnemyNumber;
 	private CombatView combatView;
-
-	/*
-	 * TODO (erledigt): NPCs (Mobs) -> zufällige Anzahl 1-4 bei Öffnen der View 1. Zufallszahl
-	 * zwischen 1 und 4 festlegen für Anzahl der Gegner 2. Zufallszahl (derzeit!)
-	 * zwischen 1-9 für zufällige Gegnerauswahl 3. -> SQL-Methode: getAllMobs() ->
-	 * für alle NPCs mit Category="Mob" 4. Mobs in Arrayliste laden für spätere
-	 * Zufallsauswahl 5. NPCModels je nach Anzahl erstellen -> Methode
-	 * 
-	 * 6. Methoden für den Kampf calculateRound calculateDamage -> HP reduzieren,
-	 * prüfen ob HP=0 checkConditions (win (zurück zur Map -> XP, Gold, Items...
-	 * hinzufügen) or lose(zurück zur Taverne -> Spieler wird geheilt) healCharacter
-	 * (verwenden von Tränken, bei Besuch der Taverne, auf der Map...)
-	 * getAllAbilities (Datenbank)
-	 */
+	private boolean isPlayerFinished;
 
 	public CombatController(PlayerCharacterModel playerCharacter, SoundController soundController, CombatView combatView) {
 		this.character = playerCharacter;
 		this.soundController = soundController;
 		this.sqlController = new SQLController();
 		this.combatView = combatView;
-	}
-
-	public List<NpcModel> combatInitialize() {
 		numberOfEnemies = createRngOfEnemies();
 		combatantsNpcList = setEnemiesForCombat(numberOfEnemies);
-		currentRound = 1;
 		selectNpc(combatantsNpcList.get(0));
-		
-		while (isCombatRunning(combatantsNpcList)) {
-			currentRound = startCombat(numberOfEnemies, currentRound);
-		}
-		return combatantsNpcList;
+		isPlayerFinished = false;
 	}
 	
-	private void selectNpc(NpcModel npcModel) {
-		this.selectedNpc = npcModel;
+	public int getNumberOfEnemies() {
+		return numberOfEnemies;
 	}
 
-	public int startCombat(int numberOfEnemies, int currentRound) {
-		int maxRounds = numberOfEnemies + 1;
-		if (currentRound == 1) {
-			currentRound++;
-		} else if (currentRound == maxRounds) {
-			currentRound = 1;
-		} else {
-			for (int i = 0; i < combatantsNpcList.size(); i++) {
-				mobAttack(character);
-				currentRound++;
-			}
+	public void setNumberOfEnemies(int numberOfEnemies) {
+		this.numberOfEnemies = numberOfEnemies;
+	}
 
-		}
-		return currentRound;
+	public List<NpcModel> getCombatantsNpcList() {
+		return combatantsNpcList;
+	}
+
+	public void setCombatantsNpcList(List<NpcModel> combatantsNpcList) {
+		this.combatantsNpcList = combatantsNpcList;
+	}
+
+	public void selectNpc(NpcModel npcModel) {
+		this.selectedNpc = npcModel;
+	}
+	
+    public void startCombatLoop() {
+        while (isCombatRunning(combatantsNpcList)) {
+            if (!isPlayerFinished) {
+                combatView.attackBtn.setEnabled(true);
+                combatView.abilityBtn.setEnabled(true);
+                combatView.inventoryBtn.setEnabled(true);
+                combatView.escapeBtn.setEnabled(true);
+                combatView.setTextToCombatLog("Du bist dran! Warte auf Aktion...");
+                break;
+            } else {
+            	combatView.setTextToCombatLog("Gegner greifen an!");
+                for (NpcModel npc : combatantsNpcList) {
+                	if (npc.getHp() > 0) {
+                		mobAttack(npc, character);
+                		combatView.updatePlayerHealth(character);
+                        try {
+                            Thread.sleep(600);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+				}                
+                isPlayerFinished = false;
+            }
+        }
+    }
+    
+    public void logEnemyAttack(NpcModel npc, int damage) {
+        String attackMessage = npc.getName() + " greift an und verursacht " + damage + " Schaden!";
+        combatView.setTextToCombatLog(attackMessage);
+    }
+
+	public boolean isPlayerFinished() {
+		return isPlayerFinished;
+	}
+
+	public void setPlayerFinished(boolean isPlayerFinished) {
+		this.isPlayerFinished = isPlayerFinished;
 	}
 
 	public void processPlayerAction(String action) {
@@ -77,12 +98,15 @@ public class CombatController {
 			if (selectedNpc != null) {
 				playerAttack(selectedNpc);
 				combatView.updateNpcHealth(selectedNpc);
+				isPlayerFinished = true;
+				SwingUtilities.invokeLater(() -> startCombatLoop());				
 			}
 			break;
 		}
 		case "Flüchten": {
 			if (combatView != null) {
 				soundController.stopMusicLoop();
+				soundController.playMusicLoop("res/soundFX/music/Map_Music.wav");
 				combatView.dispose();
 			}
 			break;
@@ -92,14 +116,18 @@ public class CombatController {
 
 	public void playerAttack(NpcModel npcModel) {
 		int baseDmg = 20;
+		SwingUtilities.invokeLater(() -> soundController.playFxSound("res/soundFX/fxEffects/sword_sound.wav"));
 		npcModel.setHp(calculateDamage(npcModel.getHp(), baseDmg));
-		soundController.playFxSound("res/soundFX/fxEffects/sword_sound.wav");
+		combatView.setTextToCombatLog("Du greifst " + npcModel.getName() + " an und verursachst " + baseDmg + " Schaden");
 		combatView.updateNpcHealth(npcModel);
 	}
 
-	public void mobAttack(PlayerCharacterModel character) {
-		int baseDmg = 5;
-		character.setCurrentHP(calculateDamage(character.getCurrentHP(), baseDmg));
+	public void mobAttack(NpcModel npcModel, PlayerCharacterModel character) {
+		if (npcModel.getHp() > 0) { 
+			SwingUtilities.invokeLater(() -> soundController.playFxSound("res/soundFX/fxEffects/swoosh_sound.wav"));
+			character.setCurrentHP(calculateDamage(character.getCurrentHP(), 2));
+			logEnemyAttack(npcModel, npcModel.getDamage());
+		}
 	}
 
 	public int calculateDamage(int targetHP, int damageDealt) {
@@ -108,29 +136,34 @@ public class CombatController {
 
 	public List<NpcModel> setEnemiesForCombat(int numberOfEnemies) {
 		allNpcsList = sqlController.getAllNpcs("MOB");
-
 		combatantsNpcList = new ArrayList<>();
-
-		for (int i = 0; i < numberOfEnemies; i++) {
+		
+		while (combatantsNpcList.size() < numberOfEnemies ) {
 			randomEnemyNumber = createRngForEnemySelection();
 			NpcModel selectedNpc = allNpcsList.get(randomEnemyNumber);
-			combatantsNpcList.add(selectedNpc);
+			// select only distinct NPCs, TODO: quick and dirty - Cedrics Job to be fixed :>
+			if (!combatantsNpcList.contains(selectedNpc)) {
+				combatantsNpcList.add(selectedNpc);
+			}
 		}
 		return combatantsNpcList;
 	}
 
 	public boolean isCombatRunning(List<NpcModel> combatantsNpcList) {
+		boolean allEnemiesDefeated = true;
 		if (character.getCurrentHP() <= 0) {
-			System.out.println(character.getName() + " hat kein kampffähiges Pokemon mehr, du fällst in Ohnmacht!");
+			System.out.println(character.getName() + " wurde besiegt! " + character.getName() + " fällt in Ohnmacht!");
 			return false;
 		}
 		for (NpcModel npc : combatantsNpcList) { 
-			if (npc.getHp() <= 0) {
-				System.out.println("Alle Monster wurden besiegt!");
-				return true;
+			if (npc.getHp() > 0) {
+				allEnemiesDefeated = false;
 			}
 		}
-		return false;
+		if (allEnemiesDefeated) {
+			System.out.println("Alle Monster wurden besiegt!");
+		}
+		return !allEnemiesDefeated;
 	}
 
 	public int createRngOfEnemies() {
