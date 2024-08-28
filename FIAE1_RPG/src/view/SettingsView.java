@@ -40,6 +40,7 @@ public class SettingsView extends JFrame {
 
 	private Font settingsFont, titleFont;
 
+	private boolean isFullscreen;
 
 	private SoundController soundController;
 	private SQLController sqlController;
@@ -54,8 +55,8 @@ public class SettingsView extends JFrame {
 		// Create Window
 		setTitle("Einstellungen");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setUndecorated(true);
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
 
 		// Create Fonts
 		settingsFont = new Font("Old English Text MT", Font.BOLD, 32);
@@ -168,8 +169,7 @@ public class SettingsView extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				soundController.playButtonClickSound();
-				setUndecorated(true);
-				setExtendedState(JFrame.MAXIMIZED_BOTH);
+				isFullscreen = true;
 			}
 		});
 
@@ -177,17 +177,14 @@ public class SettingsView extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				soundController.playButtonClickSound();
-				dispose();
-				setUndecorated(false);
-				// TODO: Size must be set for the whole application
-				setSize(1280, 720);
-				setLocationRelativeTo(null);
-				setVisible(true);
+				isFullscreen = false;
+				
 			}
 		});
 
 		submitBtn.addActionListener(new ActionListener() {
-		    @Override
+
+			@Override
 		    public void actionPerformed(ActionEvent e) {
 		        soundController.playButtonClickSound();
 		        String selectedResolution = (String) resolution.getSelectedItem();
@@ -210,18 +207,31 @@ public class SettingsView extends JFrame {
 		        }
 		        
 		        int volume = volumeSlider.getValue();
-		        boolean isFullscreen = isUndecorated();
 		        
+				if (sqlController.doesDataExistInTable("settings")){
+		        	sqlController.updateSpecificValue(1, "settings", "Volume", String.valueOf(volume), "SettingsID");
+			        sqlController.updateSpecificValue(1, "settings","FensterModus" ,String.valueOf(isFullscreen), "SettingsID");
+			        sqlController.updateSpecificValue(1, "settings", "ResWidth", String.valueOf(width), "SettingsID");
+			        sqlController.updateSpecificValue(1, "settings", "ResHeight", String.valueOf(height), "SettingsID");
+		        }else {
 		        Map<String, String> settingsMap = new HashMap<>();
 		        settingsMap.put("Volume", String.valueOf(volume));
 		        settingsMap.put("FensterModus", isFullscreen ? "0" : "1");
 		        settingsMap.put("ResWidth", String.valueOf(width));
 		        settingsMap.put("ResHeight", String.valueOf(height));
-		        //sqlController.deleteAllEntriesFromTable("settings"); funktion zum löschen vom inhalt der tabelle
 		        sqlController.insertIntoTable("settings", settingsMap);
-		        setSize(width, height);
+		        }
+		        
 		        soundController.setVolume(volume);
-		        setLocationRelativeTo(null);
+		        
+		        if (isFullscreen) {
+		        	setExtendedState(JFrame.MAXIMIZED_BOTH);
+		        } else {
+		        	setExtendedState(JFrame.NORMAL);
+		        	setSize(width, height);
+		        	setLocationRelativeTo(null);
+		        }
+		        
 		        JOptionPane.showMessageDialog(SettingsView.this, "Einstellungen wurden gespeichert und angewendet.", "Erfolg", JOptionPane.INFORMATION_MESSAGE);
 		    }
 		});
