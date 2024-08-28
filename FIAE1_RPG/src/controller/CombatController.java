@@ -1,8 +1,11 @@
 package controller;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Timer;
 
 import javax.swing.SwingUtilities;
 
@@ -10,11 +13,13 @@ import model.AbilityModel;
 import model.NpcModel;
 import model.PlayerCharacterModel;
 import view.CombatView;
+import view.InventoryView;
 
 public class CombatController {
 	private PlayerCharacterModel character;
 	private SoundController soundController;
 	private SQLController sqlController;
+	private CharacterController characterController;
 	private NpcModel selectedNpc;
 	private List<NpcModel> allNpcsList, combatantsNpcList;
 	private int numberOfEnemies, randomEnemyNumber;
@@ -32,52 +37,47 @@ public class CombatController {
 		isPlayerFinished = false;
 	}
 	
-	public int getNumberOfEnemies() {
-		return numberOfEnemies;
-	}
+	public void startCombatLoop() {
+	    if (!isCombatRunning(combatantsNpcList)) {
+	        return;
+	    }
 
-	public void setNumberOfEnemies(int numberOfEnemies) {
-		this.numberOfEnemies = numberOfEnemies;
-	}
+	    if (!isPlayerFinished) {
+	        combatView.attackBtn.setEnabled(true);
+	        combatView.abilityBtn.setEnabled(true);
+	        combatView.inventoryBtn.setEnabled(true);
+	        combatView.escapeBtn.setEnabled(true);
+	        System.out.println("Spieler ist am Zug. Warte auf Aktion...");
+	    } else {
+	        combatView.attackBtn.setEnabled(false);
+	        combatView.abilityBtn.setEnabled(false);
+	        combatView.inventoryBtn.setEnabled(false);
+	        combatView.escapeBtn.setEnabled(false);
 
-	public List<NpcModel> getCombatantsNpcList() {
-		return combatantsNpcList;
-	}
+	        int delay = 1500; // Verzögerung zwischen den Angriffen in Millisekunden
+	        final int[] enemyIndex = {0};
 
-	public void setCombatantsNpcList(List<NpcModel> combatantsNpcList) {
-		this.combatantsNpcList = combatantsNpcList;
+	        javax.swing.Timer timer = new javax.swing.Timer(delay, new ActionListener() {
+	            @Override
+	            public void actionPerformed(ActionEvent e) {
+	                if (enemyIndex[0] < combatantsNpcList.size()) {
+	                    NpcModel npc = combatantsNpcList.get(enemyIndex[0]);
+	                    if (npc.getHp() > 0) {
+	                        mobAttack(npc, character);
+	                        combatView.updatePlayerHealth(character);
+	                    }
+	                    enemyIndex[0]++;
+	                } else {
+	                    ((javax.swing.Timer) e.getSource()).stop();
+	                    isPlayerFinished = false;
+	                    startCombatLoop(); // Wieder zurück zum Spieler, wenn alle Gegner angegriffen haben
+	                }
+	            }
+	        });
+	        timer.setInitialDelay(0);
+	        timer.start();
+	    }
 	}
-
-	public void selectNpc(NpcModel npcModel) {
-		this.selectedNpc = npcModel;
-	}
-	
-    public void startCombatLoop() {
-        while (isCombatRunning(combatantsNpcList)) {
-            if (!isPlayerFinished) {
-                combatView.attackBtn.setEnabled(true);
-                combatView.abilityBtn.setEnabled(true);
-                combatView.inventoryBtn.setEnabled(true);
-                combatView.escapeBtn.setEnabled(true);
-                combatView.setTextToCombatLog("Du bist dran! Warte auf Aktion...");
-                break;
-            } else {
-            	combatView.setTextToCombatLog("Gegner greifen an!");
-                for (NpcModel npc : combatantsNpcList) {
-                	if (npc.getHp() > 0) {
-                		mobAttack(npc, character);
-                		combatView.updatePlayerHealth(character);
-                        try {
-                            Thread.sleep(600);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-				}                
-                isPlayerFinished = false;
-            }
-        }
-    }
     
     public void logEnemyAttack(NpcModel npc, int damage) {
         String attackMessage = npc.getName() + " greift an und verursacht " + damage + " Schaden!";
@@ -99,8 +99,28 @@ public class CombatController {
 				playerAttack(selectedNpc);
 				combatView.updateNpcHealth(selectedNpc);
 				isPlayerFinished = true;
-				SwingUtilities.invokeLater(() -> startCombatLoop());				
+				
+				javax.swing.Timer delayTimer = new javax.swing.Timer(1500, new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						((javax.swing.Timer) e.getSource()).stop();
+						SwingUtilities.invokeLater(() -> startCombatLoop());
+					}
+				});
+				delayTimer.setRepeats(false);
+				delayTimer.start();
+								
 			}
+			break;
+		}
+		case "Fähigkeiten": {
+			// TODO: Abilities to be added HERE!
+			break;
+		}
+		case "Inventar": {
+			// TODO: add CharacterController later here ("null")
+			new InventoryView(null, soundController);
 			break;
 		}
 		case "Flüchten": {
@@ -113,19 +133,39 @@ public class CombatController {
 		}
 		}
 	}
+	
+	public int getNumberOfEnemies() {
+		return numberOfEnemies;
+	}
+
+	public void setNumberOfEnemies(int numberOfEnemies) {
+		this.numberOfEnemies = numberOfEnemies;
+	}
+
+	public List<NpcModel> getCombatantsNpcList() {
+		return combatantsNpcList;
+	}
+
+	public void setCombatantsNpcList(List<NpcModel> combatantsNpcList) {
+		this.combatantsNpcList = combatantsNpcList;
+	}
+
+	public void selectNpc(NpcModel npcModel) {
+		this.selectedNpc = npcModel;
+	}
 
 	public void playerAttack(NpcModel npcModel) {
 		int baseDmg = 20;
 		SwingUtilities.invokeLater(() -> soundController.playFxSound("res/soundFX/fxEffects/sword_sound.wav"));
 		npcModel.setHp(calculateDamage(npcModel.getHp(), baseDmg));
 		combatView.setTextToCombatLog("Du greifst " + npcModel.getName() + " an und verursachst " + baseDmg + " Schaden");
-		combatView.updateNpcHealth(npcModel);
+		combatView.updateNpcHealth(npcModel);		
 	}
 
 	public void mobAttack(NpcModel npcModel, PlayerCharacterModel character) {
 		if (npcModel.getHp() > 0) { 
 			SwingUtilities.invokeLater(() -> soundController.playFxSound("res/soundFX/fxEffects/swoosh_sound.wav"));
-			character.setCurrentHP(calculateDamage(character.getCurrentHP(), 2));
+			character.setCurrentHP(calculateDamage(character.getCurrentHP(), npcModel.getDamage()));
 			logEnemyAttack(npcModel, npcModel.getDamage());
 		}
 	}

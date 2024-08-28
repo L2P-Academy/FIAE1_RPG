@@ -131,6 +131,22 @@ public class CombatView extends JFrame {
 			}
 		});
 		
+		abilityBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO: AbilitieView?				
+			}
+		});
+		
+		inventoryBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				combatController.processPlayerAction("Inventar");
+			}
+		});
+		
 		escapeBtn.addActionListener(new ActionListener() {
 			
 			@Override
@@ -144,7 +160,7 @@ public class CombatView extends JFrame {
 	public void updateNpcHealth(NpcModel npcModel) {
 		JProgressBar healthBar = npcProgressBars.get(npcModel);
 		if (healthBar != null) {
-			healthBar.setValue(npcModel.getHp());
+			healthBar.setValue(npcModel.getHp());			
 			revalidate();
 			repaint();
 		}
@@ -262,11 +278,8 @@ public class CombatView extends JFrame {
 		
 		// set Npc
 		selectedNpc = npcModel;
-		selectedNpcLbl = npcLabel;
-		
+		selectedNpcLbl = npcLabel;		
 		combatController.selectNpc(npcModel);
-		
-		System.out.println("NPC ausgewählt: " + npcModel.getName() + " und hat noch Leben: " + npcModel.getHp());
 		
 		// highlight the selected Npc
 		Border highlighter = BorderFactory.createLineBorder(Color.RED);
