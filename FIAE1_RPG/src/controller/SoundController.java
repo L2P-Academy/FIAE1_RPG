@@ -73,7 +73,6 @@ public class SoundController {
 			buttonClip = AudioSystem.getClip();
 			buttonClip.open(audioInputStream);
 			adjustVolume(buttonClip, volume);
-			System.out.println("Current Button Volume is:" + volume);
 			buttonClip.setFramePosition(0);
 			buttonClip.start();
 
@@ -105,7 +104,6 @@ public class SoundController {
 			fxClip = AudioSystem.getClip();
 			fxClip.open(audioInputStream);
 			adjustVolume(fxClip, volume);
-			System.out.println("Current FX Volume is:" + volume);
 			fxClip.setFramePosition(0);
 			fxClip.start();
 		} catch (Exception e) {

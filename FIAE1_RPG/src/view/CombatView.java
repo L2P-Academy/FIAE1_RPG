@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -47,12 +48,12 @@ public class CombatView extends JFrame {
 
 	private JPanel backgroundPnl, spacerPnl1, spacerPnl2, btnPnl, dialoguePnl, enemiesPnl, enemyPnl, heroPnl;
 	private JLabel heroImgLbl, selectedNpcLbl;
-	private JTextArea dialogueText;
+	private JTextArea combatLog;
 	private JProgressBar heroHp, heroMana;
 	private ImageIcon heroIcon;
 	private Image resizedImg;
 	private Font defaultFont = new Font("Calisto MT", Font.PLAIN, 26);
-	private JButton attackBtn, inventoryBtn, abilityBtn, escapeBtn;
+	public JButton attackBtn, inventoryBtn, abilityBtn, escapeBtn;
 
 	private PlayerCharacterModel characterModel;
 	private NpcModel selectedNpc;
@@ -106,31 +107,27 @@ public class CombatView extends JFrame {
 		
 		// Combat Initialize
 		npcProgressBars = new HashMap<>();		
-		enemiesList = combatController.combatInitialize();
+		enemiesList = combatController.getCombatantsNpcList();
 
 		// setup for view: adding battlebackground by ID, enemies by IDs, hero by data and adjust all panels/labels
 		loadBattleBackgroundPath(1); // load battlemap by ID and update backgroundPnl
 		createHeroPanel(); // load and prepare heroPnl
 		createEnemiesPnl(enemiesList);
 		prepareDialoguePnl();
-		
 
 		// frame finish-up
 		setLocationRelativeTo(null);
 		setVisible(true);
 
 		// play Music in background after rendering
-		soundController.playMusicLoop("res/soundFX/music/Combat_Music.wav");
+		soundController.playMusicLoop("res/soundFX/music/Combat_Music.wav");		
 		
-		
-		
-		// ActionListeners
-		
+		// ActionListeners		
 		attackBtn.addActionListener(new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				soundController.playFxSound("res/soundFX/fxEffects/sword_sound.wav");
 				combatController.processPlayerAction("Angreifen");
-				
 			}
 		});
 		
@@ -138,10 +135,7 @@ public class CombatView extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO: must process player action via combatController..
-				soundController.stopMusicLoop();
-				soundController.playMusicLoop("res/soundFX/music/Map_Music.wav");
-				dispose();
+				combatController.processPlayerAction("Flüchten");
 			}
 		});
 	}
@@ -155,6 +149,14 @@ public class CombatView extends JFrame {
 			repaint();
 		}
 	}
+	
+	// Mapping Model to ProgressBar
+	public void updatePlayerHealth(PlayerCharacterModel character) {
+			heroHp.setValue(character.getCurrentHP());
+			heroHp.setString(characterModel.getCurrentHP() + "/" + characterModel.getMaxHP());
+			revalidate();
+			repaint();
+	}	
 
 	// Modify Buttons
 	private void beautifyButtons(JButton button) {
@@ -262,6 +264,8 @@ public class CombatView extends JFrame {
 		selectedNpc = npcModel;
 		selectedNpcLbl = npcLabel;
 		
+		combatController.selectNpc(npcModel);
+		
 		System.out.println("NPC ausgewählt: " + npcModel.getName() + " und hat noch Leben: " + npcModel.getHp());
 		
 		// highlight the selected Npc
@@ -293,6 +297,8 @@ public class CombatView extends JFrame {
 		heroImgLbl.setIconTextGap(-25);
 
 		heroHp = new JProgressBar(0, characterModel.getMaxHP());
+		heroHp.setStringPainted(true);
+		heroHp.setString(characterModel.getCurrentHP() + "/" + characterModel.getMaxHP());
 		heroHp.setForeground(Color.green);
 		heroHp.setBackground(Color.red);
 		heroHp.setValue(characterModel.getCurrentHP());
@@ -346,19 +352,38 @@ public class CombatView extends JFrame {
 	
 	private void prepareDialoguePnl() {
 
+		int numberOfEnemies = combatController.getNumberOfEnemies();
+		List<NpcModel> combatantsNpcList = combatController.getCombatantsNpcList();
 		Dimension btnDimension = new Dimension(200, 25);
 		dialoguePnl = new JPanel(); // will hold the title, text and buttons
 		dialoguePnl.setLayout(new BorderLayout());
 		dialoguePnl.setPreferredSize(new Dimension(WIDTH, 250));
 		
+		StringBuilder introText = new StringBuilder("Holy Sh*t! Ein Kampf steht mir bevor! \nVor mir ");
+		
 		// Text / Dialogue
-		dialogueText = new JTextArea();
-		dialogueText.setFont(defaultFont); // Schriftart anpassen
-		dialogueText.setLineWrap(true); // Textumbruch aktivieren
-		dialogueText.setWrapStyleWord(true); // Wortumbruch aktivieren
-		dialogueText.setEditable(false); // Text nicht editierbar machen
-		dialogueText.setPreferredSize(new Dimension(400, 120));
-		dialogueText.setBackground(new Color(245, 245, 220));	
+		combatLog = new JTextArea();
+		
+		if (numberOfEnemies == 1) {
+			introText.append("steht ein/e ").append(combatantsNpcList.get(0).getName()).append("!");
+		} else {
+			introText.append("stehen mehrere Gegner: \n");
+			for (int i = 0; i < combatantsNpcList.size(); i++) {
+				if (i == combatantsNpcList.size() - 1) {
+					introText.append("und ein(e) ").append(combatantsNpcList.get(i).getName()).append("!");
+				} else {
+					introText.append("ein(e) ").append(combatantsNpcList.get(i).getName()).append(", ");
+				}
+			}
+		}
+		
+		combatLog.setText(introText.toString());
+		combatLog.setFont(defaultFont); // Schriftart anpassen
+		combatLog.setLineWrap(true); // Textumbruch aktivieren
+		combatLog.setWrapStyleWord(true); // Wortumbruch aktivieren
+		combatLog.setEditable(false); // Text nicht editierbar machen
+		combatLog.setPreferredSize(new Dimension(400, 120));
+		combatLog.setBackground(new Color(245, 245, 220));
 		
 		btnPnl = new JPanel();
 		btnPnl.setLayout(new BoxLayout(btnPnl, BoxLayout.Y_AXIS));
@@ -379,9 +404,21 @@ public class CombatView extends JFrame {
 		btnPnl.add(escapeBtn);
 
 		// filling dialoguePanel (bottom Panel)
-		dialoguePnl.add(dialogueText, BorderLayout.CENTER);
+		dialoguePnl.add(combatLog, BorderLayout.CENTER);
 		dialoguePnl.add(btnPnl, BorderLayout.EAST);
 		backgroundPnl.add(dialoguePnl, BorderLayout.SOUTH);
+	}
+	
+	public void setTextToCombatLog(String message) {
+		combatLog.setText(message);
+	}
+
+	public JTextArea getDialogueText() {
+		return combatLog;
+	}
+
+	public void setDialogueText(JTextArea dialogueText) {
+		this.combatLog = dialogueText;
 	}
 }
 
