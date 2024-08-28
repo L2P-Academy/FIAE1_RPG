@@ -6,24 +6,23 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Map;
 
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.FloatControl;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.border.Border;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import controller.SQLController;
 import controller.SoundController;
@@ -41,22 +40,22 @@ public class SettingsView extends JFrame {
 
 	private Font settingsFont, titleFont;
 
+
 	private SoundController soundController;
 	private SQLController sqlController;
 
 	public SettingsView(SoundController soundController) {
 		
-		// initialize global SoundController Class
+		// Initialize global SoundController / SQLController Class
 		this.soundController = soundController;
+		this.sqlController = new SQLController();
+
 
 		// Create Window
 		setTitle("Einstellungen");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setUndecorated(true);
-
-		// SQLController
-		sqlController = new SQLController();
 
 		// Create Fonts
 		settingsFont = new Font("Old English Text MT", Font.BOLD, 32);
@@ -120,23 +119,19 @@ public class SettingsView extends JFrame {
 		windowBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 		// Add everything to SettingsPanel
-		settingsPnl.add(new JLabel(" "));
-		settingsPnl.add(new JLabel(" "));
-		settingsPnl.add(new JLabel(" "));
+		settingsPnl.add(Box.createRigidArea(new Dimension(100, 200)));
 		settingsPnl.add(resolutionLbl);
-		settingsPnl.add(new JLabel(" "));
+		settingsPnl.add(Box.createRigidArea(new Dimension(100, 10)));
 		settingsPnl.add(resolution);
-		settingsPnl.add(new JLabel(" "));
-		settingsPnl.add(new JLabel(" "));
+		settingsPnl.add(Box.createRigidArea(new Dimension(100, 40)));
 		settingsPnl.add(volumeLbl);
-		settingsPnl.add(new JLabel(" "));
+		settingsPnl.add(Box.createRigidArea(new Dimension(100, 10)));
 		settingsPnl.add(volumeSlider);
-		settingsPnl.add(new JLabel(" "));
-		settingsPnl.add(new JLabel(" "));
+		settingsPnl.add(Box.createRigidArea(new Dimension(100, 40)));
 		settingsPnl.add(fullscreenLbl);
-		settingsPnl.add(new JLabel(" "));
+		settingsPnl.add(Box.createRigidArea(new Dimension(100, 20)));
 		settingsPnl.add(fullscreenBtn);
-		settingsPnl.add(new JLabel(" "));
+		settingsPnl.add(Box.createRigidArea(new Dimension(100, 10)));
 		settingsPnl.add(windowBtn);
 		settingsPnl.setOpaque(false);
 
@@ -169,13 +164,12 @@ public class SettingsView extends JFrame {
 			}
 		});
 
-		// Fullscreen Settings
 		fullscreenBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				soundController.playButtonClickSound();
-				setExtendedState(JFrame.MAXIMIZED_BOTH);
 				setUndecorated(true);
+				setExtendedState(JFrame.MAXIMIZED_BOTH);
 			}
 		});
 
@@ -192,27 +186,44 @@ public class SettingsView extends JFrame {
 			}
 		});
 
-		// Submit Button
 		submitBtn.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				soundController.playButtonClickSound();
-				String selectedResolution = (String) resolution.getSelectedItem();
-				switch (selectedResolution) {
-				case "1280x720":
-					setSize(1280, 720);
-					break;
-				case "1920x1080":
-					setSize(1920, 1080);
-					break;
-				case "2560x1440":
-					setSize(2560, 1440);
-					break;
-				}
-				int volume = volumeSlider.getValue();
-				soundController.setVolume(volume);
-				setLocationRelativeTo(null);
-			}
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        soundController.playButtonClickSound();
+		        String selectedResolution = (String) resolution.getSelectedItem();
+		        int width = 1280;
+		        int height = 720;
+		        
+		        switch (selectedResolution) {
+		            case "1280x720":
+		                width = 1280;
+		                height = 720;
+		                break;
+		            case "1920x1080":
+		                width = 1920;
+		                height = 1080;
+		                break;
+		            case "2560x1440":
+		                width = 2560;
+		                height = 1440;
+		                break;
+		        }
+		        
+		        int volume = volumeSlider.getValue();
+		        boolean isFullscreen = isUndecorated();
+		        
+		        Map<String, String> settingsMap = new HashMap<>();
+		        settingsMap.put("Volume", String.valueOf(volume));
+		        settingsMap.put("FensterModus", isFullscreen ? "0" : "1");
+		        settingsMap.put("ResWidth", String.valueOf(width));
+		        settingsMap.put("ResHeight", String.valueOf(height));
+		        //sqlController.deleteAllEntriesFromTable("settings"); funktion zum löschen vom inhalt der tabelle
+		        sqlController.insertIntoTable("settings", settingsMap);
+		        setSize(width, height);
+		        soundController.setVolume(volume);
+		        setLocationRelativeTo(null);
+		        JOptionPane.showMessageDialog(SettingsView.this, "Einstellungen wurden gespeichert und angewendet.", "Erfolg", JOptionPane.INFORMATION_MESSAGE);
+		    }
 		});
 	}
 
