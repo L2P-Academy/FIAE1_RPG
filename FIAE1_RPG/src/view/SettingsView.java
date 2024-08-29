@@ -87,7 +87,7 @@ public class SettingsView extends JFrame {
 		settingsPnl.setLayout(new BoxLayout(settingsPnl, BoxLayout.Y_AXIS));
 
 		// Resolution Settings
-		String comboBoxListe[] = { "1280x720", "1920x1080", "2560x1440" };
+		String comboBoxListe[] = { "Unverändert", "1280x720", "1920x1080", "2560x1440" };
 		JComboBox resolution = new JComboBox(comboBoxListe);
 		resolution.setMaximumSize(new Dimension(200, resolution.getPreferredSize().height));
 		resolution.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -188,23 +188,25 @@ public class SettingsView extends JFrame {
 		    public void actionPerformed(ActionEvent e) {
 		        soundController.playButtonClickSound();
 		        String selectedResolution = (String) resolution.getSelectedItem();
-		        int width = 1280;
-		        int height = 720;
+		        int width = getWidth();
+		        int height = getHeight();
 		        
-		        switch (selectedResolution) {
-		            case "1280x720":
-		                width = 1280;
-		                height = 720;
-		                break;
-		            case "1920x1080":
-		                width = 1920;
-		                height = 1080;
-		                break;
-		            case "2560x1440":
-		                width = 2560;
-		                height = 1440;
-		                break;
-		        }
+		        if (!selectedResolution.equals("Unverändert")) {
+                    switch (selectedResolution) {
+                        case "1280x720":
+                            width = 1280;
+                            height = 720;
+                            break;
+                        case "1920x1080":
+                            width = 1920;
+                            height = 1080;
+                            break;
+                        case "2560x1440":
+                            width = 2560;
+                            height = 1440;
+                            break;
+                    }
+                }
 		        
 		        int volume = volumeSlider.getValue();
 		        
