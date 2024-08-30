@@ -104,7 +104,7 @@ public class CombatController {
 					
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						((javax.swing.Timer) e.getSource()).stop();
+						((javax.swing.Timer) e.getSource()).stop();						
 						SwingUtilities.invokeLater(() -> startCombatLoop());
 					}
 				});
