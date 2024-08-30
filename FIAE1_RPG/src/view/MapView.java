@@ -13,6 +13,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.sound.sampled.Clip;
 import javax.swing.ImageIcon;
@@ -40,9 +41,10 @@ public class MapView extends JFrame {
 	private JButton characterBtn, inventoryBtn, questsBtn, settingsBtn, saveBtn, creditsBtn;
 	private String mapImagePath = "res/img/MapViewImages/Map_Start_Suggestion.png";
 	private String buttonPanelBackgroundPath = "res/img/MapViewImages/ButtonPanelBackground6.png";
+	private Random random = new Random();
 
 	////////////////////////// TestButtons////////////////////////////
-	private JButton savegameBtn, combatViewBtn, journalViewBtn;
+	private JButton savegameBtn;
  
 	private SoundController soundController;
 	private CharacterController characterController;
@@ -140,13 +142,19 @@ public class MapView extends JFrame {
 		creditsBtn.setToolTipText("Credits");
 		
 
-		// Create CombatViewButton
-		combatViewBtn = new JButton("Combat");
-		combatViewBtn.setContentAreaFilled(false); // Make button transparent
-		combatViewBtn.setBorderPainted(false); // Remove border
-		combatViewBtn.setToolTipText("Kampf");
-
-
+		// Create CombatViewButton -> removed for random encounters, uncomment for testing
+//		combatViewBtn = new JButton("Combat");
+//		combatViewBtn.setContentAreaFilled(false);
+//		combatViewBtn.setBorderPainted(false);
+//		combatViewBtn.setToolTipText("Kampf");
+//
+//		combatViewBtn.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				soundController.stopMusicLoop();
+//				new CombatView(soundController, characterController);
+//			}
+//		});
+		
 		/////////////////////////////////////////// Actionlisterners//////////////////////////////////////////////////////
 		savegameBtn.addActionListener(new ActionListener() {
 			@Override
@@ -155,12 +163,7 @@ public class MapView extends JFrame {
 				new SavegameView(characterController, soundController);
 			}
 		});
-		combatViewBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				soundController.stopMusicLoop();
-				new CombatView(soundController, characterController);
-			}
-		});
+
 		
 		// Add ActionListener to buttons
 		inventoryBtn.addActionListener(new ActionListener() {
@@ -218,7 +221,7 @@ public class MapView extends JFrame {
 		buttonPanel.add(questsBtn);
 		buttonPanel.add(settingsBtn);
 		buttonPanel.add(savegameBtn);
-		buttonPanel.add(combatViewBtn);
+//		buttonPanel.add(combatViewBtn);
 		buttonPanel.add(creditsBtn);
 		
 
@@ -273,7 +276,7 @@ public class MapView extends JFrame {
 
 		
 		// Starting position for map character
-		mapCharacter = new MapCharacter(200, 50);
+		mapCharacter = new MapCharacter(50, 30, characterController, soundController);
 		
 		// set waypoints and character for mapAnimationPanel
 		mapPanel.setWayPoints(waypoints);
@@ -293,6 +296,10 @@ public class MapView extends JFrame {
 				}
 				if (closestWaypoint != null) {
 					mapCharacter.moveTo(closestWaypoint.getX(), closestWaypoint.getY());
+					
+					if (!mapCharacter.isCombatTriggered()) {
+						checkForCombatEncounter();
+					}
 				}				
 			}
 		});
@@ -307,6 +314,37 @@ public class MapView extends JFrame {
 //				}
 			}
 		});
+		timer.start();
+	}
+	
+	private void checkForCombatEncounter() {
+		System.out.println("Checking for Combat Encounter during Movement...");
+		if (!mapCharacter.isCombatTriggered() && !mapCharacter.isAtTarget()) {
+			int chance = random.nextInt(100);
+			System.out.println("Random Combat Chance here: " + chance);
+			if (chance < 30) {
+				System.out.println("Combat was triggered!");
+				mapCharacter.setCombatTriggered(true);
+				startCombat();
+			} else {
+				System.out.println("No Combat this time!");
+			}
+		}
+	}
+	
+	private void startCombat() {
+		int delay = random.nextInt(1000);
+		
+		Timer timer = new Timer(delay, new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				((javax.swing.Timer) e.getSource()).stop();
+				soundController.stopMusicLoop();
+				new CombatView(soundController, characterController);
+			}
+		});
+		timer.setRepeats(false);
 		timer.start();
 	}
 	

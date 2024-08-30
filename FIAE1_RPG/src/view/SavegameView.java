@@ -224,7 +224,6 @@ public class SavegameView extends JFrame {
 					sqlController.convertRaceIDToString(characterModel.getRaceID()),
 					sqlController.convertClassIDToString(characterModel.getClassID()), characterModel.getCurrentHP(),
 					characterModel.getCurrentMana(), characterModel.getCurrentXP(), characterModel.getLevel()
-
 			});
 		}
 	}
