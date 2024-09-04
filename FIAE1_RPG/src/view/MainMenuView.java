@@ -17,7 +17,7 @@ public class MainMenuView extends JFrame {
 	private JLabel gameTitleLbl;
 	private JPanel backgroundPanel, buttonPanel;
 	private JButton newGameBtn, loadGameBtn, closeGameBtn, settingsBtn;
-	private String introImgPath = "res/img/MenuImages/Intro_Picture_Suggestion.png";
+	private String introImgPath = "res/img/Backgrounds/Background_Intro.png";
 	private Font gameFont;
 	private SoundController soundController;
 	private PlayerCharacterModel characterModel;

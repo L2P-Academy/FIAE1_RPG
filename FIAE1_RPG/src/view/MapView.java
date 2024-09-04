@@ -38,8 +38,8 @@ public class MapView extends JFrame {
 	private JPanel buttonPanel, mainPanel;
 	private JLabel mapTitleLbl;
 	private JButton characterBtn, inventoryBtn, questsBtn, settingsBtn, saveBtn, creditsBtn;
-	private String mapImagePath = "res/img/MapViewImages/Map_Start_Suggestion.png";
-	private String buttonPanelBackgroundPath = "res/img/MapViewImages/ButtonPanelBackground6.png";
+	private String mapImagePath = "res/img/MapViewImages/Map_full.png";
+	private String buttonPanelBackgroundPath = "res/img/ButtonPanel/Background_ButtonPanel.png";
 
 	////////////////////////// TestButtons////////////////////////////
 	private JButton savegameBtn, combatViewBtn, journalViewBtn;
@@ -85,7 +85,7 @@ public class MapView extends JFrame {
 		gameFont = new Font("Old English Text MT", Font.BOLD, 32);
 
 		// Create inventoryBtn with bagIcon
-		ImageIcon bagIcon = new ImageIcon(new ImageIcon("res/img/MapViewImages/New_Button_Panel/new_inventory_icon.png").getImage()
+		ImageIcon bagIcon = new ImageIcon(new ImageIcon("res/img/MapViewImages/ButtonPanel/new_inventory_icon.png").getImage()
 				.getScaledInstance(60, 60, Image.SCALE_SMOOTH));
 		
 		inventoryBtn = new JButton(bagIcon);
@@ -94,7 +94,7 @@ public class MapView extends JFrame {
 		inventoryBtn.setToolTipText("Inventar"); // hoverText
 
 		// Create CharacterBtn with characterIcon
-		ImageIcon characterIcon = new ImageIcon(new ImageIcon("res/img/MapViewImages/New_Button_Panel/new_character_icon.png").getImage()
+		ImageIcon characterIcon = new ImageIcon(new ImageIcon("res/img/MapViewImages/ButtonPanel/new_character_icon.png").getImage()
 				.getScaledInstance(60, 60, Image.SCALE_SMOOTH));
 		
 		characterBtn = new JButton(characterIcon);
@@ -103,7 +103,7 @@ public class MapView extends JFrame {
 		characterBtn.setToolTipText("Charakter");
 
 		// Create questsBtn with questsIcon
-		ImageIcon questsIcon = new ImageIcon(new ImageIcon("res/img/MapViewImages/New_Button_Panel/new_quest_icon.png").getImage()
+		ImageIcon questsIcon = new ImageIcon(new ImageIcon("res/img/MapViewImages/ButtonPanel/new_quest_icon.png").getImage()
 				.getScaledInstance(60, 60, Image.SCALE_SMOOTH));
 		
 		questsBtn = new JButton(questsIcon);
@@ -112,7 +112,7 @@ public class MapView extends JFrame {
 		questsBtn.setToolTipText("Quests");
 
 		// Create Gear-Icon for Settings-Button
-		ImageIcon gearIcon = new ImageIcon(new ImageIcon("res/img/MapViewImages/New_Button_Panel/new_settings_icon.png").getImage()
+		ImageIcon gearIcon = new ImageIcon(new ImageIcon("res/img/MapViewImages/ButtonPanel/new_settings_icon.png").getImage()
 				.getScaledInstance(60, 60, Image.SCALE_SMOOTH));
 		
 		settingsBtn = new JButton(gearIcon);
@@ -122,7 +122,7 @@ public class MapView extends JFrame {
 		
 		// Create SavegameViewButton
 		
-		ImageIcon saveIcon = new ImageIcon(new ImageIcon("res/img/MapViewImages/New_Button_Panel/new_save_icon.png").getImage()
+		ImageIcon saveIcon = new ImageIcon(new ImageIcon("res/img/MapViewImages/ButtonPanel/new_save_icon.png").getImage()
 				.getScaledInstance(60, 60, Image.SCALE_SMOOTH));
 		
 		savegameBtn = new JButton(saveIcon);
@@ -131,7 +131,7 @@ public class MapView extends JFrame {
 		savegameBtn.setToolTipText("Speichern");
 
 		// Create CreditViewButton
-		ImageIcon creditIcon = new ImageIcon(new ImageIcon("res/img/MapViewImages/New_Button_Panel/new_credit_icon.png").getImage()
+		ImageIcon creditIcon = new ImageIcon(new ImageIcon("res/img/MapViewImages/ButtonPanel/new_credit_icon.png").getImage()
 				.getScaledInstance(60, 60, Image.SCALE_SMOOTH));
 		
 		creditsBtn = new JButton(creditIcon);
@@ -139,12 +139,13 @@ public class MapView extends JFrame {
 		creditsBtn.setBorderPainted(false); // Remove border
 		creditsBtn.setToolTipText("Credits");
 		
-
+		// For later tests
+		/*
 		// Create CombatViewButton
 		combatViewBtn = new JButton("Combat");
 		combatViewBtn.setContentAreaFilled(false); // Make button transparent
 		combatViewBtn.setBorderPainted(false); // Remove border
-		combatViewBtn.setToolTipText("Kampf");
+		combatViewBtn.setToolTipText("Kampf"); */
 
 
 		/////////////////////////////////////////// Actionlisterners//////////////////////////////////////////////////////

@@ -137,7 +137,7 @@ public class SettingsView extends JFrame {
 		settingsPnl.setOpaque(false);
 
 		// Add everything to BackgroundPanel
-		settingsBgrPnl = new BackGroundPanel(new ImageIcon("res/img/Backgrounds/settings_background.jpg").getImage());
+		settingsBgrPnl = new BackGroundPanel(new ImageIcon("res/img/Backgrounds/Background_Settings.jpg").getImage());
 		settingsBgrPnl.setLayout(new BorderLayout());
 		settingsBgrPnl.add(buttonPnl, BorderLayout.SOUTH);
 		settingsBgrPnl.add(titlePnl, BorderLayout.NORTH);

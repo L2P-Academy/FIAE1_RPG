@@ -82,7 +82,7 @@ public class QuestView extends JFrame {
 		rewardPnl.setLayout(new BoxLayout(rewardPnl, BoxLayout.Y_AXIS));
 		rewardsLbl = new JLabel("Belohnungen");
 		rewardsLbl.setFont(titleFont);
-		xpImgLbl = createImageLabel("res/img/MenuImages/Experience_Points.png");
+		xpImgLbl = createImageLabel("res/img/ItemModelImages/Experience_Points.png");
 		xpCountLbl = new JLabel(questModel.getRewardXP() + "");
 		xpCountLbl.setFont(textFont);
 		goldImgLbl = createImageLabel("res/img/ItemModelImages/Goldmünze.png");
@@ -104,7 +104,7 @@ public class QuestView extends JFrame {
 
 		// Dialog
 		dialogPnl = new JPanel(new BorderLayout());
-		npcImgLbl = createImageLabel("res/img/CharacterPortraits/female_orc3.png");
+		npcImgLbl = createImageLabel("res/img/CharacterPortraits/NPC_Kara.png");
 		dialogTextArea = new JTextArea();
 		dialogTextArea.setFont(textFont);
 		dialogTextArea.setLineWrap(true);

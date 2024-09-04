@@ -49,7 +49,7 @@ public class InventoryView extends JFrame {
     private SoundController soundController;
     public CharacterController characterController;
 
-    String imgPath = "res/img/BackgroundTextures/InventoryBackgroundSuggestion9.png";
+    String imgPath = "res/img/Backgrounds/Background_Inventory.png";
 
     public InventoryView(CharacterController characterController, SoundController soundController) {
 

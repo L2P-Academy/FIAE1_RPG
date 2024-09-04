@@ -80,7 +80,7 @@ public class CharacterCreationView extends JFrame{
 				"res/img/CharacterPortraits/New_Race_Gender/new_goblin_divers.png"}
 	};
 	
-	private String backgroundImgPath = "res/img/Backgrounds/backgr_ccv_charactercreation1.jpeg";
+	private String backgroundImgPath = "res/img/Backgrounds/Background_CharacterCreation.jpeg";
 		
 	public CharacterCreationView(CharacterController characterController, SoundController soundController) {
 		
