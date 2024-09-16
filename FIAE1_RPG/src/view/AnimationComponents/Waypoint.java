@@ -9,7 +9,7 @@ public class Waypoint {
 	private ImageIcon imageIcon;
 
 	public Waypoint(int index, int x, int y, String iconPath) {
-		this.index = index;
+		this.index = index; 
 		this.x = x;
 		this.y = y;
 		this.imageIcon = scaleImage(iconPath, 80, 80); // change this to resize all Map Icons

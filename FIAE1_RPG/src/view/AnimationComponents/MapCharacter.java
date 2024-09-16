@@ -37,7 +37,7 @@ public class MapCharacter {
 		this.combatTriggered = false; // -> max. 1 combat per move, reset
 	}
 	
-	public boolean isCombatTriggered() {
+	public boolean isCombatTriggered() {	
 		return combatTriggered;
 	}
 	

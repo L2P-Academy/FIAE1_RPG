@@ -123,7 +123,7 @@ public class CombatController {
 			new InventoryView(null, soundController);
 			break;
 		}
-		case "Flüchten": {
+		case "Flüchten": { 
 			if (combatView != null) {
 				soundController.stopMusicLoop();
 				soundController.playMusicLoop("res/soundFX/music/Map_Music.wav");

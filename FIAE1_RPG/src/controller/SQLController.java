@@ -40,7 +40,7 @@ public class SQLController {
 	public List<PlayerCharacterModel> getAllCharacters() {
 		List<PlayerCharacterModel> characters = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(URL, USER, PW)) {
-			Statement statement = connection.createStatement();
+			Statement statement = connection.createStatement(); 
 			ResultSet resultSet = statement.executeQuery("SELECT * FROM playercharacter");
 
 			while (resultSet.next()) {
